@@ -1,90 +1,100 @@
 import { useState } from "react";
-import "./RegisterUser.css";
 
-
-function RegisterUser() {
-  const [formData, setFormData] = useState({
-    fullname: "",
-    email: "",
-    password: ""
-  });
-
-  const [message, setMessage] = useState("");
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+export default function RegisterUser() {
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState(""); // rol dinámico
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3002/api/v1/auth/sign-up", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+  if (!fullname || !email || !password || !role) {
+    alert("Por favor complete todos los campos");
+    return;
+  }
 
-      const data = await response.json();
+  try {
+    const response = await fetch("http://localhost:3002/api/v1/auth/create-user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // OJO: aquí deberías pasar también el token del ADMIN logueado
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        fullname,
+        email,
+        password,
+        role,
+      }),
+    });
 
-      if (response.ok) {
-        setMessage("✅ Usuario registrado con éxito");
-        setFormData({ fullname: "", email: "", password: "" });
-      } else {
-        setMessage(`❌ Error: ${data.message || "No se pudo registrar"}`);
-      }
-    } catch (error) {
-      console.error("Error en el registro:", error);
-      setMessage("⚠️ Error de conexión con el servidor");
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Usuario registrado correctamente ✅");
+      setFullname("");
+      setEmail("");
+      setPassword("");
+      setRole("");
+    } else {
+      alert(data.message || "Error al registrar usuario ❌");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Error al conectar con el servidor");
+  }
+};
 
   return (
-    <div className="register-container">
-      <h2>Registrar Nuevo Usuario</h2>
-      <form onSubmit={handleSubmit} className="register-form">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4 w-[350px] p-4 border rounded-lg shadow"
+    >
+      <h2 className="text-lg font-semibold">Registrar Usuario</h2>
 
-        <label>Nombre completo</label>
-        <input
-          type="text"
-          name="fullname"
-          placeholder="Ingrese el nombre completo"
-          value={formData.fullname}
-          onChange={handleChange}
-          required
-        />
+      <input
+        type="text"
+        placeholder="Nombre completo"
+        value={fullname}
+        onChange={(e) => setFullname(e.target.value)}
+        className="border rounded p-2"
+      />
 
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          placeholder="Ingrese el correo"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+      <input
+        type="email"
+        placeholder="Correo"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="border rounded p-2"
+      />
 
-        <label>Contraseña</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Ingrese la contraseña"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+      <input
+        type="password"
+        placeholder="Contraseña"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="border rounded p-2"
+      />
 
-        <button type="submit" className="register-btn">
-          Registrar
-        </button>
-      </form>
+      <select
+        value={role}
+        onChange={(e) => setRole(e.target.value)}
+        className="border rounded p-2"
+      >
+        <option value="">Seleccione un rol</option>
+        <option value="PACIENTE">Paciente</option>
+        <option value="MEDICO">Médico</option>
+        <option value="ENFERMERO">Enfermero</option>
+      </select>
 
-      {message && <p className="register-message">{message}</p>}
-    </div>
+      <button
+        type="submit"
+        className="bg-blue-600 text-white rounded p-2 hover:bg-blue-700"
+      >
+        Registrar
+      </button>
+    </form>
   );
 }
-
-export default RegisterUser;
