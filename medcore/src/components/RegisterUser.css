@@ -82,3 +82,31 @@ margin-top: 20px;
 .register-message.error {
   color: #dc3545;
 }
+
+/* ====== Select (Roles) ====== */
+.register-form select {
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #fff;
+  outline: none;
+  transition: 0.3s;
+  appearance: none; /* quita la flechita fea del navegador */
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D'12'%20height%3D'12'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M2%204l4%204%204-4'%20stroke%3D'%23333'%20stroke-width%3D'2'%20fill%3D'none'%20fill-rule%3D'evenodd'/%3E%3C/svg%3E"); /* flechita custom */
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+
+.register-form select:hover {
+  border-color: #007bff;
+}
+
+.register-form select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.2);
+}
+

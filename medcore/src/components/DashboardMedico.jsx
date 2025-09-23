@@ -1,12 +1,21 @@
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./DashboardAdmin.css";
 
-function Dashboard() {
- // const navigate = useNavigate();
+ function Dashboard() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // eliminar token
+    navigate("/login", { replace: true }); // redirigir al login
+  };
 
   return (
+    
     <div className="dashboard-container">
-      <h1>Bienvenido Medico</h1>
+      <h1>Bienvenido Médico</h1>
+       <button onClick={handleLogout} className="register-btn">
+        Cerrar sesión
+      </button>
     </div>
   );
 }

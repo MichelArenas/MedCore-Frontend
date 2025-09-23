@@ -6,20 +6,24 @@ import DashboardAdmin from "./components/DashboardAdmin";
 import DashboardMedico from "./components/DashboardMedico";
 import DashboardPaciente from "./components/DashboardPaciente";
 import DashboardEnfermero from "./components/DashboardEnfermero";
+import PrivateRoute from "./components/PrivateRoute";
+
 
 function App() {
   return (
+   
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/DashboardAdmin" element={<DashboardAdmin />} />
-        <Route path="/DashboardMedico" element={<DashboardMedico />} />
-        <Route path="/DashboardPaciente" element={<DashboardPaciente />} />
-        <Route path="/DashboardEnfermero" element={<DashboardEnfermero />} />
-        <Route path="/register-user" element={<RegisterUser />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/DashboardAdmin" element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
+        <Route path="/DashboardMedico" element={<PrivateRoute><DashboardMedico /></PrivateRoute>} />
+        <Route path="/DashboardPaciente" element={<PrivateRoute><DashboardPaciente /></PrivateRoute>} />
+        <Route path="/DashboardEnfermero" element={<PrivateRoute><DashboardEnfermero /></PrivateRoute>} />
+        <Route path="/register-user" element={<PrivateRoute><RegisterUser /></PrivateRoute>} />
       </Routes>
     </Router>
+ 
   );
 }
-
 export default App;
