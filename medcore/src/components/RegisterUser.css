@@ -1,0 +1,84 @@
+/* ====== Contenedor principal ====== */
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+  background-color: #f4f9fc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ====== Caja del formulario ====== */
+.register-form {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ====== Título ====== */
+.register-container h2 {
+  margin-bottom: 20px;
+  color: #007bff;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+/* ====== Etiquetas ====== */
+.register-form label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+  text-align: left;
+}
+
+/* ====== Inputs ====== */
+.register-form input {
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.register-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.2);
+}
+
+/* ====== Botón ====== */
+.register-btn {
+margin-top: 20px;
+  padding: 12px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.register-btn:hover {
+  background: #0b5ed7;
+}
+
+/* ====== Mensajes ====== */
+.register-message {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.register-message.success {
+  color: #28a745;
+}
+
+.register-message.error {
+  color: #dc3545;
+}

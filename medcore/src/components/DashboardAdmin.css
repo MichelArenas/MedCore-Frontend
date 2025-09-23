@@ -1,0 +1,18 @@
+.dashboard-buttons{
+  margin-top: 20px;
+  padding: 12px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+}
+
+.dashboard-container{
+  font-size: 38px;
+  font-weight: bold;
+  color: #007bff;
+  text-align: center;
+}
+

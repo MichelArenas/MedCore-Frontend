@@ -10,9 +10,9 @@
 /* Panel general (dos columnas: izquierda y derecha) */
 .login-panel {
   display: flex;
-  width: 1100px;         /* ancho total del panel */
+  width: 1000px;         /* ancho total del panel */
   max-width: 95%;       /* responsive en pantallas pequeñas */
-  height: 700px;        /* altura fija */
+  height: 600px;        /* altura fija */
   border-radius: 20px;
   overflow: hidden;
   background: #fff;
@@ -71,7 +71,7 @@
 }
 
 .doctor-img {
-  width: 300px;     /* espacio del borde */
+  width: 280px;     /* espacio del borde */
 }
 
 
@@ -79,7 +79,7 @@
   height: auto;
   object-fit: contain;
   align-self: flex-end;   /* 👈 solo la imagen se va a la derecha */
-  margin-top: 135px;
+  margin-top: 60px;
   margin-right: -80px;
   
 }
@@ -102,7 +102,7 @@ margin-top: 140px;
 
 .logo {
   width: 200px;
-  margin-bottom: 40px;
+  margin-bottom: 5px;
 }
 
 .app-name {
@@ -123,23 +123,25 @@ margin-top: 140px;
 }
 
 .login-form label {
+  display: block;
   margin-top: 10px;
   font-size: 14px;
   color: #333;
 }
 
 .login-form input {
+  width: 100%;
   padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
 
-.checkbox {
+/*.checkbox {
   margin-top: 15px;
   display: flex;
   align-items: center;
-}
+}*/
 
 .login-form button {
   margin-top: 20px;
