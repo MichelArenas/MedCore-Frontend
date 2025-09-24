@@ -13,12 +13,15 @@ import "./DashboardAdmin.css";
     
     <div className="dashboard-container">
       <h1>Bienvenido al Dashboard</h1>
-      <button className="dashboard-buttons" onClick={() => navigate("/register-user")}>
-        Registrar Usuario
-      </button>
-       <button onClick={handleLogout} className="register-btn">
-        Cerrar sesión
-      </button>
+      
+      <div className="button-group">
+        <button className="register-button" onClick={() => navigate("/register-user")}>
+          Registrar Usuario
+        </button>
+        <button onClick={handleLogout} className="logOut-button">
+          Cerrar sesión
+        </button>
+      </div>
     </div>
   );
 }

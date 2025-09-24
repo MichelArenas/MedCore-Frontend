@@ -1,4 +1,5 @@
 import "./Login.css";
+import Swal from "sweetalert2";
 import logo from "../assets/logo.png";
 import doctor from "../assets/doctor.png";
 import { useNavigate } from "react-router-dom";
@@ -30,11 +31,24 @@ function Login() {
         if (data.requiresVerification) {
           // ✅ Primera fase: se envió el código al correo
           setRequiresVerification(true);
-          alert("Se envió un código de verificación a tu correo");
+         Swal.fire({
+          icon: "info",
+          title: "Código enviado",
+          text: "Se envió un código de verificación a tu correo 📩",
+          confirmButtonColor: "#007bff"
+        });
         } else {
           // ✅ Segunda fase: login exitoso
           localStorage.setItem("token", data.token);
           localStorage.setItem("role", data.user.role);
+          localStorage.setItem("fullname", data.user.fullname);
+          
+           Swal.fire({
+            icon: "success",
+            title: "Bienvenido!",
+            text: "Login exitoso ✅",
+            confirmButtonColor: "#007bff"
+          });
 
           const role = data.user.role;
           if (role === "ADMIN") navigate("/DashboardAdmin");

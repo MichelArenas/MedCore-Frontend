@@ -37,6 +37,7 @@ export default function RegisterUser() {
         setEmail("");
         setPassword("");
         setRole("");
+
       } else {
         setMessage(data.message || "Error al registrar usuario ❌");
         setMessageType("error");
@@ -95,6 +96,11 @@ export default function RegisterUser() {
           </p>
         )}
       </form>
+       {message && (
+      <div className={`alert ${messageType}`}>
+        {message}
+      </div>
+    )}
     </div>
   );
 }

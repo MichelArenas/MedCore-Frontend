@@ -13,7 +13,7 @@ import "./DashboardAdmin.css";
     
     <div className="dashboard-container">
       <h1>Bienvenido Médico</h1>
-       <button onClick={handleLogout} className="register-btn">
+       <button onClick={handleLogout} className="logOut-button">
         Cerrar sesión
       </button>
     </div>

@@ -4,51 +4,48 @@
   justify-content: center; /* centra horizontal */
   align-items: center;     /* centra vertical */
   height: 100vh;
-  background-color: #b7e7ffff; /* azul claro del fondo */
+  background: linear-gradient(135deg, #b7e7ff, #e5f4fd); /* degradado sutil */
 }
 
 /* Panel general (dos columnas: izquierda y derecha) */
 .login-panel {
   display: flex;
-  width: 1000px;         /* ancho total del panel */
-  max-width: 95%;       /* responsive en pantallas pequeñas */
-  height: 600px;        /* altura fija */
+  width: 1000px;
+  max-width: 95%;
+  height: 600px;
   border-radius: 20px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
-  border: 1.5px solid #000000ff;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+  border: none; /* quité el borde negro para un look más limpio */
 }
 
 /* Panel izquierdo */
 .left-panel {
   flex: 1;
-  background: #e5f4fdff;
+  background: #e5f4fd;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 30px;
   text-align: center;
-  border-right: 1.5px solid #000000ff;
-  position: relative; /* necesario para ubicar el círculo */
+  position: relative;
   overflow: hidden;
-  
 }
 
 .left-panel::before {
   content: "";
   position: absolute;
-  width: 600px;         
-  height: 350px;        
-  border-radius: 0 0 50% 50%;  /* 👈 curva hacia abajo */
-  background: #ffffff;   
-  top: 0;                /* pegado arriba */
-  left: 50%;             
-  transform: translateX(-50%); 
+  width: 600px;
+  height: 350px;
+  border-radius: 0 0 50% 50%;
+  background: #ffffff;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 0;
 }
-
 
 .left-panel h1,
 .left-panel p {
@@ -56,44 +53,40 @@
   z-index: 1;
 }
 
-
 .welcome-title {
-  font-size: 38px;
-  font-weight: bold;
-  color: #333;
-  
+  font-size: 35px;
+  font-weight: 800;
+  color: #006cdfff; /* azul oscuro */
+  margin-bottom: 10px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .subtitle {
-  font-size: 17px;
-  color: #666;
-  margin: 10px 0 20px 0;
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+  font-family: 'Inter', sans-serif;
 }
 
 .doctor-img {
-  width: 280px;     /* espacio del borde */
+  width: 250px;
 }
 
-
-.image-container{
-  height: auto;
+.image-container {
   object-fit: contain;
-  align-self: flex-end;   /* 👈 solo la imagen se va a la derecha */
-  margin-top: 60px;
-  margin-right: -80px;
-  
+  margin-top: 120px;
+  transform: translateX(160px);
 }
 
-.text-container{
-margin-top: 140px;
+.text-container {
+  margin-top: 120px;
 }
 
 /* Panel derecho */
 .right-panel {
   flex: 1;
-  background: #ffffffff;
+  background: #fff;
   display: flex;
-
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -101,13 +94,15 @@ margin-top: 140px;
 }
 
 .logo {
-  width: 200px;
-  margin-bottom: 5px;
+  width: 175px;
+  margin-bottom: 50px;
 }
 
 .app-name {
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
 }
 
 .app-name span {
@@ -118,41 +113,50 @@ margin-top: 140px;
 .login-form {
   display: flex;
   flex-direction: column;
-  width: 70%;
-
+  width: 75%;
 }
 
 .login-form label {
-  display: block;
-  margin-top: 10px;
+  margin-top: 12px;
   font-size: 14px;
-  color: #333;
+  color: #444;
+  font-weight: 500;
 }
 
+/* Inputs con efecto hover/focus */
 .login-form input {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1.5px solid #d1d5db; /* gris claro */
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
 }
 
-/*.checkbox {
-  margin-top: 15px;
-  display: flex;
-  align-items: center;
-}*/
+.login-form input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.4);
+}
 
+/* Botón */
 .login-form button {
-  margin-top: 20px;
-  padding: 12px;
-  background: #333;
+  margin-top: 22px;
+  padding: 14px;
+  background: #007bff;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
 }
 
 .login-form button:hover {
-  background: #007bff;
+  background: #0056b3;
+  box-shadow: 0px 6px 14px rgba(0, 86, 179, 0.5);
+  transform: translateY(-1px);
 }
