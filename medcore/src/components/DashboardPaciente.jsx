@@ -4,11 +4,32 @@ import "./DashboardPaciente.css";
  function Dashboard() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // eliminar token
-    localStorage.removeItem("fullname");
-    localStorage.removeItem("role");
-    navigate("/login", { replace: true }); // redirigir al login
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Llamar al endpoint de logout
+      await fetch("http://localhost:3002/api/v1/auth/logout", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      
+      // Proceder con el logout en frontend
+      localStorage.removeItem("token"); // eliminar token
+      localStorage.removeItem("fullname");
+      localStorage.removeItem("role");
+      navigate("/login", { replace: true }); // redirigir al login
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+      // En caso de error, eliminar token de todas formas
+      localStorage.removeItem("token");
+      localStorage.removeItem("fullname");
+      localStorage.removeItem("role");
+      navigate("/login", { replace: true });
+    }
   };
 
   const fullname = localStorage.getItem("fullname");
