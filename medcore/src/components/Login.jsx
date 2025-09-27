@@ -5,6 +5,7 @@ import doctor from "../assets/doctor.png";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "../App.css";
+//import LoginButton from "./LoginButton";
 
 function Login() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [requiresVerification, setRequiresVerification] = useState(false);
+  const [verificationType, setVerificationType] = useState(null); // "EMAIL" o "2FA"
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
@@ -29,25 +31,30 @@ function Login() {
 
       if (response.ok) {
         if (data.requiresVerification) {
-          // ✅ Primera fase: se envió el código al correo
+          // ✅ Primera fase: requiere verificación
           setRequiresVerification(true);
-         Swal.fire({
-          icon: "info",
-          title: "Código enviado",
-          text: "Se envió un código de verificación a tu correo 📩",
-          confirmButtonColor: "#007bff"
-        });
+          setVerificationType(data.verificationType);
+
+          Swal.fire({
+            icon: "info",
+            title: "Verificación requerida",
+            text:
+              data.verificationType === "EMAIL"
+                ? "Tu cuenta aún no está activada. Verifica tu correo 📩"
+                : "Se envió un código de verificación a tu correo 📩",
+            confirmButtonColor: "#007bff",
+          });
         } else {
           // ✅ Segunda fase: login exitoso
           localStorage.setItem("token", data.token);
           localStorage.setItem("role", data.user.role);
           localStorage.setItem("fullname", data.user.fullname);
-          
-           Swal.fire({
+
+          Swal.fire({
             icon: "success",
             title: "Bienvenido!",
             text: "Login exitoso ✅",
-            confirmButtonColor: "#007bff"
+            confirmButtonColor: "#007bff",
           });
 
           const role = data.user.role;
@@ -57,6 +64,11 @@ function Login() {
           if (role === "ENFERMERO") navigate("/DashboardEnfermero");
         }
       } else {
+        // Error en login
+        if (data.requiresVerification) {
+          setRequiresVerification(true);
+          setVerificationType(data.verificationType);
+        }
         setError(data.message || "Credenciales inválidas");
       }
     } catch (err) {
@@ -86,6 +98,7 @@ function Login() {
           <img src={logo} alt="MedCore Logo" className="logo" />
 
           <form className="login-form" onSubmit={handleLogin}>
+            {/* Email */}
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
@@ -95,10 +108,11 @@ function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                disabled={requiresVerification} // bloquear en segunda fase
+                disabled={requiresVerification} // bloquear si ya pidió verificación
               />
             </div>
 
+            {/* Password */}
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
@@ -112,8 +126,8 @@ function Login() {
               />
             </div>
 
-            {/* Mostrar input de verificación SOLO si se requiere */}
-            {requiresVerification && (
+            {/* Input SOLO si es 2FA */}
+            {requiresVerification && verificationType === "2FA" && (
               <div className="form-group">
                 <label htmlFor="verificationCode">Código de verificación</label>
                 <input
@@ -127,9 +141,25 @@ function Login() {
               </div>
             )}
 
-            <button type="submit" className="login-button">
-              {requiresVerification ? "Verificar Código" : "Ingresar"}
-            </button>
+            {/* Botón SOLO si es verificación de email */}
+            {requiresVerification && verificationType === "EMAIL" && (
+              <button
+                type="button"
+                onClick={() => navigate("/verify-email")}
+                className="verify-button"
+              >
+                Verificar Cuenta
+              </button>
+            )}
+
+            
+
+            {/* Botón dinámico */}
+            {(!requiresVerification || verificationType === "2FA") && (
+              <button type="submit" className="login-button">
+                {requiresVerification ? "Verificar Código" : "Ingresar"}
+              </button>
+            )}
           </form>
 
           {/* Mostrar error si existe */}

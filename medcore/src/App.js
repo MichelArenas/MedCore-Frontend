@@ -6,6 +6,7 @@ import DashboardAdmin from "./components/DashboardAdmin";
 import DashboardMedico from "./components/DashboardMedico";
 import DashboardPaciente from "./components/DashboardPaciente";
 import DashboardEnfermero from "./components/DashboardEnfermero";
+import VerifyEmail from "./components/VerifyEmail";
 import PrivateRoute from "./components/PrivateRoute";
 
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/DashboardPaciente" element={<PrivateRoute><DashboardPaciente /></PrivateRoute>} />
         <Route path="/DashboardEnfermero" element={<PrivateRoute><DashboardEnfermero /></PrivateRoute>} />
         <Route path="/register-user" element={<PrivateRoute><RegisterUser /></PrivateRoute>} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>
     </Router>
  
