@@ -37,6 +37,9 @@ import "./DashboardAdmin.css";
         <button className="register-button" onClick={() => navigate("/register-user")}>
           Registrar Usuario
         </button>
+        <button className="register-button" onClick={() => navigate("/bulk-import")}>
+          Carga de Datos Masiva .CSV
+        </button>
         <button onClick={handleLogout} className="logOut-button">
           Cerrar sesión
         </button>

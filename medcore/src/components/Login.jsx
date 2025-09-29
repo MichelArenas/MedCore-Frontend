@@ -58,7 +58,7 @@ function Login() {
           });
 
           const role = data.user.role;
-          if (role === "ADMIN") navigate("/DashboardAdmin");
+          if (role === "ADMINISTRADOR") navigate("/DashboardAdmin");
           if (role === "MEDICO") navigate("/DashboardMedico");
           if (role === "PACIENTE") navigate("/DashboardPaciente");
           if (role === "ENFERMERO") navigate("/DashboardEnfermero");

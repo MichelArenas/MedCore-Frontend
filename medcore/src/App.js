@@ -23,6 +23,7 @@ function App() {
         <Route path="/DashboardEnfermero" element={<PrivateRoute><DashboardEnfermero /></PrivateRoute>} />
         <Route path="/register-user" element={<PrivateRoute><RegisterUser /></PrivateRoute>} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/bulk-import" element={<BulkImportCsv />} />
       </Routes>
     </Router>
  
