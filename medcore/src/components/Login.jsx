@@ -38,12 +38,10 @@ function Login() {
           Swal.fire({
             icon: "info",
             title: "Verificación requerida",
-            text:
-              data.verificationType === "EMAIL"
-                ? "Tu cuenta aún no está activada. Verifica tu correo 📩"
-                : "Se envió un código de verificación a tu correo 📩",
+            text: data.message,
             confirmButtonColor: "#007bff",
           });
+          
         } else {
           // ✅ Segunda fase: login exitoso
           localStorage.setItem("token", data.token);

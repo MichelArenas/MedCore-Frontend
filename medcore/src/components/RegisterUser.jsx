@@ -96,11 +96,6 @@ export default function RegisterUser() {
           </p>
         )}
       </form>
-       {message && (
-      <div className={`alert ${messageType}`}>
-        {message}
-      </div>
-    )}
     </div>
   );
 }
