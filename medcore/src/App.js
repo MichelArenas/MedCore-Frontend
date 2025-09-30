@@ -8,6 +8,7 @@ import DashboardPaciente from "./components/DashboardPaciente";
 import DashboardEnfermero from "./components/DashboardEnfermero";
 import VerifyEmail from "./components/VerifyEmail";
 import PrivateRoute from "./components/PrivateRoute";
+import BulkImportCsv from "./components/bulkTmportCsv";
 
 
 function App() {

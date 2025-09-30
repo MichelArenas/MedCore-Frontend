@@ -1,0 +1,195 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f9fc;
+  padding: 24px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*Tarjeta de carga*/
+.register-form {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  width: 540px;
+  max-width: 94vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Tarjeta de carga */
+.upload-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.register-container h2 {
+  margin-bottom: 20px;
+  color: #007bff;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.register-form label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+  text-align: left;
+}
+
+.register-form input {
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.register-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(13,110,253,0.2);
+}
+
+.register-btn {
+  margin-top: 6px;
+  padding: 14px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0,123,255,0.3);
+}
+
+.register-btn:hover {
+  background: #0056b3;
+  box-shadow: 0px 6px 14px rgba(0,86,179,0.5);
+  transform: translateY(-1px);
+}
+
+.register-message {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* From Uiverse.io by Yaya12085 */ 
+.container {
+  height: 300px;
+  width: 300px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 30px rgba(0, 0, 0, .2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 5px;
+  background-color: rgba(0, 110, 255, 0.041);
+}
+/* Caja superior con nube */
+.header {
+  flex: 1;
+  width: 100%;
+  min-height: 180px;
+  border: 2px dashed royalblue;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.header.dragging {
+  border-color: #0d6efd;
+  background: rgba(13,110,253,.06);
+}
+
+.header svg {
+  height: 100px;
+}
+
+.header p {
+  text-align: center;
+  color: black;
+}
+
+.footer {
+  background-color: rgba(0, 110, 255, 0.075);
+  width: 100%;
+  height: 40px;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: grid;
+  align-items: center;
+  justify-content: flex-end;
+  grid-template-columns: 36px 1fr 36px;
+  gap: 8px;
+  color: black;
+  border: none;
+}
+
+.footer svg {
+  height: 130%;
+  fill: royalblue;
+  background-color: rgba(70, 66, 66, 0.103);
+  border-radius: 50%;
+  padding: 2px;
+  cursor: pointer;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.205);
+}
+
+.footer p {
+  flex: 1;
+  text-align: center;
+}
+
+#file {
+  display: none;
+}
+.file-left svg,
+.file-right svg {
+  height: 22px;
+  width: 22px;
+
+}
+
+.file-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(70,66,66,0.08);
+  border-radius: 8px;
+  
+}
+
+.file-right:hover { background: rgba(70,66,66,0.16); }
+
+/* Texto del archivo */
+.file-middle { overflow: hidden; }
+.file-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-placeholder { color: #555; } 
+.file-meta { color: #666; font-size: 12px; }
+
+.register-message.success { color: #28a745; }
+.register-message.error   { color: #dc3545; }
