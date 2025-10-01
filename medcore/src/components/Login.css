@@ -160,3 +160,78 @@
   box-shadow: 0px 6px 14px rgba(0, 86, 179, 0.5);
   transform: translateY(-1px);
 }
+
+/* --- Responsivo --- */
+@media (max-width: 768px) {
+  .login-panel {
+    flex-direction: column; /* apilar paneles en vertical */
+    width: 100%;
+    height: auto;
+    border-radius: 0; /* opcional, para usar todo el ancho */
+  }
+
+  .left-panel {
+    flex: none;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .left-panel::before {
+    width: 100%;
+    height: 140px;
+    border-radius: 0 0 50% 50%;
+    
+  }
+
+  .doctor-img,
+  .image-container {
+    display: none; /* ocultamos el doctor para móviles */
+  }
+
+  .text-container {
+    margin-top: 20px;
+    align-items: flex-start; 
+    padding-right: 20px
+   
+  }
+
+  .welcome-title {
+    margin-top: 5px;
+    font-size: 23px;
+
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+   .right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    padding-left: 15px;     
+    padding-right: 20px;     
+  }
+
+  .logo {
+    width: 123px;
+    margin-bottom: 20px;
+  }
+
+    /* Inputs más pequeños */
+  .login-form input {
+    padding: 8px;          /* menos alto */
+    font-size: 13px;       /* texto más pequeño */
+    border-radius: 6px;    /* esquinas menos redondeadas */
+  }
+
+  /* Botón más compacto */
+  .login-form button {
+    padding: 10px;         /* menos alto */
+    font-size: 14px;       /* texto más pequeño */
+    border-radius: 6px;
+  }
+
+  
+}
