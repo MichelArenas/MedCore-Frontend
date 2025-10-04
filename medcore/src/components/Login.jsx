@@ -5,6 +5,7 @@ import doctor from "../assets/doctor.png";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "../App.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 //import LoginButton from "./LoginButton";
 
 function Login() {
@@ -14,6 +15,7 @@ function Login() {
   const [verificationCode, setVerificationCode] = useState("");
   const [requiresVerification, setRequiresVerification] = useState(false);
   const [verificationType, setVerificationType] = useState(null); // "EMAIL" o "2FA"
+  const [showPassword, setShowPassword] = useState(false); // 👁️ para mostrar/ocultar password
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
@@ -111,17 +113,25 @@ function Login() {
             </div>
 
             {/* Password */}
-            <div className="form-group">
+            <div className="form-group ">
               <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Ingresa tu contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={requiresVerification}
-              />
+              <div className="password-wrapper">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"} // 👈 alterna entre texto y password
+                  placeholder="Ingresa tu contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={requiresVerification}
+                />
+                <span
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />} {/* 👈 ojo abierto/cerrado */}
+                </span>
+              </div>
             </div>
 
             {/* Input SOLO si es 2FA */}

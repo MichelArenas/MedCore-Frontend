@@ -161,8 +161,53 @@
   transform: translateY(-1px);
 }
 
-/* --- Responsivo --- */
-@media (max-width: 768px) {
+/* Contenedor del input de password con botón */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* espacio para el botón */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Contenedor de contraseña con ícono */
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 40px; /* espacio para el icono */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #007bff;
+  margin-bottom: -10px;
+}
+.toggle-password:hover {
+  color: #0056b3;
+}
+
+/* --- Responsivo Movil --- */
+@media (max-width: 639px) {
   .login-panel {
     flex-direction: column; /* apilar paneles en vertical */
     width: 100%;
@@ -232,6 +277,58 @@
     font-size: 14px;       /* texto más pequeño */
     border-radius: 6px;
   }
+}
+
+  /* --- Tablet (640px - 1024px) --- */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .login-panel {
+    flex-direction: row; /* sigue siendo dos columnas */
+    width: 95%;
+    height: auto;
+  }
+
+  .left-panel {
+    padding: 20px;
+  }
+
+  /* Mover doctor hacia la izquierda */
+  .image-container {
+    margin-top: 100px;  /* lo bajas un poco si quieres */
+    transform: translateX(70px); /* antes estaba en 160px, aquí lo acercamos */
+  }
+
+  .welcome-title {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .doctor-img {
+    width: 180px;
+    margin-bottom: -30px;
+
+  }
+
+  .logo {
+    width: 140px;
+    margin-bottom: 30px;
+  }
+
+  .login-form {
+    width: 85%;
+  }
+
+  .login-form input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .login-form button {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
 
   
-}

@@ -9,6 +9,7 @@ import DashboardEnfermero from "./components/DashboardEnfermero";
 import VerifyEmail from "./components/VerifyEmail";
 import PrivateRoute from "./components/PrivateRoute";
 import BulkImportCsv from "./components/bulkTmportCsv";
+import LandingPage from "./components/LandinPage";
 
 
 function App() {
@@ -16,8 +17,9 @@ function App() {
    
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="/DashboardAdmin" element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
         <Route path="/DashboardMedico" element={<PrivateRoute><DashboardMedico /></PrivateRoute>} />
         <Route path="/DashboardPaciente" element={<PrivateRoute><DashboardPaciente /></PrivateRoute>} />

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./DashboardAdmin.css";
+import Sidebar from "./Sidebar";
 
  function Dashboard() {
   const navigate = useNavigate();
@@ -19,18 +20,23 @@ import "./DashboardAdmin.css";
       
       // Proceder con el logout en frontend
       localStorage.removeItem("token"); // eliminar token
-      navigate("/login", { replace: true }); // redirigir al login
+      navigate("/landing", { replace: true }); // redirigir al landing
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
       // En caso de error, eliminar token de todas formas
       localStorage.removeItem("token");
-      navigate("/login", { replace: true });
+      navigate("/landing", { replace: true });
     }
   };
 
   return (
     
     <div className="dashboard-container">
+        <header className="dashboard-header">
+        <div className="header-left">
+          <Sidebar /> {/* Botón menú hamburguesa */}
+        </div>
+      </header>
       <h1>Bienvenido Enfermero</h1>
        <button onClick={handleLogout} className="logOut-button">
         Cerrar sesión
