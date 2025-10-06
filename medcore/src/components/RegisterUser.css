@@ -15,7 +15,7 @@
   padding: 30px 40px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 350px;
+  width: 500px; /* Aumentado para acomodar más campos */
   display: flex;
   flex-direction: column;
 }
@@ -116,3 +116,122 @@ margin-top: 22px;
   box-shadow: 0 0 6px rgba(13, 110, 253, 0.2);
 }
 
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 10px;
+  color: #666;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.nav-btn.active {
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+}
+
+.nav-btn:hover {
+  color: #007bff;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.prev-btn, .next-btn {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.prev-btn:hover, .next-btn:hover {
+  background-color: #e0e0e0;
+}
+
+select {
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+  background-color: white;
+}
+
+select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+/* Estilos para campos requeridos */
+label::after {
+  content: " *";
+  color: #dc3545;
+  font-weight: bold;
+}
+
+label:not(:has(+ input[required]))::after,
+label:not(:has(+ select[required]))::after {
+  content: "";
+}
+
+/* Estilo para el título de contacto de emergencia */
+h3 {
+  font-size: 16px;
+  color: #444;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+/* Responder a pantallas pequeñas */
+@media (max-width: 600px) {
+  .register-form {
+    width: 90%;
+    padding: 20px;
+  }
+  
+  .form-navigation {
+    flex-direction: column;
+  }
+  
+  .nav-btn {
+    margin-bottom: 5px;
+  }
+}
