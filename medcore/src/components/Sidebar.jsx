@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { FaBars, FaTimes, FaCog, FaQuestionCircle, FaPhone, FaSignOutAlt } from "react-icons/fa";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../utils/authUtils";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("fullname");
+    logout(); // Usa la función centralizada de logout
     navigate("/"); // Redirige al landing page
   };
 

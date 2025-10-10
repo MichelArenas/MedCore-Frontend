@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import "./DashboardAdmin.css"
 import Sidebar from "../components/Sidebar"
+import { logout } from "../utils/authUtils"
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -19,12 +20,12 @@ function Dashboard() {
       })
 
       // Proceder con el logout en frontend
-      localStorage.removeItem("token")
+      logout() // Usar función centralizada
       navigate("/landing", { replace: true })
     } catch (error) {
       console.error("Error al cerrar sesión:", error)
       // En caso de error, limpiar de todas formas
-      localStorage.removeItem("token")
+      logout() // Usar función centralizada
       navigate("/landing", { replace: true })
     }
   }
