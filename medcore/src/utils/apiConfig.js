@@ -3,10 +3,13 @@
  * a través del API Gateway
  */
 
-// URL base del API Gateway
-export const API_GATEWAY_URL = 'http://localhost:3001';
+// Base del API (lee REACT_APP_API_BASE_URL o por defecto /api)
+const API_BASE = process.env.REACT_APP_API_BASE_URL || '/api';
 
-// Endpoints para autenticación
+// Exporta la base por si otros módulos la necesitan
+export const API_GATEWAY_URL = API_BASE;
+
+// el resto de endpoints tal cual:
 export const AUTH_ENDPOINTS = {
   SIGN_IN: `${API_GATEWAY_URL}/api/v1/auth/sign-in`,
   SIGN_UP: `${API_GATEWAY_URL}/api/v1/auth/sign-up`,
