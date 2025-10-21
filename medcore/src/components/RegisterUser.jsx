@@ -1,5 +1,6 @@
 import { useState } from "react";
-import "./RegisterUser.css"; 
+import "./RegisterUser.css";
+import { userService } from "../utils/userService"; // Importamos el servicio de usuarios
 
 // Importar CSS personalizado si no está ya en RegisterUser.css
 
@@ -100,18 +101,18 @@ export default function RegisterUser() {
     };
 
     try {
-      const response = await fetch("http://localhost:3003/api/v1/users", {
+      /*const response = await fetch("http://localhost:3003/api/v1/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(userData),
-      });
+      });*/
+      // Usar el servicio de usuarios en lugar de fetch directo
+      const result = await userService.createUser(userData);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.ok) {
         setMessage("Usuario registrado correctamente ✅");
         setMessageType("success");
         // Limpiar todos los campos
@@ -130,7 +131,7 @@ export default function RegisterUser() {
         setEmergencyContact({ name: "", phone: "", relationship: "" });
         setActiveSection("basic");
       } else {
-        setMessage(data.message || "Error al registrar usuario ❌");
+        setMessage(result.data?.message || "Error al registrar usuario ❌");
         setMessageType("error");
       }
     } catch (error) {
