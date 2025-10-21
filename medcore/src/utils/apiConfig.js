@@ -3,8 +3,8 @@
  * a través del API Gateway
  */
 
-// Base del API (lee REACT_APP_API_BASE_URL o por defecto /api)
-const API_BASE = process.env.REACT_APP_API_BASE_URL || '/api';
+// Base del API (lee REACT_APP_API_BASE_URL o por defecto '')
+const API_BASE = process.env.REACT_APP_API_BASE_URL || '';
 
 // Exporta la base por si otros módulos la necesitan
 export const API_GATEWAY_URL = API_BASE;

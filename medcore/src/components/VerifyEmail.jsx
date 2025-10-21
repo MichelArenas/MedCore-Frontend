@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./VerifyEmail.css";
 import { authService } from "../utils/userService"; // Importamos el servicio de autenticación
 
 function VerifyEmail() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
@@ -23,6 +25,12 @@ function VerifyEmail() {
           title: "Cuenta verificada ✅",
           text: result.data.message || "Tu cuenta ha sido verificada correctamente",
           confirmButtonColor: "#007bff",
+          confirmButtonText: "OK"
+        }).then((result) => {
+          // Redirigir al login cuando se haga clic en OK
+          if (result.isConfirmed) {
+            navigate('/login');
+          }
         });
       } else {
         Swal.fire({
