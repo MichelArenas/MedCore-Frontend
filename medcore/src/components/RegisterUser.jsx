@@ -100,7 +100,7 @@ export default function RegisterUser() {
     };
 
     try {
-      const response = await fetch("http://localhost:3002/api/v1/users", {
+      const response = await fetch("http://localhost:3003/api/v1/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

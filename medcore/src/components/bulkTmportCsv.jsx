@@ -77,7 +77,7 @@ export default function BulkImportCsv() {
             formData.append("file", file);
             const token = localStorage.getItem("token");
 
-            const response = await fetch("http://localhost:3002/api/v1/users/bulk-import", {
+            const response = await fetch("http://localhost:3003/api/v1/users/bulk-import", {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`
