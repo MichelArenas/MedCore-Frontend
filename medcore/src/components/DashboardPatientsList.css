@@ -1,0 +1,188 @@
+html, body, #root { height: 100%; }
+body { margin: 0; background: #f4f7fc; }
+
+.patients-list-container,
+.dashboard-content {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.patients-list-container {
+  font-family: "Poppins", sans-serif;
+  background: #f4f7fc;
+  min-height: 100vh;
+  padding: 32px 16px;
+}
+
+.header-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  color: #007bff;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.search-container .search-input {
+  padding: 10px 12px;
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  outline: none;
+  min-width: 280px;
+}
+
+.patients-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid #e1e9f4;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.patients-table thead th {
+  background: #eaf3ff;
+  color: #0f62fe;
+  text-align: left;
+  padding: 12px 14px;
+  font-weight: 700;
+  border-bottom: 1px solid #d9e6fb;
+}
+
+.patients-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eef3fb;
+  color: #1f2937;
+}
+
+.patients-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.status-active { background: #e6f9ef; color: #138a36; border: 1px solid #b9f0cf; }
+.status-disabled { background: #fdecec; color: #b42318; border: 1px solid #f8c9c6; }
+.status-pending { background: #fff7e6; color: #b76e00; border: 1px solid #ffe2a8; }
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn,
+.toggle-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.edit-btn { background: #0ea5e9; color: white; }
+.edit-btn:hover { filter: brightness(0.95); }
+
+.btn-disable { background: #ef4444; color: white; }
+.btn-enable { background: #22c55e; color: white; }
+.toggle-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+
+/* -------- Desktop (>1024px) -------- */
+@media (min-width: 1025px) {
+  .patients-list-container {
+    max-width: 1200px;   /* ancho amable */
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+  .patients-table { table-layout: auto; }
+}
+
+/* -------- Tablet (640px–1024px) -------- */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .patients-list-container {
+    max-width: 100%;     /* usa todo el ancho disponible */
+    margin: 0 auto;
+    padding: 28px 18px;
+  }
+
+  .header-container {
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .title { font-size: 2rem; }
+
+  .search-container { margin-left: auto; }
+  .search-input { min-width: 320px; height: 40px; }
+
+  /* Asegura que NO queden columnas ocultas por reglas mobile */
+  .patients-table thead th,
+  .patients-table tbody td {
+    display: table-cell !important;
+    white-space: nowrap;
+    padding: 12px 12px;
+    font-size: 0.95rem;
+  }
+
+  .patients-table {
+    width: 100%;
+    table-layout: auto; /* deja que se expanda */
+  }
+
+  .actions { gap: 10px; flex-direction: row; }
+  .edit-btn, .toggle-btn { padding: 9px 12px; }
+}
+
+/* -------- Mobile (<640px) -------- */
+@media (max-width: 639px) {
+  .patients-list-container { padding: 20px 12px; }
+
+  .header-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .title { font-size: 1.6rem; text-align: left; }
+
+  .search-input { width: 100%; min-width: 0; height: 38px; }
+
+  .patients-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+  }
+
+  .patients-table thead th,
+  .patients-table tbody td {
+    padding: 10px 10px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  /* Oculta columnas menos críticas en móvil */
+  .patients-table thead th:nth-child(3),
+  .patients-table thead th:nth-child(4),
+  .patients-table thead th:nth-child(5),
+  .patients-table tbody td:nth-child(3),
+  .patients-table tbody td:nth-child(4),
+  .patients-table tbody td:nth-child(5) {
+    display: none !important;
+  }
+
+  .actions { flex-direction: column; gap: 6px; }
+  .edit-btn, .toggle-btn { width: 100%; padding: 8px 10px; }
+}

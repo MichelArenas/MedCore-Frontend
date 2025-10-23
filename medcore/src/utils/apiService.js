@@ -36,6 +36,11 @@ export const apiRequest = async (url, options = {}) => {
       requestOptions.headers['Authorization'] = `Bearer ${token}`;
     }
 
+    // Si el body es FormData, NO fijes 'Content-Type' (el navegador lo pone con boundary)
+    if (requestOptions.body instanceof FormData) {
+      delete requestOptions.headers['Content-Type'];
+    }
+
     // Realizar la petición
     const response = await fetch(url, requestOptions);
     

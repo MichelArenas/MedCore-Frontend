@@ -50,14 +50,31 @@ export const PATIENT_ENDPOINTS = {
   GET_MEDICAL_HISTORY: (id) => `${API_GATEWAY_URL}/api/v1/patients/${id}/medical-history`,
 };
 
-// Endpoints para historial médico
-export const MEDICAL_RECORDS_ENDPOINTS = {
-  BASE: `${API_GATEWAY_URL}/api/v1/medical-records`,
-  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/medical-records/${id}`,
-};
-
 // Endpoints para auditoría
 export const AUDIT_ENDPOINTS = {
   BASE: `${API_GATEWAY_URL}/api/v1/audit`,
   GET_BY_ENTITY: (entity, id) => `${API_GATEWAY_URL}/api/v1/audit/${entity}/${id}`,
+};
+
+// Endpoints para historial médico
+export const MEDICAL_RECORDS_ENDPOINTS = {
+  BASE: `${API_GATEWAY_URL}/api/v1/medical-records`,
+  GET_BY_ID: (id) => `${API_GATEWAY_URL}/medical-records/${id}`,
+  // tu back lista con filtros; si soporta ?patientId=:
+  LIST: (patientId) =>
+    patientId ? `${API_GATEWAY_URL}/api/v1/medical-records?patientId=${encodeURIComponent(patientId)}`
+              : `${API_GATEWAY_URL}/api/v1/medical-records`,
+};
+
+// Documents (adjuntos)
+export const DOCUMENTS_ENDPOINTS = {
+  UPLOAD: `${API_GATEWAY_URL}/api/v1/documents/upload`,                 // POST multipart
+  BY_PATIENT: (id) => `${API_GATEWAY_URL}/api/v1/documents/patient/${id}`, // GET
+  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/documents/${id}`,          // GET (descarga)
+  DELETE: (id) => `${API_GATEWAY_URL}/api/v1/documents/${id}`,             // DELETE
+};
+
+// Diagnosis (crear para un paciente — multipart si subes archivos)
+export const DIAGNOSIS_ENDPOINTS = {
+  CREATE_FOR_PATIENT: (patientId) => `${API_GATEWAY_URL}/api/v1/diagnosis/${patientId}/diagnostics`,
 };

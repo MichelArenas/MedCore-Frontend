@@ -2,14 +2,16 @@
  * Servicios para los paneles de administración
  */
 
-import { get, post, put, patch, del } from './apiService';
+import { get, post, put, del, apiRequest } from './apiService';
 import { 
   DEPT_ENDPOINTS, 
   AFFILIATION_ENDPOINTS, 
   SPECIALITY_ENDPOINTS,
   PATIENT_ENDPOINTS,
   MEDICAL_RECORDS_ENDPOINTS,
-  AUDIT_ENDPOINTS
+  AUDIT_ENDPOINTS,
+  DOCUMENTS_ENDPOINTS,
+  DIAGNOSIS_ENDPOINTS
 } from './apiConfig';
 
 /**
@@ -193,3 +195,65 @@ export const auditService = {
     return await get(AUDIT_ENDPOINTS.GET_BY_ENTITY(entity, id));
   },
 };
+
+// --- Medical Records ---
+export const medicalRecordsService = {
+  list: (patientId) => get(MEDICAL_RECORDS_ENDPOINTS.LIST(patientId)),
+  getById: (id) => get(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id)),
+  create: (payload) => post(MEDICAL_RECORDS_ENDPOINTS.BASE, payload),
+  update: (id, payload) => put(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id), payload),
+  archive: (id) => del(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id)),
+};
+
+// --- Documents (adjuntos) ---
+export const documentsService = {
+  listByPatient: (patientId) => get(DOCUMENTS_ENDPOINTS.BY_PATIENT(patientId)),
+  upload: async ({ file, patientId, encounterId, diagnosisId, description, tags, category }) => {
+    const fd = new FormData();
+    fd.append("document", file);
+    if (patientId) fd.append("patientId", patientId);
+    if (encounterId) fd.append("encounterId", encounterId);
+    if (diagnosisId) fd.append("diagnosisId", diagnosisId);
+    if (description) fd.append("description", description);
+    if (tags) fd.append("tags", tags);
+    if (category) fd.append("category", category);
+
+    return apiRequest(DOCUMENTS_ENDPOINTS.UPLOAD, {
+      method: "POST",
+      headers: {},
+      body: fd,
+    });
+  },
+  downloadUrl: (id) => DOCUMENTS_ENDPOINTS.GET_BY_ID(id), // <- FIX
+  remove: (id) => del(DOCUMENTS_ENDPOINTS.DELETE(id)),
+};
+
+// --- Diagnosis (crear) ---
+export const diagnosisService = {
+  // Si envías SIN archivos: JSON
+  createForPatientJson: (patientId, payload) =>
+    post(DIAGNOSIS_ENDPOINTS.CREATE_FOR_PATIENT(patientId), payload),
+
+  // Si envías CON archivos: multipart (como en Postman)
+  createForPatientFormData: async (patientId, {
+    title, description, diagnosis, treatment, observations, nextAppointment, medicalRecordId, files = []
+  }) => {
+    const fd = new FormData();
+    if (title) fd.append("title", title);
+    if (description) fd.append("description", description);
+    if (diagnosis) fd.append("diagnosis", diagnosis);
+    if (treatment) fd.append("treatment", treatment);
+    if (observations) fd.append("observations", observations);
+    if (nextAppointment) fd.append("nextAppointment", nextAppointment);
+    if (medicalRecordId) fd.append("medicalRecordId", medicalRecordId);
+    files.forEach(f => fd.append("documents", f)); // **clave** para múltiples archivos
+
+    return apiRequest(DIAGNOSIS_ENDPOINTS.CREATE_FOR_PATIENT(patientId), {
+      method: "POST",
+      headers: {},
+      body: fd,
+    });
+  },
+};
+
+

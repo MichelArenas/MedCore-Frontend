@@ -63,7 +63,7 @@ function Dashboard() {
   {/* Tarjeta de pacientes */}
   <div
     className="card card-pacientes"
-    onClick={() => navigate("")}
+    onClick={() => navigate("/DashboardPatientsList")}
   >
     <h2>Pacientes</h2>
   </div>

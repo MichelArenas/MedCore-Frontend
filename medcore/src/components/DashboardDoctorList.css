@@ -1,5 +1,15 @@
 /* DashboardDoctorsList.css */
 
+html, body, #root { height: 100%; }
+body { margin: 0; background: #f4f7fc; }
+
+.doctors-list-container,
+.patients-list-container,
+.dashboard-content {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* Contenedor general */
 .doctors-list-container {
   max-width: 1000px;
@@ -58,7 +68,7 @@
   margin-top: 50px;
 }
 
-//--botones--//
+/*botones*/
 .status-badge {
   padding: 6px 12px;
   border-radius: 20px;
@@ -96,7 +106,7 @@
   cursor: not-allowed;
 }
 
-//--busqueda--//
+/*--busqueda--*/
 .search-container {
   margin: 0;
 }
@@ -142,4 +152,96 @@ display: flex;
 
 .edit-btn:hover {
   background-color: #1e40af;
+}
+
+/* ====== Desktop (>1024px) ====== */
+@media (min-width: 1025px) {
+  .doctors-list-container {
+    max-width: 1200px;   /* más ancho en desktop */
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+  .doctors-table { table-layout: auto; }
+}
+
+/* ====== Tablet (640px–1024px) ====== */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .doctors-list-container {
+    max-width: 100%;      /* ocupar todo el ancho */
+    margin: 0;            /* sin centrado estrecho */
+    padding: 28px 18px;
+  }
+
+  .header-container {
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .title { font-size: 2rem; }
+
+  .search-container { margin-left: auto; }
+  .search-input { min-width: 320px; height: 40px; }
+
+  .doctors-table {
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .doctors-table thead th,
+  .doctors-table tbody td {
+    display: table-cell !important;
+    white-space: nowrap;
+    padding: 12px 12px;
+    font-size: 0.95rem;
+  }
+
+  .actions { gap: 10px; flex-direction: row; }
+  .edit-btn, .toggle-btn { padding: 9px 12px; }
+}
+
+/* ====== Mobile (<640px) ====== */
+@media (max-width: 639px) {
+  .doctors-list-container {
+    max-width: 100%;   /* que no quede tarjeta */
+    margin: 0;
+    padding: 20px 12px;
+  }
+
+  .header-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .title { font-size: 1.6rem; text-align: left; }
+
+  .search-input { width: 100%; min-width: 0; height: 38px; }
+
+  .doctors-table {
+    display: block;               /* enable scroll horizontal si es necesario */
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+  }
+
+  .doctors-table thead th,
+  .doctors-table tbody td {
+    padding: 10px 10px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  /* Oculta columnas menos críticas en móvil: 3=Tipo, 4=Nro, 5=Edad */
+  .doctors-table thead th:nth-child(3),
+  .doctors-table thead th:nth-child(4),
+  .doctors-table thead th:nth-child(5),
+  .doctors-table tbody td:nth-child(3),
+  .doctors-table tbody td:nth-child(4),
+  .doctors-table tbody td:nth-child(5) {
+    display: none !important;
+  }
+
+  .actions { flex-direction: column; gap: 6px; }
+  .edit-btn, .toggle-btn { width: 100%; padding: 8px 10px; }
 }

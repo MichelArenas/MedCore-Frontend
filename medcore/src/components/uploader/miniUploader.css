@@ -1,0 +1,29 @@
+:root{
+  --primary:#0a66ff; --primary-600:#0056d6;
+  --border:#e6eef7; --card:#fff; --muted:#6b7280; --text:#1f2937;
+}
+.miniup-card{ display:flex; flex-direction:column; gap:8px; }
+.miniup-drop{
+  width:100%; min-height:120px; border:2px dashed var(--primary);
+  border-radius:12px; background: color-mix(in oklab, var(--primary) 6%, transparent);
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  transition: .2s ease; cursor:pointer;
+}
+.miniup-drop.dragging{ background: color-mix(in oklab, var(--primary) 12%, transparent); transform: translateY(-1px); }
+.miniup-drop svg{ height:64px }
+.miniup-drop p{ margin-top:8px; color:var(--muted); font-weight:600 }
+
+.miniup-bar{
+  width:100%; min-height:42px; padding:8px 10px; border:1px solid var(--border);
+  border-radius:10px; display:grid; grid-template-columns: 28px 1fr auto; gap:8px; align-items:center;
+  background: color-mix(in oklab, var(--primary) 4%, transparent); cursor:pointer;
+}
+.miniup-left svg{ height:18px; fill: var(--primary); opacity:.9 }
+.miniup-mid{ overflow:hidden }
+.miniup-name{ font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.miniup-placeholder{ color:var(--muted) }
+.miniup-meta{ color:var(--muted); font-size:12px; }
+.miniup-right{
+  border:0; background:#eef2ff; color:#1f2937; border-radius:8px; padding:6px 10px; cursor:pointer;
+}
+.miniup-right:hover{ background:#e0e7ff }
