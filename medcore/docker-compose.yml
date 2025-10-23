@@ -1,0 +1,15 @@
+services:
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: medcore-frontend:latest
+    ports:
+      - "3000:80"
+    networks:
+      medcore_net:
+        aliases: [front]
+
+networks:
+  medcore_net:
+    external: true
