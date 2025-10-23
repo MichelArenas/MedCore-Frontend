@@ -1,92 +1,146 @@
-.register-button{
-  margin-top: 22px;
-  padding: 14px;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
-
-}
-
-.logOut-button{
-  margin-top: 22px;
-  padding: 14px;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
-}
-
-.register-button:hover {
-  background: #0056b3;
-  box-shadow: 0px 6px 14px rgba(0, 86, 179, 0.5);
-  transform: translateY(-1px);
-}
-
-.logOut-button:hover {
-  background: #0056b3;
-  box-shadow: 0px 6px 14px rgba(0, 86, 179, 0.5);
-  transform: translateY(-1px);
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* centra los botones */
-  gap: 20px;           /* separación entre botones */
-}
-
-
-.dashboard-container{
-  font-size: 38px;
-  font-weight: bold;
+/* ==============================
+   🔹 Estilos Generales Dashboard
+   ============================== */
+.dashboard-container {
+  font-family: "Poppins", sans-serif;
   color: #007bff;
   text-align: center;
-  
+  background: #f4f7fc;
+  min-height: 100vh;
 }
 
 /* Cabecera */
 .dashboard-header {
   width: 100%;
   height: 70px;
-  background-color: #007bff; /* azul oscuro */
+  background: linear-gradient(90deg, #007bff, #339dff);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+  padding: 0 25px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  border-bottom: 2px solid #e1e9f4;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+}
 
-/* Botón hamburguesa */
 .menu-button {
   background: none;
   border: none;
   cursor: pointer;
-  
 }
 
-/* Contenido */
+/* Contenido principal */
 .dashboard-content {
-  flex: 1;
-  padding: 40px 20px;
-  margin-top: 20px; /* separación extra de la cabecera */
+  padding: 50px 20px;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Título */
 .dashboard-content h1 {
-  margin-bottom: 30px;
+  font-size: 2.4rem;
   color: #007bff;
+  margin-bottom: 35px;
+  font-weight: 700;
+  text-shadow: 1px 2px 5px rgba(0, 123, 255, 0.2);
 }
 
+/* ==============================
+   🔹 Tarjetas principales
+   ============================== */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
 
+.card {
+  width: 200px;
+  height: 120px;
+  border-radius: 15px;
+  background: #ffffff;
+  border: 2px solid #007bff;
+  color: #007bff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 5px 12px rgba(0, 123, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.35s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  background: #007bff;
+  color: #ffffff;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.35);
+}
+
+/* ==============================
+   🔹 Botones tipo cards
+   ============================== */
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 35px;
+}
+
+.card-button {
+  width: 200px;
+  height: 120px;
+  background: #ffffff;
+  color: #007bff;
+  border: 2px solid #007bff;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(0, 123, 255, 0.2);
+  transition: all 0.35s ease;
+}
+
+.card-button:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.35);
+}
+
+/* ==============================
+   🔹 Botón de cierre
+   ============================== */
+.logOut-button {
+  margin-top: 15px;
+  padding: 12px 26px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.logOut-button:hover {
+  background: #0056b3;
+  box-shadow: 0px 6px 16px rgba(0, 86, 179, 0.5);
+  transform: translateY(-2px);
+}
