@@ -1,5 +1,11 @@
 node_modules
-build
 .git
 Dockerfile
-docker-compose.yml
+docker-compose*.yml
+npm-debug.log
+.vscode
+dist
+build
+coverage
+*.log
+.env*

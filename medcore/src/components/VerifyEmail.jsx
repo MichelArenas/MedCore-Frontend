@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./VerifyEmail.css";
+import { authService } from "../utils/userService"; // Importamos el servicio de autenticación
 
 function VerifyEmail() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
@@ -10,26 +13,30 @@ function VerifyEmail() {
   const handleVerify = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3002/api/v1/auth/verify-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, verificationCode }),
+      // Usar el servicio de autenticación en lugar de fetch directo
+      const result = await authService.verifyEmail({ 
+        email, 
+        verificationCode 
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.ok) {
         Swal.fire({
           icon: "success",
           title: "Cuenta verificada ✅",
-          text: data.message || "Tu cuenta ha sido verificada correctamente",
+          text: result.data.message || "Tu cuenta ha sido verificada correctamente",
           confirmButtonColor: "#007bff",
+          confirmButtonText: "OK"
+        }).then((result) => {
+          // Redirigir al login cuando se haga clic en OK
+          if (result.isConfirmed) {
+            navigate('/login');
+          }
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: data.message || "No se pudo verificar la cuenta",
+          text: result.data.message || "No se pudo verificar la cuenta",
           confirmButtonColor: "#d33",
         });
       }

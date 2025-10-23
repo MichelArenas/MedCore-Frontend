@@ -10,6 +10,8 @@ import VerifyEmail from "./components/VerifyEmail";
 import PrivateRoute from "./components/PrivateRoute";
 import BulkImportCsv from "./components/bulkTmportCsv";
 import LandingPage from "./components/LandinPage";
+import DashboardDoctorsList from "./components/DashboardDoctorsList";
+import DashboardNursesList from "./components/DashboardNursesList";
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/DashboardAdmin" element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
         <Route path="/DashboardMedico" element={<PrivateRoute><DashboardMedico /></PrivateRoute>} />
+        <Route path="/DashboardDoctorsList" element={<PrivateRoute><DashboardDoctorsList/></PrivateRoute>}/>
+        <Route path="/DashboardNursesList" element={<PrivateRoute><DashboardNursesList/></PrivateRoute>}/>
         <Route path="/DashboardPaciente" element={<PrivateRoute><DashboardPaciente /></PrivateRoute>} />
         <Route path="/DashboardEnfermero" element={<PrivateRoute><DashboardEnfermero /></PrivateRoute>} />
         <Route path="/register-user" element={<PrivateRoute><RegisterUser /></PrivateRoute>} />

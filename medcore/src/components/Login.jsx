@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "../App.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { authService } from "../utils/userService"; // Importamos el servicio de autenticación
 //import LoginButton from "./LoginButton";
 
 function Login() {
@@ -23,15 +24,17 @@ function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3002/api/v1/auth/sign-in", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, verificationCode }),
+      // Usar el servicio de autenticación en lugar de fetch directo
+      const result = await authService.login({ 
+        email, 
+        password, 
+        verificationCode 
       });
 
-      const data = await response.json();
+      // Obtener datos de la respuesta
+      const { ok, data } = result;
 
-      if (response.ok) {
+      if (ok) {
         if (data.requiresVerification) {
           // ✅ Primera fase: requiere verificación
           setRequiresVerification(true);
@@ -49,6 +52,7 @@ function Login() {
           localStorage.setItem("token", data.token);
           localStorage.setItem("role", data.user.role);
           localStorage.setItem("fullname", data.user.fullname);
+          localStorage.setItem("userId", data.user.id);
 
           Swal.fire({
             icon: "success",

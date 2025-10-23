@@ -41,29 +41,57 @@ function Dashboard() {
       </header>
 
       <div className="dashboard-content">
-        <h1>Bienvenido al Dashboard</h1>
+        <h1>Bienvenido Administrador</h1>
+<div className="cards-container">
+  {/* Tarjeta de doctores */}
+  <div
+    className="card card-doctors"
+    onClick={() => navigate("/DashboardDoctorsList")}
+  >
+    <h2>Doctores</h2>
+  </div>
 
-        <div className="button-group">
-          <button
-            className="register-button"
-            onClick={() => navigate("/register-user")}
-          >
-            Registrar Usuario
-          </button>
+  {/* Tarjeta de enfermeros */}
+  <div
+    className="card card-nurses"
+    onClick={() => navigate("/DashboardNursesList")}
+  >
+    <h2>Enfermeros</h2>
+  </div>
 
-          <button
-            className="register-button"
-            onClick={() => navigate("/bulk-import")}
-          >
-            Carga de Datos Masiva .CSV
-          </button>
+
+  {/* Tarjeta de pacientes */}
+  <div
+    className="card card-pacientes"
+    onClick={() => navigate("")}
+  >
+    <h2>Pacientes</h2>
+  </div>
+</div>
+
+       <div className="button-group">
+  <button
+    className="card-button"
+    onClick={() => navigate("/register-user")}
+  >
+    Registrar Usuario
+  </button>
+
+  <button
+    className="card-button"
+    onClick={() => navigate("/bulk-import")}
+  >
+    Carga de Datos Masiva .CSV
+  </button>
+
+</div>
 
           <button onClick={handleLogout} className="logOut-button">
             Cerrar sesión
           </button>
         </div>
       </div>
-    </div>
+    
   )
 }
 

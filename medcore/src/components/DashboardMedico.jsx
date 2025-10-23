@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./DashboardAdmin.css";
+import "./DashboardMedico.css";
 import Sidebar from "./Sidebar";
 import { logout } from "../utils/authUtils";
 
@@ -38,6 +38,8 @@ import { logout } from "../utils/authUtils";
           <Sidebar /> {/* Botón menú hamburguesa */}
         </div>
       </header>
+
+      
       <h1>Bienvenido Médico</h1>
        <button onClick={handleLogout} className="logOut-button">
         Cerrar sesión

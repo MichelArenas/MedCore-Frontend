@@ -1,0 +1,145 @@
+/* DashboardDoctorsList.css */
+
+/* Contenedor general */
+.doctors-list-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #f9f9f9; /* Fondo claro */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Título */
+.doctors-list-container h1 {
+  text-align: center;
+  color: #006cdfff;
+  margin-bottom: 30px;
+  font-size: 40px;
+}
+
+/* Tabla */
+.doctors-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Encabezado de la tabla */
+.doctors-table thead {
+  background-color: #007bff; 
+  color: white;
+}
+
+.doctors-table th,
+.doctors-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+/* Filas alternas */
+.doctors-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Hover en filas */
+.doctors-table tbody tr:hover {
+  background-color: #e0f7fa;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Mensajes de carga y error */
+.loading, .error {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin-top: 50px;
+}
+
+//--botones--//
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+
+.toggle-btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-enable {
+  background-color: #1c4f86ff;
+  color: white;
+}
+
+.btn-disable {
+  background-color: #1c4f86ff;
+  color: white;
+}
+
+.toggle-btn:hover {
+  opacity: 0.9;
+}
+
+.toggle-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+//--busqueda--//
+.search-container {
+  margin: 0;
+}
+
+.search-input {
+  width: 280px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.search-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+.header-container{
+display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.edit-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  background-color: #1e40af;
+}
