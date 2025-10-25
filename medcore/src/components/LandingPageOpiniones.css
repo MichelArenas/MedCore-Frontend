@@ -1,0 +1,92 @@
+.opiniones {
+ background-color: #ffffff;
+  padding: 60px 80px;
+  text-align: left;
+}
+
+.titulo-opiniones {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.titulo-opiniones::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: #007bff;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+/* 🔹 Scroll horizontal suave */
+.opiniones-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 25px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+}
+
+.opiniones-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.opiniones-container::-webkit-scrollbar-thumb {
+  background-color: #ccd5e0;
+  border-radius: 10px;
+}
+
+/* 🔹 Tarjeta estilo testimonial */
+.tarjeta-opinion {
+  background-color: #fff;
+  border-radius: 16px;
+  flex: 0 0 350px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.1);
+  border: 1px solid #e3e7ee;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-opinion:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(0, 51, 102, 0.15);
+}
+
+.texto-opinion {
+  font-style: italic;
+  color: #444;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.paciente-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.foto-paciente {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+}
+
+.paciente-info h4 {
+  color: #007bff;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.paciente-info span {
+  color: #666;
+  font-size: 0.9rem;
+}
