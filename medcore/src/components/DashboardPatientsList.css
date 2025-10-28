@@ -79,24 +79,199 @@ body { margin: 0; background: #f4f7fc; }
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
-.edit-btn,
-.toggle-btn {
-  padding: 8px 12px;
+/* Estilos base para botones con iconos */
+.btn-icon {
+  padding: 8px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
+  transition: all 0.25s ease;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: visible;
 }
 
-.edit-btn { background: #0ea5e9; color: white; }
-.edit-btn:hover { filter: brightness(0.95); }
+.btn-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
-.btn-disable { background: #ef4444; color: white; }
-.btn-enable { background: #22c55e; color: white; }
-.toggle-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-icon:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltip */
+.btn-icon:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 4px;
+  opacity: 1;
+  pointer-events: none;
+  animation: tooltip-appear 0.2s ease-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-icon:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #1f2937;
+  z-index: 1000;
+  opacity: 1;
+  animation: tooltip-appear 0.2s ease-out;
+}
+
+/* Ajuste para tooltips en los bordes */
+.actions .btn-icon:first-child:hover::after {
+  left: 0;
+  transform: translateX(0);
+}
+
+.actions .btn-icon:first-child:hover::before {
+  left: 12px;
+  transform: translateX(0);
+}
+
+.actions .btn-icon:last-child:hover::after {
+  left: auto;
+  right: 0;
+  transform: translateX(0);
+}
+
+.actions .btn-icon:last-child:hover::before {
+  left: auto;
+  right: 12px;
+  transform: translateX(0);
+}
+
+@keyframes tooltip-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Ocular el atributo title nativo para evitar conflictos */
+.btn-icon[title] {
+  position: relative;
+}
+
+/* Estilos para los iconos SVG */
+.btn-icon svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.btn-icon:hover svg {
+  transform: scale(1.1);
+}
+
+.btn-icon:active svg {
+  transform: scale(0.95);
+}
+
+/* Colores específicos para iconos */
+.btn-icon.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-icon.btn-primary:hover {
+  background: #2563eb;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-icon.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-icon.btn-secondary:hover {
+  background: #4b5563;
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+}
+
+.btn-icon.btn-info {
+  background: #0ea5e9;
+  color: white;
+}
+
+.btn-icon.btn-info:hover {
+  background: #0284c7;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.btn-icon.btn-warning {
+  background: #f59e0b;
+  color: white;
+}
+
+.btn-icon.btn-warning:hover {
+  background: #d97706;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.btn-icon.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-icon.btn-danger:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.btn-icon.btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.btn-icon.btn-success:hover {
+  background: #059669;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.btn-icon.btn-toggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-icon.btn-toggle:disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
 
 /* -------- Desktop (>1024px) -------- */
@@ -141,8 +316,17 @@ body { margin: 0; background: #f4f7fc; }
     table-layout: auto; /* deja que se expanda */
   }
 
-  .actions { gap: 10px; flex-direction: row; }
-  .edit-btn, .toggle-btn { padding: 9px 12px; }
+  .actions { 
+    gap: 8px; 
+    flex-direction: row; 
+    justify-content: center;
+  }
+  
+  .btn-icon { 
+    padding: 8px; 
+    min-width: 36px;
+    min-height: 36px;
+  }
 }
 
 /* -------- Mobile (<640px) -------- */
@@ -183,6 +367,30 @@ body { margin: 0; background: #f4f7fc; }
     display: none !important;
   }
 
-  .actions { flex-direction: column; gap: 6px; }
-  .edit-btn, .toggle-btn { width: 100%; padding: 8px 10px; }
+  .actions { 
+    flex-direction: row; 
+    gap: 6px; 
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn-icon { 
+    padding: 10px; 
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  /* En móvil, hacer tooltips más grandes y posicionarlos arriba */
+  .btn-icon:hover::after {
+    font-size: 0.8rem;
+    padding: 8px 10px;
+    bottom: 120%;
+  }
+
+  .btn-icon:hover::before {
+    bottom: 120%;
+    border-top: 6px solid #1f2937;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+  }
 }

@@ -3,8 +3,8 @@
  * a través del API Gateway
  */
 
-// Base del API (lee REACT_APP_API_BASE_URL o por defecto '')
-const API_BASE = process.env.REACT_APP_API_BASE_URL || '';
+// Base del API (lee REACT_APP_API_BASE_URL o por defecto localhost:3001)
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
 // Exporta la base por si otros módulos la necesitan
 export const API_GATEWAY_URL = API_BASE;
@@ -59,7 +59,7 @@ export const AUDIT_ENDPOINTS = {
 // Endpoints para historial médico
 export const MEDICAL_RECORDS_ENDPOINTS = {
   BASE: `${API_GATEWAY_URL}/api/v1/medical-records`,
-  GET_BY_ID: (id) => `${API_GATEWAY_URL}/medical-records/${id}`,
+  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/medical-records/${id}`,
   // tu back lista con filtros; si soporta ?patientId=:
   LIST: (patientId) =>
     patientId ? `${API_GATEWAY_URL}/api/v1/medical-records?patientId=${encodeURIComponent(patientId)}`

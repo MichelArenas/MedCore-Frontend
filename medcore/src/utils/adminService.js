@@ -199,7 +199,11 @@ export const auditService = {
 // --- Medical Records ---
 export const medicalRecordsService = {
   list: (patientId) => get(MEDICAL_RECORDS_ENDPOINTS.LIST(patientId)),
-  getById: (id) => get(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id)),
+  getById: (id) => {
+    const url = MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id);
+    console.log('[medicalRecordsService.getById] URL generada:', url);
+    return get(url);
+  },
   create: (payload) => post(MEDICAL_RECORDS_ENDPOINTS.BASE, payload),
   update: (id, payload) => put(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id), payload),
   archive: (id) => del(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id)),
@@ -208,23 +212,54 @@ export const medicalRecordsService = {
 // --- Documents (adjuntos) ---
 export const documentsService = {
   listByPatient: (patientId) => get(DOCUMENTS_ENDPOINTS.BY_PATIENT(patientId)),
-  upload: async ({ file, patientId, encounterId, diagnosisId, description, tags, category }) => {
+  upload: async ({ file, patientId, medicalRecordId, diagnosticId, description, tags, category }) => {
     const fd = new FormData();
     fd.append("document", file);
     if (patientId) fd.append("patientId", patientId);
-    if (encounterId) fd.append("encounterId", encounterId);
-    if (diagnosisId) fd.append("diagnosisId", diagnosisId);
+    if (medicalRecordId) fd.append("medicalRecordId", medicalRecordId);
+    if (diagnosticId) fd.append("diagnosticId", diagnosticId);
     if (description) fd.append("description", description);
     if (tags) fd.append("tags", tags);
     if (category) fd.append("category", category);
 
-    return apiRequest(DOCUMENTS_ENDPOINTS.UPLOAD, {
+    const result = await apiRequest(DOCUMENTS_ENDPOINTS.UPLOAD, {
       method: "POST",
       headers: {},
       body: fd,
     });
+
+    return result;
   },
-  downloadUrl: (id) => DOCUMENTS_ENDPOINTS.GET_BY_ID(id), // <- FIX
+  downloadUrl: (id) => DOCUMENTS_ENDPOINTS.GET_BY_ID(id),
+  // Nuevo método para obtener blob con autenticación
+  downloadBlob: async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      console.log('[downloadBlob] Fetching document:', DOCUMENTS_ENDPOINTS.GET_BY_ID(id));
+      const response = await fetch(DOCUMENTS_ENDPOINTS.GET_BY_ID(id), {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      console.log('[downloadBlob] Response status:', response.status);
+      console.log('[downloadBlob] Response headers:', response.headers.get('content-type'));
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      const blob = await response.blob();
+      console.log('[downloadBlob] Blob created:', blob.size, 'bytes, type:', blob.type);
+      const objectUrl = URL.createObjectURL(blob);
+      console.log('[downloadBlob] Object URL created:', objectUrl);
+      return objectUrl;
+    } catch (error) {
+      console.error('Error downloading document blob:', error);
+      throw error;
+    }
+  },
   remove: (id) => del(DOCUMENTS_ENDPOINTS.DELETE(id)),
 };
 

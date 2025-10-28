@@ -16,6 +16,7 @@ import DashboardPatientsList from "./components/DashboardPatientsList";
 import MedicalHistoryView from "./components/medical/MedicalHistoryView";
 import MedicalHistoryNew from "./components/medical/MedicalHistoryNew";
 import MedicalHistoryEdit from "./components/medical/MedicalHistoryEdit";
+import PatientDocumentsImproved from "./components/medical/PatientDocumentsImproved";
 import { canReadHistory, canWriteHistory } from "./utils/rbac";
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/dashboard/medical-history/:patientId" element={ <PrivateRoute allow={(user, params) => canReadHistory(user, params.patientId)}><MedicalHistoryView /></PrivateRoute>}/>
         <Route path="/dashboard/medical-history/new"element={<PrivateRoute allow={(user) => canWriteHistory(user)}><MedicalHistoryNew /></PrivateRoute>}/>
         <Route path="/dashboard/medical-history/:id/edit" element={<PrivateRoute allow={(user) => canWriteHistory(user)}><MedicalHistoryEdit /></PrivateRoute>}/>
+        <Route path="/dashboard/documents/:patientId" element={<PrivateRoute allow={(user, params) => canReadHistory(user, params.patientId)}><PatientDocumentsImproved /></PrivateRoute>}/>
         <Route path="/dashboard/pacientes" element={<PrivateRoute allow={(u) => ["MEDICO","ADMINISTRADOR"].includes(u?.role)}><DashboardPatientsList /></PrivateRoute>}/>
       </Routes>
 </Router>

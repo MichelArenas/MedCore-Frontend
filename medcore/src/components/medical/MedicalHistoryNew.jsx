@@ -36,26 +36,22 @@ export default function MedicalHistoryNew() {
         return;
       }
 
-      // 2) Crear DIAGNÓSTICO (opcional) — si hay algún campo o archivos
-      const hasDxFields =
-        payload.title || payload.description || payload.diagnosisText ||
-        payload.treatment || payload.observations || payload.nextAppointment || (filesSel?.length>0);
+      // 2) Crear DIAGNÓSTICO (siempre) — usando datos de la historia clínica + campos adicionales
+      const diagnosticData = {
+        title: payload.title || payload.diagnosisText || "Diagnóstico General",
+        description: payload.description || `Diagnóstico asociado a consulta del ${new Date().toLocaleDateString()}`,
+        diagnosis: payload.diagnosisText || payload.diagnosis || "Diagnóstico no especificado",
+        treatment: payload.treatment || "Tratamiento no especificado",
+        observations: payload.observations || payload.notes || null,
+        nextAppointment: payload.nextAppointment || null,
+        medicalRecordId,
+        files: filesSel || [],
+      };
 
-      if (hasDxFields) {
-        const resDx = await diagnosisService.createForPatientFormData(patientId, {
-          title: payload.title,
-          description: payload.description,
-          diagnosis: payload.diagnosisText,
-          treatment: payload.treatment,
-          observations: payload.observations,
-          nextAppointment: payload.nextAppointment,
-          medicalRecordId,
-          files: filesSel || [],
-        });
+      const resDx = await diagnosisService.createForPatientFormData(patientId, diagnosticData);
 
-        if (!resDx.ok) {
-          Swal.fire({ icon:"warning", title:"Diagnóstico con errores", text: resDx?.data?.message || "Revisa los campos" });
-        }
+      if (!resDx.ok) {
+        Swal.fire({ icon:"warning", title:"Diagnóstico con errores", text: resDx?.data?.message || "Revisa los campos" });
       }
 
       Swal.fire({ icon:"success", title:"Consulta guardada", timer:1500, showConfirmButton:false });
