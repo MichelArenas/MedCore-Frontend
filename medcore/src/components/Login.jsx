@@ -86,7 +86,7 @@ function Login() {
       <div className="login-panel">
         {/* Panel izquierdo */}
         <div className="left-panel">
-          <div className="text-container">
+         {/*  <div className="text-container">
             <h1 className="welcome-title">¡BIENVENIDOS!</h1>
             <p className="subtitle">
               Por favor ingresa tus datos para continuar
@@ -94,7 +94,12 @@ function Login() {
           </div>
           <div className="image-container">
             <img src={doctor} alt="Doctor" className="doctor-img" />
-          </div>
+          </div>*/}
+           <img
+            src="https://images.pexels.com/photos/12955896/pexels-photo-12955896.jpeg"
+            alt="Doctor"
+            className="doctor-image"
+          />
         </div>
 
         {/* Panel derecho */}

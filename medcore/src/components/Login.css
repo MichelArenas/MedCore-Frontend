@@ -4,7 +4,7 @@
   justify-content: center; /* centra horizontal */
   align-items: center;     /* centra vertical */
   height: 100vh;
-  background: linear-gradient(135deg, #b7e7ff, #e5f4fd); /* degradado sutil */
+  background: #ffffff; /* degradado sutil */
 }
 
 /* Panel general (dos columnas: izquierda y derecha) */
@@ -15,7 +15,7 @@
   height: 600px;
   border-radius: 20px;
   overflow: hidden;
-  background: #fff;
+  background: #f8f9fa;
   box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
   border: none; /* quité el borde negro para un look más limpio */
 }
@@ -23,7 +23,7 @@
 /* Panel izquierdo */
 .left-panel {
   flex: 1;
-  background: #e5f4fd;
+  background: #f8f9fa;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,13 +34,13 @@
   overflow: hidden;
 }
 
-.left-panel::before {
+/*.left-panel::before {
   content: "";
   position: absolute;
   width: 600px;
   height: 350px;
   border-radius: 0 0 50% 50%;
-  background: #ffffff;
+  background: #f8f9fa;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -56,7 +56,7 @@
 .welcome-title {
   font-size: 35px;
   font-weight: 800;
-  color: #006cdfff; /* azul oscuro */
+  color: #006cdfff; 
   margin-bottom: 10px;
   font-family: 'Poppins', sans-serif;
 }
@@ -80,12 +80,37 @@
 
 .text-container {
   margin-top: 120px;
+}*/
+
+/* Contenedor principal */
+/* Panel izquierdo */
+.left-panel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+/* Imagen de fondo que cubre toda la sección */
+.doctor-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0; /* para que se funda con el contenedor */
+  box-shadow: none;
+}
+
 
 /* Panel derecho */
 .right-panel {
   flex: 1;
-  background: #fff;
+  background: #f8f9fa;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,101 +135,134 @@
 }
 
 /* Formulario */
+/* Contenedor principal del formulario */
 .login-form {
   display: flex;
   flex-direction: column;
   width: 75%;
+  background: #ffffff;
+  padding: 40px 45px;
+  border-radius: 20px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
 }
 
+.login-form:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Etiquetas */
 .login-form label {
-  margin-top: 12px;
-  font-size: 14px;
-  color: #444;
-  font-weight: 500;
+  margin-top: 16px;
+  font-size: 15px;
+  color: #2b2b2b;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-/* Inputs con efecto hover/focus */
+/* Inputs */
 .login-form input {
   width: 100%;
-  padding: 12px;
-  margin-top: 6px;
-  border: 1.5px solid #d1d5db; /* gris claro */
-  border-radius: 10px;
+  padding: 13px 15px;
+  margin-top: 8px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 12px;
   font-size: 15px;
+  background-color: #f9fafb;
+  color: #333;
   transition: all 0.3s ease;
 }
 
 .login-form input:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.4);
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
 }
 
 /* Botón */
 .login-form button {
-  margin-top: 22px;
+  margin-top: 28px;
   padding: 14px;
-  background: #007bff;
+  background: linear-gradient(135deg, #007bff, #0056b3);
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 16px;
   font-weight: 600;
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 
 .login-form button:hover {
-  background: #0056b3;
-  box-shadow: 0px 6px 14px rgba(0, 86, 179, 0.5);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #0056b3, #003f88);
+  box-shadow: 0 6px 18px rgba(0, 86, 179, 0.45);
+  transform: translateY(-2px);
 }
 
-/* Contenedor del input de password con botón */
+/* Contenedor de contraseña */
 .password-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
+  width: 100%;
 }
 
+/* Input de contraseña */
 .password-wrapper input {
   width: 100%;
-  padding-right: 40px; /* espacio para el botón */
+  padding: 12px 48px 12px 15px; /* deja espacio para el icono */
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
 }
 
+.password-wrapper input:focus {
+  border-color: #007bff;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Ícono del ojo perfectamente centrado dentro del input */
 .toggle-password {
   position: absolute;
-  right: 10px;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%); /* centra verticalmente */
+  font-size: 18px;
+  color: #007bff;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-}
-
-/* Contenedor de contraseña con ícono */
-.password-container {
-  position: relative;
+  line-height: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 0;
+  height: 100%;
 }
 
-.password-container input {
-  width: 100%;
-  padding-right: 40px; /* espacio para el icono */
-}
-
-.toggle-password {
-  position: absolute;
-  right: 12px;
-  cursor: pointer;
-  font-size: 18px;
-  color: #007bff;
-  margin-bottom: -10px;
-}
 .toggle-password:hover {
   color: #0056b3;
 }
+
+
+/* Animación sutil al enfocar */
+@keyframes inputFocus {
+  from { box-shadow: none; }
+  to { box-shadow: 0 0 6px rgba(0, 123, 255, 0.3); }
+}
+
+/* Placeholder */
+.login-form input::placeholder {
+  color: #a3a3a3;
+  font-size: 14px;
+}
+
 
 /* --- Responsivo Movil --- */
 @media (max-width: 639px) {
