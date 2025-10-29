@@ -2,52 +2,56 @@
 .hamburger {
   position: fixed;
   top: 20px;
-  left: 20px;
-  font-size: 1.8rem;
-  color: white;
-  cursor: pointer;
+  right: 20px;
   background: none;
   border: none;
+  cursor: pointer;
+  font-size: 28px;
+  color: #007bff;
+  transition: color 0.3s ease, transform 0.2s ease;
   z-index: 1100;
-  transition: transform 0.3s ease;
 }
 
 .hamburger:hover {
+  color: #0056b3;
   transform: scale(1.1);
 }
 
-/* ====== Sidebar cerrado ====== */
+/* ====== Sidebar base ====== */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -260px;
+  right: -260px; /* Cambiado para que salga desde la derecha */
   width: 260px;
   height: 100%;
-  background: #007bff;
-  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
-  color: white;
-  transition: left 0.35s ease, box-shadow 0.3s ease;
-  padding-top: 70px;
+  background: #fdfdfdff;
+  box-shadow: -3px 0 10px rgba(0, 0, 0, 0.3);
+  color: #007bff;
+  transition: right 0.35s ease, box-shadow 0.3s ease;
+  padding: 40px 0 20px;
   font-family: "Poppins", sans-serif;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* ====== Sidebar abierto ====== */
 .sidebar.open {
-  left: 0;
-  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.4);
+  right: 0;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.4);
 }
 
 /* ====== Título ====== */
 .sidebar-title {
   text-align: center;
-  margin-bottom: 25px;
   font-size: 1.6rem;
   font-weight: 600;
   letter-spacing: 1px;
-  color: #fff;
+  color: #007bff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   padding-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 /* ====== Lista ====== */
@@ -55,17 +59,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
 
 /* ====== Ítems ====== */
 .sidebar ul li {
-  padding: 14px 25px;
+  padding: 12px 25px;
   display: flex;
   align-items: center;
   gap: 12px;
   cursor: pointer;
   border-radius: 8px;
-  margin: 5px 15px;
+  margin: 6px 15px;
   font-size: 1rem;
   font-weight: 500;
   transition: background 0.3s ease, transform 0.2s ease;
@@ -73,31 +78,33 @@
 
 .sidebar ul li:hover {
   background: rgba(255, 255, 255, 0.15);
-  transform: translateX(5px);
+  transform: translateX(-5px); /* Ajustado hacia la izquierda para animar desde el borde derecho */
 }
 
 /* ====== Íconos ====== */
 .sidebar ul li .icon {
   font-size: 1.2rem;
-  color: #ffffff;
+  color: #007bff;
 }
 
 /* ====== Cerrar sesión ====== */
 .logout {
-  margin-top: 20px;
-  color: #ffff;
+  margin-top: 10px;
+  color: #ff4444ff;
   font-weight: 600;
 }
 
 .logout:hover {
-  background: #ffff;
-  color: white;
+  background: #ff0000ff;
+  color: #ff0000ff;
 }
+
 
 /* ====== Responsividad ====== */
 @media (max-width: 768px) {
   .sidebar {
     width: 220px;
+    padding-top: 30px;
   }
 
   .sidebar-title {

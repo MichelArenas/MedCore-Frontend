@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./RegisterUser.css";
 import { userService } from "../utils/userService";
+import "./bulkTmportCsv"
 
 export default function RegisterUser() {
   // Campos básicos
@@ -21,6 +23,7 @@ export default function RegisterUser() {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [bloodType, setBloodType] = useState("");
+  const navigate = useNavigate();
 
   // Contacto de emergencia
   const [emergencyContact, setEmergencyContact] = useState({
@@ -259,6 +262,11 @@ export default function RegisterUser() {
 
         {message && <p className={`register-message ${messageType}`}>{message}</p>}
       </form>
+
+        <div>
+            <button className="bulk-import" onClick={() => navigate("/bulk-import")}> Carga de Datos Masiva .CSV</button>
+        </div>
+    
     </div>
   );
 }

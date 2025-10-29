@@ -151,6 +151,27 @@ margin-top: 22px;
   animation: fadeIn 0.3s ease-in-out;
 }
 
+.bulk-import{
+  margin-top: 28px;
+  padding: 14px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.bulk-import:hover{
+  background: linear-gradient(135deg, #0056b3, #003f88);
+  box-shadow: 0 6px 18px rgba(0, 86, 179, 0.45);
+  transform: translateY(-2px);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

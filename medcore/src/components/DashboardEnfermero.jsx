@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./DashboardAdmin.css";
+import "./DashboardEnfermero.css";
 import Sidebar from "./Sidebar";
 import { logout } from "../utils/authUtils";
 

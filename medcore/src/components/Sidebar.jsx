@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { FaBars, FaTimes, FaCog, FaQuestionCircle, FaPhone, FaSignOutAlt, FaNotesMedical } from "react-icons/fa";
+import { FaBars, FaTimes, FaCog, FaUserPlus, FaUserMd, FaUserInjured, FaSignOutAlt, FaNotesMedical, FaUserNurse } from "react-icons/fa";
 import "./Sidebar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../utils/authUtils";
 import { getCurrentUser, canSeeHistoryMenu  } from "../utils/rbac"; 
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,12 +50,20 @@ function Sidebar() {
             <FaCog className="icon" /> <span>Configuración</span>
           </li>
 
-          <li className="sidebar-item" onClick={() => { close(); navigate("/dashboard/ayuda"); }}>
-            <FaQuestionCircle className="icon" /> <span>Ayuda</span>
+          <li className="sidebar-item" onClick={() => { close(); navigate("/DashboardPatientsList"); }}>
+            <FaUserInjured className="icon" /> <span>Pacientes</span>
           </li>
 
-          <li className="sidebar-item" onClick={() => { close(); navigate("/dashboard/contacto"); }}>
-            <FaPhone className="icon" /> <span>Contáctanos</span>
+          <li className="sidebar-item" onClick={() => { close(); navigate("/DashboardDoctorsList"); }}>
+            <FaUserMd className="icon" /> <span>Médicos</span>
+          </li>
+
+             <li className="sidebar-item" onClick={() => { close(); navigate("/DashboardNursesList"); }}>
+            <FaUserNurse className="icon" /> <span>Enfermeros</span>
+          </li>
+
+          <li className="sidebar-item" onClick={() => { close(); navigate("/register-user"); }}>
+            <FaUserPlus className="icon" /> <span>Registrar usuarios</span>
           </li>
 
           {canSeeHistoryMenu(user) && (

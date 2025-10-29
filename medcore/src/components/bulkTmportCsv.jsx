@@ -198,7 +198,7 @@ export default function BulkImportCsv() {
           <button className="register-btn" type="submit" disabled={!file || loading}>
             {loading ? "Subiendo..." : "Subir CSV"}
           </button>
-          <button type="button" className="register-btn secondary" onClick={() => navigate("/DashboardAdmin")}>
+          <button type="button" className="register-btn secondary" onClick={() => navigate("/register-user")}>
             Volver
           </button>
         </div>
