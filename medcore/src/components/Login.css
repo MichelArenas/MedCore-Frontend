@@ -4,7 +4,7 @@
   justify-content: center; /* centra horizontal */
   align-items: center;     /* centra vertical */
   height: 100vh;
-  background: #ffffff; /* degradado sutil */
+  background: #ffffff; 
 }
 
 /* Panel general (dos columnas: izquierda y derecha) */

@@ -33,7 +33,7 @@ const LandingPage = () => {
         {/* Imagen principal */}
         <div className="landing-image-section">
           <img
-            src="https://360radio.com.co/wp-content/uploads/2025/01/medicos-colombianos.jpg"
+            src="https://plus.unsplash.com/premium_photo-1661627589302-21c86f989f99?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&fm=jpg&q=60&w=3000"
             alt="Equipo médico"
             className="landing-image"
           />

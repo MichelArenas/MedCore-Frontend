@@ -29,6 +29,7 @@ function DashboardPatientsList() {
       console.log("Respuesta de pacientes:", data); // Para depuración
       
       // Obtener array de usuarios, intentando diferentes propiedades en la respuesta
+      console.log("Respuesta de pacientes:", data); // Para depuración
       const raw = Array.isArray(data) ? data : data.patients || data.users || [];
       console.log("Pacientes encontrados:", raw.length);
       
@@ -47,10 +48,14 @@ function DashboardPatientsList() {
             gender: p.gender || p.user.gender || "",
             phone: p.phone || p.user.phone || "",
             address: p.address || p.user.address || "",
+            city: p.city || p.user.city || "",
             status: p.status || p.user.status || "",
+            
             _original: p,
           };
         }
+        
+
         
         // Si es directamente un usuario con rol PACIENTE
         return {
@@ -64,10 +69,13 @@ function DashboardPatientsList() {
           gender: p.gender || "",
           phone: p.phone || "",
           address: p.address || "",
+          city: p.city || "",
           status: p.status || "",
+         
           _original: p,
         };
       });
+      console.log("Pacientes normalizados:", list);
 
       setPacientes(list);
     } catch (err) {
@@ -81,6 +89,8 @@ function DashboardPatientsList() {
   useEffect(() => {
     fetchPacientes();
   }, []);
+
+  
 
   // --- Acciones ADMIN (si quieres mantenerlas para mode=admin) ---
   const handleToggleStatus = async (userId, currentStatus) => {
@@ -129,7 +139,54 @@ function DashboardPatientsList() {
     }
   };
 
+  const handleDeletePatient = async (userId, email) => {
+  const result = await Swal.fire({
+    title: `¿Eliminar paciente?`,
+    text: `Se eliminará completamente el paciente con correo: ${email}`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`http://localhost:3003/api/v1/users/${userId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || "Error al eliminar paciente");
+
+    // Eliminar del estado local
+    setPacientes(prev => prev.filter(p => p.id !== userId));
+
+    Swal.fire({
+      icon: "success",
+      title: "Eliminado",
+      text: data.message,
+      timer: 1800,
+      showConfirmButton: false,
+    });
+  } catch (err) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.message,
+    });
+  }
+};
+
+
   const handleEditPatient = async (patient) => {
+    console.log("Paciente a editar:", patient);
+
     const { value: formValues } = await Swal.fire({
       title: `Editar Paciente`,
       html: `
@@ -164,6 +221,7 @@ function DashboardPatientsList() {
       const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3003/api/v1/users/patients/${patient.id}`,
+      // `http://localhost:3003/api/v1/users/:id`,
         {
           method: "PUT",
           headers: {
@@ -244,7 +302,7 @@ function DashboardPatientsList() {
           </button>
           <button 
             className="btn-icon btn-info" 
-            onClick={() => navigate(`/dashboard/documents/${pid}`)}
+            onClick={() => navigate(`/dashboard/documents/${p.id}`)}
             title="Ver Documentos"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -252,6 +310,8 @@ function DashboardPatientsList() {
               <polyline points="13,2 13,9 20,9"/>
             </svg>
           </button>
+
+          
         </div>
       );
     }
@@ -269,6 +329,24 @@ function DashboardPatientsList() {
             <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
           </svg>
         </button>
+
+       <button
+  className="btn-icon delete-btn"
+  onClick={() => handleDeletePatient(p.id, p.email)}
+  title="Eliminar Paciente"
+>
+  
+
+
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6 18.333 19.333c-.083.833-.75 1.667-1.667 1.667H8.334c-.917 0-1.583-.833-1.667-1.667L5 6"/>
+    <line x1="10" y1="11" x2="10" y2="17"/>
+    <line x1="14" y1="11" x2="14" y2="17"/>
+    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+  </svg>
+</button>
+
         <button 
           className="btn-icon btn-primary" 
           onClick={() => navigate(`/dashboard/medical-history/${p.id}`)}

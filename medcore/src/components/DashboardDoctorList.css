@@ -154,6 +154,161 @@ display: flex;
   background-color: #1e40af;
 }
 
+.btn-icon.btn-info:hover {
+  background: #0284c7;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.btn-icon.delete-btn{
+ background: #ff0404ff;
+  color: white;
+}
+
+/* Estilos base para botones con iconos */
+.btn-icon {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: visible;
+}
+
+.btn-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltip */
+.btn-icon:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 4px;
+  opacity: 1;
+  pointer-events: none;
+  animation: tooltip-appear 0.2s ease-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-icon:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #1f2937;
+  z-index: 1000;
+  opacity: 1;
+  animation: tooltip-appear 0.2s ease-out;
+}
+
+/* Ajuste para tooltips en los bordes */
+.actions .btn-icon:first-child:hover::after {
+  left: 0;
+  transform: translateX(0);
+}
+
+.actions .btn-icon:first-child:hover::before {
+  left: 12px;
+  transform: translateX(0);
+}
+
+.actions .btn-icon:last-child:hover::after {
+  left: auto;
+  right: 0;
+  transform: translateX(0);
+}
+
+.actions .btn-icon:last-child:hover::before {
+  left: auto;
+  right: 12px;
+  transform: translateX(0);
+}
+
+@keyframes tooltip-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Ocular el atributo title nativo para evitar conflictos */
+.btn-icon[title] {
+  position: relative;
+}
+
+/* Estilos para los iconos SVG */
+.btn-icon svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.btn-icon:hover svg {
+  transform: scale(1.1);
+}
+
+.btn-icon:active svg {
+  transform: scale(0.95);
+}
+
+.btn-icon.btn-editar {
+  background: #0ea5e9;
+  color: white;
+}
+
+.btn-icon.btn-editar:hover {
+  background: #0284c7;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+/*.btn-icon.btn-toggle{
+  
+}*/
+
+.btn-icon.btn-toggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-icon.btn-toggle:disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+
 /* ====== Desktop (>1024px) ====== */
 @media (min-width: 1025px) {
   .doctors-list-container {

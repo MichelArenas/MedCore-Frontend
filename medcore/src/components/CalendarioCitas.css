@@ -1,0 +1,182 @@
+/* 🔹 Contenedor general alineado a la derecha */
+.calendario-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 40px;
+}
+
+/* 🔹 Caja del calendario (mismo ancho, más corta) */
+.calendar-container {
+  width: 70%;
+  max-width: 380px; /* mantiene ancho */
+  background: #fff;
+  border-radius: 14px;
+  padding: 15px 18px; /* 🔹 menos alto, margen ajustado */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  transform: scale(1);
+  transform-origin: top right;
+}
+
+/* 🔹 Título */
+h2 {
+  text-align: center;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+/* 🔹 Botones del calendario */
+.fc .fc-button {
+  background-color: #007bff ;
+  border: none ;
+  color: white ;
+  border-radius: 6px ;
+  font-weight: 500;
+  font-size: 0.7rem ;
+  padding: 3px 6px ;
+}
+
+/* 🔹 Alineación y estilo de los días */
+.fc-daygrid-day {
+  position: relative;
+}
+
+/* 🔹 Oculta totalmente los textos de eventos dentro del mes */
+.fc-daygrid-event {
+  display: none ;
+}
+
+/* 🔹 Efecto hover sobre días con cita */
+.fc-daygrid-day:hover {
+  background-color: #cce3ff ;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* 🔹 Título del mes */
+.fc .fc-toolbar-title {
+  font-size: 0.9rem ;
+  color: #007bff ;
+}
+
+.fc .fc-toolbar-chunk button {
+  margin-right: 6px ; /* separa botones */
+}
+
+.fc .fc-toolbar-chunk:last-child button {
+  margin-right: 0 ;
+}
+
+/* 🔹 Celdas de los días centradas y más compactas */
+.fc .fc-daygrid-day-frame {
+  display: flex ;
+  justify-content: center ;  /* 🔹 centra contenido horizontalmente */
+  align-items: center ;       /* 🔹 centra verticalmente */
+  font-size: 0.7rem ;
+  padding: 2px ;
+}
+
+/* 🔹 Números de los días — corregido el desplazamiento */
+.fc .fc-daygrid-day-number {
+  font-size: 0.8rem ;
+  padding: 0 ;
+  margin: 0 ;
+  text-align: center ;        /* 🔹 centra el número */
+  width: 100% ;
+}
+
+/* 🔹 Reduce el alto general del calendario */
+.fc .fc-daygrid-day {
+  min-height: 40px ; /* 🔹 antes 60px, ahora más corto */
+  height: 40px ;
+}
+
+/* 🔹 Día actual */
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #e8f3ff ;
+  border: 1px solid #007bff ;
+  border-radius: 4px ;
+}
+
+/* 🔹 Quita bordes innecesarios y mejora visual */
+.fc td, .fc th {
+  border-color: #eaeaea ;
+}
+
+.fc .fc-daygrid-day-events {
+  margin: 0 ;
+  padding: 0 ;
+}
+
+/* 🔹 Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-content h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.modal-content p {
+  margin: 6px 0;
+  color: #333;
+  font-size: 0.85rem;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.modal-content button:hover {
+  background: #0056b3;
+}
+
+/* 🔹 Estado visual */
+.estado.confirmada {
+  color: green;
+  font-weight: 600;
+  margin-left: 6px;
+  font-size: 0.8rem;
+}
+
+.estado.pendiente {
+  color: orange;
+  font-weight: 600;
+  margin-left: 6px;
+  font-size: 0.8rem;
+}

@@ -50,6 +50,7 @@ function Login() {
         } else {
           // ✅ Segunda fase: login exitoso
           localStorage.setItem("token", data.token);
+          localStorage.setItem("profileImage", data.user.profileImage) //
           localStorage.setItem("role", data.user.role);
           localStorage.setItem("fullname", data.user.fullname);
           localStorage.setItem("userId", data.user.id);
