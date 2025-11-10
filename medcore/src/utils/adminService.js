@@ -198,16 +198,14 @@ export const auditService = {
 
 // --- Medical Records ---
 export const medicalRecordsService = {
-  list: (patientId) => get(MEDICAL_RECORDS_ENDPOINTS.LIST(patientId)),
-  getById: (id) => {
-    const url = MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id);
-    console.log('[medicalRecordsService.getById] URL generada:', url);
-    return get(url);
-  },
+  // IMPORTANTE: que 'list' apunte al endpoint correcto por paciente
+  list: (patientId) => get(MEDICAL_RECORDS_ENDPOINTS.BY_PATIENT(patientId)),
+  getById: (recordId) => get(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(recordId)),
   create: (payload) => post(MEDICAL_RECORDS_ENDPOINTS.BASE, payload),
-  update: (id, payload) => put(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id), payload),
-  archive: (id) => del(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(id)),
+  update: (recordId, payload) => put(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(recordId), payload),
+  archive: (recordId) => del(MEDICAL_RECORDS_ENDPOINTS.GET_BY_ID(recordId)),
 };
+
 
 // --- Documents (adjuntos) ---
 export const documentsService = {

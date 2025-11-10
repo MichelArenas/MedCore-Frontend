@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./medical.css";
+import medicalRecordService  from "../../services/medicalRecordService";
 
 function normalizeRecords(payload) {
   // Acepta varias formas de respuesta y siempre devuelve un array
@@ -18,6 +19,7 @@ function normalizeRecords(payload) {
 
 export default function MedicalHistoryView() {
   const { patientId } = useParams();
+  console.log('[MHV] route patientId =', patientId);
   const navigate = useNavigate();
   const [records, setRecords]   = useState([]);   // SIEMPRE un array
   const [loading, setLoading]   = useState(true);
@@ -26,17 +28,13 @@ export default function MedicalHistoryView() {
   useEffect(() => {
     (async () => {
       try {
-        const token = localStorage.getItem("token");
-        // Usar API Gateway en lugar de acceso directo al microservicio
-        const res = await fetch(`http://localhost:3001/api/v1/medical-records?patientId=${patientId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(json?.message || "Error al obtener historias");
-
-        // 🔧 Normaliza SIEMPRE a []
-        const list = normalizeRecords(json);
+        setLoading(true);
+        console.log('[MHV] fetching records for', patientId);
+        const json = await medicalRecordService.getPatientMedicalRecords(patientId);
+        console.log('[MHV] backend payload =', json);
+        // listByPatient devuelve { items: [...] }
+        const list = json.items || normalizeRecords(json);
+        console.log('[MHV] normalized records =', list);
         setRecords(list);
       } catch (e) {
         console.error(e);

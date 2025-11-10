@@ -38,3 +38,4 @@ export const canReadHistory = (user, patientId) => {
 
 export const canWriteHistory = (user) =>
   !!user && [ROLES.DOCTOR, ROLES.ADMIN].includes(user.role);
+

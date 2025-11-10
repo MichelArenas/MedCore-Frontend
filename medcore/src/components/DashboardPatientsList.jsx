@@ -17,7 +17,7 @@ function DashboardPatientsList() {
   const fetchPacientes = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3003/api/users/by-role?role=PACIENTE", {
+      const response = await fetch("http://localhost:3003/api/v1/users/patients", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -39,7 +39,7 @@ function DashboardPatientsList() {
         if (p.user) {
           return {
             id: p.userId || p.id || p._id,
-            patientId: p.id || p._id,
+            patientId: p.id,
             fullname: p.user.fullname || "",
             email: p.user.email || "",
             id_type: p.documentType || "",
@@ -54,13 +54,15 @@ function DashboardPatientsList() {
             _original: p,
           };
         }
-        
+        console.log('[PatientsList] normalizados =', list.map(p => ({
+          patientId: p.patientId, userId: p.userId, fullname: p.fullname
+        })));
 
         
         // Si es directamente un usuario con rol PACIENTE
         return {
           id: p.id || p._id,
-          patientId: p.id || p._id, // Mismo ID para historia
+          patientId: p.id,
           fullname: p.fullname || "",
           email: p.email || "",
           id_type: p.id_type || "",
@@ -279,7 +281,7 @@ function DashboardPatientsList() {
         <div className="actions">
           <button 
             className="btn-icon btn-primary" 
-            onClick={() => navigate(`/dashboard/medical-history/${pid}`)}
+            onClick={() => p.patientId && navigate(`/dashboard/medical-history/${pid}`)}
             title="Ver Historia Clínica"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -292,7 +294,7 @@ function DashboardPatientsList() {
           </button>
           <button 
             className="btn-icon btn-secondary" 
-            onClick={() => navigate(`/dashboard/medical-history/new?patientId=${pid}`)}
+            onClick={() => p.patientId && navigate(`/dashboard/medical-history/new?patientId=${pid}`)}
             title="Nueva Historia Clínica"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -302,7 +304,7 @@ function DashboardPatientsList() {
           </button>
           <button 
             className="btn-icon btn-info" 
-            onClick={() => navigate(`/dashboard/documents/${p.id}`)}
+            onClick={() => p.patientId && navigate(`/dashboard/documents/${p.id}`)}
             title="Ver Documentos"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

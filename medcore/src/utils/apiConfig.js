@@ -59,12 +59,12 @@ export const AUDIT_ENDPOINTS = {
 // Endpoints para historial médico
 export const MEDICAL_RECORDS_ENDPOINTS = {
   BASE: `${API_GATEWAY_URL}/api/v1/medical-records`,
-  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/medical-records/${id}`,
-  // tu back lista con filtros; si soporta ?patientId=:
-  LIST: (patientId) =>
-    patientId ? `${API_GATEWAY_URL}/api/v1/medical-records?patientId=${encodeURIComponent(patientId)}`
-              : `${API_GATEWAY_URL}/api/v1/medical-records`,
+  // listar historias de un paciente
+  BY_PATIENT: (patientId) => `${API_GATEWAY_URL}/api/v1/medical-records/by-patient/${patientId}`,
+  // obtener una historia por su id (recordId)
+  GET_BY_ID: (recordId) => `${API_GATEWAY_URL}/api/v1/medical-records/${recordId}`,
 };
+
 
 // Documents (adjuntos)
 export const DOCUMENTS_ENDPOINTS = {
