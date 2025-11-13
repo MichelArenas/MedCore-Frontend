@@ -1,14 +1,13 @@
-import { useNavigate } from "react-router-dom"
-import "./DashboardMedico.css"
-import Sidebar from "./SidesbarMedico"
-import logo from "../assets/logo.png"
-import "@fortawesome/fontawesome-free/css/all.min.css"
-import CalendarioMedico from "./CalendarioMedico"
-import CheckList from "./CheckList"
-import { logout } from "../utils/authUtils"
+import { useNavigate } from "react-router-dom";
+import "./DashboardMedico.css";
+import Sidebar from "./Sidebar";
+import logo from "../assets/logo.png";
+import DoctorQueueList from "./queue/DoctorQueueList";
 
 function DashboardMedico() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+  const doctorId = userId;
   return (
     <div className="dashboard-Medico-container">
       {/* 🔹 CABECERA */}
@@ -25,22 +24,21 @@ function DashboardMedico() {
       <div className="dashboard-Medico-content">
         <h1 className="title-Medico">Bienvenido Medico</h1>
 
-      <div className="tareas-section">
-  <h1 className="servicios-title">Tus tareas</h1>
+        {/* 🔹 SECCIÓN: SALA DE TURNOS*/}
+        <div className="queue-section">
+          <div className="queue-section-header">
+            <h3>Mi sala de espera de hoy</h3>
+            <button
+              className="btn-primario"
+              onClick={() => navigate(`/doctor/${doctorId}/current`)}
+            >
+              Ver en pantalla completa
+            </button>
+          </div>
 
-  <div className="tareas-calendario">
-    {/* 🔹 Checklist a la derecha */}
-    <div className="tareas-list">
-      <CheckList />
-    </div>
-     {/* 🔹 Calendario pequeño a la izquierda */}
-    <div className="tareas-calendar">
-      <CalendarioMedico />
-    </div>
-  </div>
-</div>
-
-</div>
+          {/* Versión compacta de la cola directamente en el dashboard */}
+          <DoctorQueueList doctorId={doctorId} compact />
+        </div>
 
         {/* 🔹 SECCIÓN: SERVICIOS MÁS UTILIZADOS */}
 
@@ -77,21 +75,22 @@ function DashboardMedico() {
               <h4>Citas programadas</h4>
               <p>Mira o cancela las citas que tienes programadas.</p>
             </div>
-
-             <div
+           {/*CARD DE TURNOS DEL DOCTOR */}
+            <div
               className="servicio-card"
-              onClick={() => navigate("/ver-turnos")} //
+              onClick={() => navigate(`/doctor/${doctorId}/current`)}
             >
-              <i className="fa-solid fa-clock icono-servicio"></i>
-              <h4>Turnos de hoy</h4>
-              <p>Llama a tu proximo paciente de hoy.</p>
+              <i className="fa-solid fa-users-line icono-servicio"></i>
+              <h4>Sala de espera</h4>
+              <p>Gestiona la cola de pacientes y llama al siguiente.</p>
             </div>
-
           </div>
         </div>
+      </div>
       </div>
   
   )
 }
+
 
 export default DashboardMedico

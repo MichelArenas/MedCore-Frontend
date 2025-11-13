@@ -5,6 +5,7 @@
 
 // Base del API (lee REACT_APP_API_BASE_URL o por defecto localhost:3001)
 const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+const API_QUEUE = process.env.APPOINTMENT_SERVICE_URL || 'http://localhost:3007'; //TEMPORAL
 
 // Exporta la base por si otros módulos la necesitan
 export const API_GATEWAY_URL = API_BASE;
@@ -77,4 +78,14 @@ export const DOCUMENTS_ENDPOINTS = {
 // Diagnosis (crear para un paciente — multipart si subes archivos)
 export const DIAGNOSIS_ENDPOINTS = {
   CREATE_FOR_PATIENT: (patientId) => `${API_GATEWAY_URL}/api/v1/diagnosis/${patientId}/diagnostics`,
+};
+
+//Gestion de cola
+//Unirse a la cola de espera
+export const QUEUE_ENDPOINTS = {
+  JOIN_QUEUE: `${API_QUEUE}/api/v1/queue/join`,
+  GET_QUEUE_MEDICO: (doctorid) => `${API_QUEUE}/api/v1/queue/doctor/${doctorid}/current`,
+  POST_CALL_NEXT:(doctorid) => `${API_QUEUE}/api/v1/queue/doctor/${doctorid}/call-next`,
+  PUT_COMPLETE_CURRENT:(ticketid) => `${API_QUEUE}/api/v1/queue/ticket/${ticketid}/complete`,
+  GET_POSITION_IN_QUEUE:(ticketid) => `${API_QUEUE}/api/v1/queue/ticket/${ticketid}/position`,
 };

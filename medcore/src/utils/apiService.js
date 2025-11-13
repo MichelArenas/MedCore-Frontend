@@ -10,77 +10,79 @@
  * @param {Object} options - Opciones para fetch (method, headers, body)
  * @returns {Promise<Object>} - Respuesta de la API
  */
-export const apiRequest = async (url, options = {}) => {
+/**
+ * Servicio tipo Axios para todos los microservicios
+ * Acepta:
+ *   apiRequest({ method, url, params, data, headers })
+ */
+export const apiRequest = async (config = {}) => {
   try {
-    // Configuración por defecto para la petición
-    const defaultOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const {
+      url,
+      method = "GET",
+      params = {},
+      data = null,
+      headers = {},
+    } = config;
+
+    if (!url) throw new Error("apiRequest requiere un 'url'");
+
+    // Construir query params
+    const queryString = new URLSearchParams(params).toString();
+    const finalUrl = queryString ? `${url}?${queryString}` : url;
+
+    // Headers por defecto
+    const requestHeaders = {
+      "Content-Type": "application/json",
+      ...headers,
     };
 
-    // Combinar opciones por defecto con las recibidas
-    const requestOptions = {
-      ...defaultOptions,
-      ...options,
-      headers: {
-        ...defaultOptions.headers,
-        ...options.headers,
-      },
-    };
-
-    // Añadir token de autenticación si está disponible
-    const token = localStorage.getItem('token');
+    // Token
+    const token = localStorage.getItem("token");
     if (token) {
-      requestOptions.headers['Authorization'] = `Bearer ${token}`;
+      requestHeaders["Authorization"] = `Bearer ${token}`;
     }
 
-    // Si el body es FormData, NO fijes 'Content-Type' (el navegador lo pone con boundary)
-    if (requestOptions.body instanceof FormData) {
-      delete requestOptions.headers['Content-Type'];
-    }
+    // Configuración fetch
+    const fetchOptions = {
+      method,
+      headers: requestHeaders,
+    };
 
-    // Realizar la petición
-    const response = await fetch(url, requestOptions);
-    
-    // Manejar respuesta 401 (Unauthorized) automáticamente para redirección al login
-    if (response.status === 401) {
-      // Si es un error de token inválido o expirado, limpiar localStorage
-      if (!url.includes('/auth/sign-in')) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        localStorage.removeItem('fullname');
-        window.location.href = '/login'; // Redireccionar al login
+    // Si hay body
+    if (data !== null) {
+      fetchOptions.body = data instanceof FormData ? data : JSON.stringify(data);
+
+      // Si es FormData, no obligamos el content-type
+      if (data instanceof FormData) {
+        delete fetchOptions.headers["Content-Type"];
       }
     }
 
-    // Procesar la respuesta
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.indexOf('application/json') !== -1) {
-      const data = await response.json();
+    const response = await fetch(finalUrl, fetchOptions);
+
+    const contentType = response.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
       return {
         status: response.status,
         ok: response.ok,
-        data,
-      };
-    } else {
-      const text = await response.text();
-      return {
-        status: response.status,
-        ok: response.ok,
-        data: text,
+        data: await response.json(),
       };
     }
-  } catch (error) {
-    console.error('Error en la petición API:', error);
+
     return {
-      status: 500,
-      ok: false,
-      error: error.message || 'Error de conexión con el servidor',
+      status: response.status,
+      ok: response.ok,
+      data: await response.text(),
     };
+
+  } catch (err) {
+    console.error("Error apiRequest:", err);
+    return { ok: false, status: 500, error: err.message };
   }
 };
+
 
 /**
  * Realiza una petición GET
