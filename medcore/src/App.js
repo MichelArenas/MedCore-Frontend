@@ -18,7 +18,10 @@ import MedicalHistoryNew from "./components/medical/MedicalHistoryNew";
 import MedicalHistoryEdit from "./components/medical/MedicalHistoryEdit";
 import PatientDocumentsImproved from "./components/medical/PatientDocumentsImproved";
 import PerfilPaciente from "./components/PerfilPaciente";
+import MisCitas from "./components/CitasList";
 import { canReadHistory, canWriteHistory } from "./utils/rbac";
+import SolicitarCita from "./components/SolicitarCita";
+import SalaDeEspera from "./components/SalaEspera";
 
 function App() {
   return (
@@ -37,6 +40,9 @@ function App() {
         <Route path="/DashboardEnfermero" element={<PrivateRoute><DashboardEnfermero /></PrivateRoute>} />
         <Route path="/register-user" element={<PrivateRoute><RegisterUser /></PrivateRoute>} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/ver-citas" element={<MisCitas />} />
+        <Route path="/turno-virtual" element={<SalaDeEspera />} />
+        <Route path="/solicitar-cita" element={<PrivateRoute><SolicitarCita /></PrivateRoute>} />
         <Route path="/bulk-import" element={<BulkImportCsv />} />
         <Route path="/dashboard/profile" element={<PrivateRoute><PerfilPaciente/></PrivateRoute>} />
         <Route path="/dashboard/medical-history/:patientId" element={ <PrivateRoute allow={(user, params) => canReadHistory(user, params.patientId)}><MedicalHistoryView /></PrivateRoute>}/>

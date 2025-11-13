@@ -134,8 +134,8 @@ function DashboardPaciente() {
               onClick={() => navigate("/solicitar-cita")} // 👈 redirige
             >
               <i className="fas fa-calendar-check icono-servicio"></i>
-              <h4>Solicitar o cancelar cita</h4>
-              <p>Administra tus citas médicas de forma rápida y sencilla.</p>
+              <h4>Solicitar cita</h4>
+              <p>Solicita tus citas médicas de forma rápida y sencilla.</p>
             </div>
 
             <div
@@ -149,19 +149,19 @@ function DashboardPaciente() {
 
             <div
               className="servicio-card"
-              onClick={() => navigate("/cita-virtual")} // 👈 redirige
+              onClick={() => navigate("/turno-virtual")} 
             >
-              <i className="fas fa-video icono-servicio"></i>
-              <h4>Cita virtual</h4>
-              <p>Conéctate con tu especialista desde cualquier lugar.</p>
+              <i className="fa-solid fa-hourglass-half icono-servicio"></i>
+              <h4>Sala de espera virtual</h4>
+              <p>Pide tu turno y unete a la cola.</p>
             </div>
              <div
               className="servicio-card"
-              onClick={() => navigate("/ver-citas")} // 👈 redirige
+              onClick={() => navigate("/ver-citas")} 
             >
               <i className="fa-solid fa-calendar icono-servicio"></i>
               <h4>Ver mis citas</h4>
-              <p>Mira las citas que tienes programadas.</p>
+              <p>Mira o cancela las citas que tienes programadas .</p>
             </div>
           </div>
         </div>

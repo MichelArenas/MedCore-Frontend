@@ -1,0 +1,146 @@
+.appointments-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.appointments-table th, .appointments-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: left;
+}
+
+.appointments-table th {
+  background-color: #f3f3f3;
+  color: #333;
+  font-weight: 600;
+}
+
+.appointments-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-scheduled { background: #2196f3; color: white; }
+.status-confirmed { background: #4caf50; color: white; }
+.status-in_progress { background: #ff9800; color: white; }
+.status-completed { background: #9c27b0; color: white; }
+.status-cancelled { background: #f44336; color: white; }
+.status-rescheduled { background: #607d8b; color: white; }
+.status-no_show { background: #9e9e9e; color: white; }
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-icon {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.btn-icon:hover {
+  transform: scale(1.2);
+}
+
+.btn-edit { color: #2196f3; }
+.btn-confirm { color: #4caf50; }
+.btn-cancel { color: #f44336; }
+
+/* 🔹 Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 400px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-save {
+  background: #4caf50;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-close {
+  background: #ccc;
+  color: black;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-save:hover { background: #45a049; }
+.btn-close:hover { background: #b3b3b3; }

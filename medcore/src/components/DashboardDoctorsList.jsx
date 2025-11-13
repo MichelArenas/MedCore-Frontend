@@ -9,36 +9,42 @@ function DashboardDoctorsList() {
   const [error, setError] = useState(null)
 
   // 🔄 Obtener lista de doctores
-  const fetchDoctores = async () => {
-    try {
-      const token = localStorage.getItem("token")
-      const response = await fetch(
-        "http://localhost:3003/api/users/by-role?role=MEDICO",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error("Error al obtener doctores")
+ const fetchDoctores = async () => {
+  try {
+    const token = localStorage.getItem("token")
+    const response = await fetch(
+      "http://localhost:3003/api/users/by-role?role=MEDICO",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
+    )
 
-      const data = await response.json()
-      setDoctores(data.users || [])
-    } catch (error) {
-      console.error(error)
-      setError("No se pudieron cargar los doctores")
-    } finally {
-      setLoading(false)
-    }
+    const data = await response.json()
+    console.log("✅ Respuesta completa del backend:", data)
+    console.log("✅ Primer doctor:", data.users[0])
+    console.log("✅ Departamento del primer doctor:", data.users[0]?.department)
+    console.log("✅ Especialidad del primer doctor:", data.users[0]?.specialty)
+    
+    setDoctores(data.users || [])
+  } catch (error) {
+    console.error("❌ Error:", error)
+    setError("No se pudieron cargar los doctores")
+  } finally {
+    setLoading(false)
   }
-
+}
   useEffect(() => {
     fetchDoctores()
   }, [])
+
+  // 👇 Agrega esto para ver el estado actual
+useEffect(() => {
+  console.log("Estado actual de doctores:", doctores)
+}, [doctores])
+
 
   // 🧩 Función para cambiar estado (toggle)
   const handleToggleStatus = async (userId, currentStatus) => {
@@ -59,6 +65,7 @@ function DashboardDoctorsList() {
       )
 
       const data = await response.json()
+      console.log(data)
 
       if (!response.ok) {
         Swal.fire({
@@ -289,8 +296,8 @@ function DashboardDoctorsList() {
                 <td>{doc.id_type}</td>
                 <td>{doc.id_number}</td>
                 <td>{doc.age}</td>
-                <td>{doc.department?.name || "-"}</td>
-                <td>{doc.specialty?.name || "-"}</td>
+                <td>{doc.department || "-"}</td>
+                <td>{doc.specialty || "-"}</td>
                 <td>
                   <span
                     className={`status-badge ${
@@ -370,7 +377,7 @@ function DashboardDoctorsList() {
             ))
           ) : (
             <tr>
-              <td colSpan="7">
+              <td colSpan="9">
                 No se encontraron doctores con ese nombre o documento.
               </td>
             </tr>

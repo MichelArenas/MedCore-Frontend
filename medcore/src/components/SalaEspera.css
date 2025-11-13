@@ -1,0 +1,52 @@
+.sala-espera {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.lista-citas {
+  list-style: none;
+  padding: 0;
+}
+
+.card-cita {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.1s;
+}
+
+.card-cita:hover {
+  transform: translateY(-2px);
+}
+
+.btn-join {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-join:hover {
+  background: #0056b3;
+}
+
+.ticket-info {
+  text-align: right;
+  color: #333;
+}
+
+.alerta {
+  color: #d9534f;
+  font-weight: bold;
+  margin-top: 5px;
+}

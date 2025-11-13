@@ -72,9 +72,12 @@ export default function RegisterUser() {
 
   // 🔹 2️⃣ Cuando cambia el departamento, obtener especialidades asociadas
   useEffect(() => {
+    console.log("📦 departmentId actual:", departmentId);
+
     const fetchSpecialtiesByDept = async () => {
       if (!departmentId) return;
       try {
+        console.log("🛰️ GET =>", `http://localhost:3004/api/v1/specialties/department/${departmentId}`);
         const token = localStorage.getItem("token");
         const response = await axios.get(
           `http://localhost:3004/api/v1/specialties/department/${departmentId}`,
@@ -187,6 +190,7 @@ export default function RegisterUser() {
       setMessageType("error");
     }
   };
+console.log("🗂️ Departamentos disponibles:", departments);
 
   return (
     <div className="register-container">

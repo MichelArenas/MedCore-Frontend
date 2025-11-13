@@ -27,7 +27,7 @@ function SidebarPatient() {
 
   const goToAppointments = () => {
     close();
-    navigate("/dashboard/appointments");
+    navigate("/ver-citas");
   };
 
   const goToProfile = () => {
@@ -37,7 +37,7 @@ function SidebarPatient() {
 
   const goToSoliciteAppoiments = () => {
     close();
-    navigate ("/dashboard/soliciteAppoiment")
+    navigate ("/solicitar-cita")
   };
 
    const goToVirtualAppoiments = () => {
@@ -47,7 +47,7 @@ function SidebarPatient() {
 
    const goToTurns = () => {
     close();
-    navigate ("/dashboard/turns")
+    navigate ("/turns")
   };
 
    const goToNotifications = () => {
