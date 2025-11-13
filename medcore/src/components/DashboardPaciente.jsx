@@ -139,9 +139,45 @@ function DashboardPaciente() {
             </div>
 
             <div
-              className="servicio-card"
-              onClick={() => navigate("/historia-clinica")} // 👈 redirige
-            >
+                className="servicio-card"
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("token");
+                    const userId = localStorage.getItem("userId");
+                  if (!userId) {
+                     console.error("❌ No se encontró el userId en localStorage");
+                     return;
+                   };
+
+                    // Obtener todos los pacientes (igual que en DashboardPatientsList)
+                    const response = await fetch("http://localhost:3003/api/v1/users/patients", {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                      },
+                    });
+
+                    if (!response.ok) throw new Error("Error al obtener pacientes");
+
+                    const data = await response.json();
+                    const raw = Array.isArray(data) ? data : data.patients || data.users || [];
+                    
+                    // Buscar el paciente asociado al user actual
+                    const paciente = raw.find((p) => p.userId === user.id);
+
+                    if (!paciente) {
+                      console.error("⚠️ No se encontró paciente asociado a este usuario");
+                      return;
+                    }
+
+                    // Redirigir a su historia clínica
+                    const patientId = paciente.id || paciente._id;
+                    navigate(`/dashboard/medical-history/${patientId}`);
+                  } catch (err) {
+                    console.error("💥 Error al abrir la historia clínica:", err);
+                  }
+                }}
+              >
               <i className="fas fa-file-medical icono-servicio"></i>
               <h4>Mi historia clínica</h4>
               <p>Consulta tus antecedentes y resultados médicos.</p>

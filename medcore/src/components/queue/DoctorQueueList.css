@@ -1,0 +1,294 @@
+.queue-page {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+  font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.queue-main {
+  width: 100%;
+  max-width: 64rem;
+}
+
+.queue-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+  padding: 1.5rem;
+}
+
+/* Header */
+.queue-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.queue-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.queue-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Fecha */
+.queue-date-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.queue-date-icon {
+  font-size: 20px;
+  color: #64748b;
+}
+
+.queue-date-input {
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Botón */
+.queue-call-btn {
+  width: 120px;
+  height: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-weight: 600;
+  gap: 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  box-shadow: 0px 6px 16px rgba(37, 99, 235, 0.137);
+}
+
+.text {
+  width: 70%;
+  height: 100%;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.arrow path {
+  fill: white;
+  font-weight: 600;
+
+}
+
+.queue-call-btn:hover .arrow {
+  animation: slide-in-left 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-8px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+.queue-call-btn:active {
+  transform: scale(0.97);
+}
+
+
+
+@media (min-width: 640px) {
+  .queue-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Lista */
+.queue-list-wrapper {
+  margin-top: 0.5rem;
+}
+
+.queue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.queue-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.queue-item-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Número */
+.queue-number {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  background-color: #e2e8f0;
+  color: #64748b;
+}
+
+.queue-number-primary {
+  background-color: #e5edff;
+  color: #2563eb;
+}
+
+.queue-number-muted {
+  background-color: #e2e8f0;
+  color: #94a3b8;
+}
+
+/* Nombre */
+.queue-patient {
+  flex: 1;
+  min-width: 0;
+}
+
+.queue-patient-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-patient-name-active {
+  color: #0f172a;
+}
+
+.queue-patient-name-muted {
+  color: #94a3b8;
+}
+
+/* Chips */
+.queue-status {
+  display: flex;
+  align-items: center;
+}
+
+.queue-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.queue-chip-waiting {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.queue-chip-neutral {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.queue-chip-done {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.queue-chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.queue-chip-dot-yellow {
+  background-color: #eab308;
+}
+
+.queue-chip-dot-neutral {
+  background-color: #9ca3af;
+}
+
+.queue-chip-dot-done {
+  background-color: #22c55e;
+}
+
+.queue-item-done {
+  opacity: 0.5;
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+.queue-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: 1.5rem;
+}
+
+.queue-complete-btn {
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  border: 1px solid #22c55e;
+  background-color: #ecfdf3; 
+  color: #15803d;            
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.queue-complete-btn:hover {
+  background-color: #bbf7d0;
+  transform: translateY(-1px);
+}
+
+.queue-complete-btn:active {
+  transform: translateY(0);
+}
+

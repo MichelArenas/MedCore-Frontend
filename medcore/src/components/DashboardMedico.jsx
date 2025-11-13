@@ -2,10 +2,12 @@ import { useNavigate } from "react-router-dom";
 import "./DashboardMedico.css";
 import Sidebar from "./Sidebar";
 import logo from "../assets/logo.png";
-import { logout } from "../utils/authUtils";
+import DoctorQueueList from "./queue/DoctorQueueList";
 
- function DashboardMedico() {
+function DashboardMedico() {
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+  const doctorId = userId;
   return (
     <div className="dashboard-Medico-container">
       {/* 🔹 CABECERA */}
@@ -25,7 +27,21 @@ import { logout } from "../utils/authUtils";
       {/* 🔹 CONTENIDO PRINCIPAL */}
       <div className="dashboard-Medico-content">
 
+        {/* 🔹 SECCIÓN: SALA DE TURNOS*/}
+        <div className="queue-section">
+          <div className="queue-section-header">
+            <h3>Mi sala de espera de hoy</h3>
+            <button
+              className="btn-primario"
+              onClick={() => navigate(`/doctor/${doctorId}/current`)}
+            >
+              Ver en pantalla completa
+            </button>
+          </div>
 
+          {/* Versión compacta de la cola directamente en el dashboard */}
+          <DoctorQueueList doctorId={doctorId} compact />
+        </div>
 
         {/* 🔹 SECCIÓN: SERVICIOS MÁS UTILIZADOS */}
         <div className="servicios-section">
@@ -64,6 +80,15 @@ import { logout } from "../utils/authUtils";
               <i className="fa-solid fa-calendar icono-servicio"></i>
               <h4>Ver mis citas</h4>
               <p>Mira las citas que tienes programadas.</p>
+            </div>
+           {/*CARD DE TURNOS DEL DOCTOR */}
+            <div
+              className="servicio-card"
+              onClick={() => navigate(`/doctor/${doctorId}/current`)}
+            >
+              <i className="fa-solid fa-users-line icono-servicio"></i>
+              <h4>Sala de espera</h4>
+              <p>Gestiona la cola de pacientes y llama al siguiente.</p>
             </div>
           </div>
         </div>

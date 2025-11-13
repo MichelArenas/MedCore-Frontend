@@ -11,7 +11,8 @@ import {
   MEDICAL_RECORDS_ENDPOINTS,
   AUDIT_ENDPOINTS,
   DOCUMENTS_ENDPOINTS,
-  DIAGNOSIS_ENDPOINTS
+  DIAGNOSIS_ENDPOINTS,
+  QUEUE_ENDPOINTS
 } from './apiConfig';
 
 /**
@@ -289,4 +290,40 @@ export const diagnosisService = {
   },
 };
 
+/**
+ * Servicio para gestión de cola de espera
+*/
+
+export const queueService = {
+  // Unirse a la cola de espera
+  joinQueue: (payload) => post(QUEUE_ENDPOINTS.JOIN_QUEUE, payload),
+
+  /**
+   * Obtener la cola de un médico
+   * doctorId: id del médico
+   * options:
+   *   - date: 'YYYY-MM-DD'  (opcional, por defecto hoy)
+   *   - includeFinished: boolean (opcional, incluir COMPLETED/CANCELLED/NO_SHOW)
+   */
+  getQueueForDoctor: (doctorId, { date, includeFinished = false } = {}) =>
+    apiRequest({
+      method: "GET",
+      url: QUEUE_ENDPOINTS.GET_QUEUE_MEDICO(doctorId),
+      params: {
+        ...(date ? { date } : {}),
+        ...(includeFinished ? { includeFinished: true } : {}),
+      },
+    }),
+  // Llamar al siguiente paciente
+  callNextPatient: (doctorId) =>
+    post(QUEUE_ENDPOINTS.POST_CALL_NEXT(doctorId)),
+
+  // Completar la atención del paciente actual
+  completeCurrentTicket: (ticketId) =>
+    put(QUEUE_ENDPOINTS.PUT_COMPLETE_CURRENT(ticketId)),
+
+  // Obtener la posición en la cola de un ticket
+  getPositionInQueue: (ticketId) =>
+    get(QUEUE_ENDPOINTS.GET_POSITION_IN_QUEUE(ticketId)),
+};
 
