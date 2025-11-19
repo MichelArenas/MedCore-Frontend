@@ -306,14 +306,17 @@ export const queueService = {
    *   - includeFinished: boolean (opcional, incluir COMPLETED/CANCELLED/NO_SHOW)
    */
   getQueueForDoctor: (doctorId, { date, includeFinished = false } = {}) =>
-    apiRequest({
-      method: "GET",
-      url: QUEUE_ENDPOINTS.GET_QUEUE_MEDICO(doctorId),
-      params: {
-        ...(date ? { date } : {}),
-        ...(includeFinished ? { includeFinished: true } : {}),
-      },
-    }),
+  apiRequest({
+    method: "GET",
+    url: QUEUE_ENDPOINTS.GET_QUEUE_MEDICO(doctorId),
+    params: {
+      ...(date ? { day: date } : {}),               // ← FIX FINAL
+      ...(includeFinished ? { includeFinished: true } : {}),
+    },
+  }),
+
+  
+
   // Llamar al siguiente paciente
   callNextPatient: (doctorId) =>
     post(QUEUE_ENDPOINTS.POST_CALL_NEXT(doctorId)),
@@ -325,5 +328,44 @@ export const queueService = {
   // Obtener la posición en la cola de un ticket
   getPositionInQueue: (ticketId) =>
     get(QUEUE_ENDPOINTS.GET_POSITION_IN_QUEUE(ticketId)),
+
+   // Marcar NO SHOW
+  markNoShow: (ticketId) =>
+    put(QUEUE_ENDPOINTS.PUT_MARK_NO_SHOW(ticketId)),
+
+  // Salir de la cola (solo front-end)
+  leaveQueue: async (ticketId) => {
+    console.log("[queueService] Simulando salir de la cola para:", ticketId);
+    return { ok: true, ticketId };
+  },
+
+  
+
 };
+
+// --- Appointment Service ---
+export const appointmentService = {
+  // Listar citas de un doctor
+  listByDoctor: (doctorId, { dateFrom, dateTo } = {}) =>
+    apiRequest({
+      method: 'GET',
+      url: `/appointments/doctor/${doctorId}`,
+      params: {
+        ...(dateFrom ? { dateFrom } : {}),
+        ...(dateTo ? { dateTo } : {})
+      }
+    }),
+
+  // Cancelar una cita
+  cancelAppointment: ({ id, reason }) => {
+    const actorId = localStorage.getItem('userId');
+    const actorRole = localStorage.getItem('role');
+    return apiRequest({
+      method: 'PUT',
+      url: `/appointments/${id}`,
+      body: { reason, actorId, actorRole }
+    });
+  }
+};
+
 

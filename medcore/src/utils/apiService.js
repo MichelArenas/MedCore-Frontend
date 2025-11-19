@@ -1,19 +1,5 @@
 /**
- * Servicio para realizar peticiones HTTP a los microservicios
- * a través del API Gateway
- */
-
-/**
- * Realiza una petición al API Gateway con manejo de token de autenticación
- * 
- * @param {string} url - URL completa del endpoint
- * @param {Object} options - Opciones para fetch (method, headers, body)
- * @returns {Promise<Object>} - Respuesta de la API
- */
-/**
  * Servicio tipo Axios para todos los microservicios
- * Acepta:
- *   apiRequest({ method, url, params, data, headers })
  */
 export const apiRequest = async (config = {}) => {
   try {
@@ -39,6 +25,8 @@ export const apiRequest = async (config = {}) => {
 
     // Token
     const token = localStorage.getItem("token");
+    console.log("🔑 TOKEN ENVIADoo =", token);
+
     if (token) {
       requestHeaders["Authorization"] = `Bearer ${token}`;
     }
@@ -50,112 +38,102 @@ export const apiRequest = async (config = {}) => {
     };
 
     // Si hay body
-    if (data !== null) {
+    if (data !== null && method !== "GET" && method !== "DELETE") {
       fetchOptions.body = data instanceof FormData ? data : JSON.stringify(data);
 
       // Si es FormData, no obligamos el content-type
       if (data instanceof FormData) {
-        delete fetchOptions.headers["Content-Type"];
+        delete requestHeaders["Content-Type"];
       }
     }
+
+    console.log("🔍 Fetch request:", { finalUrl, fetchOptions });
 
     const response = await fetch(finalUrl, fetchOptions);
 
     const contentType = response.headers.get("content-type");
 
+    let responseData;
     if (contentType && contentType.includes("application/json")) {
-      return {
-        status: response.status,
-        ok: response.ok,
-        data: await response.json(),
-      };
+      responseData = await response.json();
+    } else {
+      responseData = await response.text();
     }
+
+    console.log("🔍 Fetch response:", { status: response.status, ok: response.ok, data: responseData });
 
     return {
       status: response.status,
       ok: response.ok,
-      data: await response.text(),
+      data: responseData,
     };
 
   } catch (err) {
     console.error("Error apiRequest:", err);
-    return { ok: false, status: 500, error: err.message };
+    return { 
+      ok: false, 
+      status: 500, 
+      data: null,
+      error: err.message 
+    };
   }
 };
 
-
 /**
  * Realiza una petición GET
- * 
- * @param {string} url - URL del endpoint
- * @param {Object} options - Opciones adicionales para la petición
- * @returns {Promise<Object>} - Respuesta de la API
  */
-export const get = async (url, options = {}) => {
-  return apiRequest(url, { 
-    ...options, 
-    method: 'GET' 
+export const get = async (url, params = {}, options = {}) => {
+  return apiRequest({ 
+    url,
+    method: 'GET',
+    params,
+    ...options 
   });
 };
 
 /**
  * Realiza una petición POST
- * 
- * @param {string} url - URL del endpoint
- * @param {Object} data - Datos a enviar en el body
- * @param {Object} options - Opciones adicionales para la petición
- * @returns {Promise<Object>} - Respuesta de la API
  */
-export const post = async (url, data, options = {}) => {
-  return apiRequest(url, {
-    ...options,
+export const post = async (url, data = null, options = {}) => {
+  return apiRequest({
+    url,
     method: 'POST',
-    body: JSON.stringify(data),
+    data,
+    ...options
   });
 };
 
 /**
  * Realiza una petición PUT
- * 
- * @param {string} url - URL del endpoint
- * @param {Object} data - Datos a enviar en el body
- * @param {Object} options - Opciones adicionales para la petición
- * @returns {Promise<Object>} - Respuesta de la API
  */
-export const put = async (url, data, options = {}) => {
-  return apiRequest(url, {
-    ...options,
+export const put = async (url, data = null, options = {}) => {
+  return apiRequest({
+    url,
     method: 'PUT',
-    body: JSON.stringify(data),
+    data,
+    ...options
   });
 };
 
 /**
  * Realiza una petición PATCH
- * 
- * @param {string} url - URL del endpoint
- * @param {Object} data - Datos a enviar en el body
- * @param {Object} options - Opciones adicionales para la petición
- * @returns {Promise<Object>} - Respuesta de la API
  */
-export const patch = async (url, data, options = {}) => {
-  return apiRequest(url, {
-    ...options,
+export const patch = async (url, data = null, options = {}) => {
+  return apiRequest({
+    url,
     method: 'PATCH',
-    body: JSON.stringify(data),
+    data,
+    ...options
   });
 };
 
 /**
  * Realiza una petición DELETE
- * 
- * @param {string} url - URL del endpoint
- * @param {Object} options - Opciones adicionales para la petición
- * @returns {Promise<Object>} - Respuesta de la API
  */
 export const del = async (url, options = {}) => {
-  return apiRequest(url, {
-    ...options,
+  return apiRequest({
+    url,
     method: 'DELETE',
+    ...options
   });
 };

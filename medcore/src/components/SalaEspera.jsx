@@ -1,123 +1,171 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
 import "./SalaEspera.css";
 
 function SalaDeEspera() {
-  const [citas, setCitas] = useState([]);
-  const [error, setError] = useState("");
-  const [ticketInfo, setTicketInfo] = useState({});
+  const [turno, setTurno] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
-  const patientId = user?.id;
+  const ticketId = localStorage.getItem("ticketId");
 
-  // Cargar citas confirmadas
-  useEffect(() => {
-    if (patientId) {
-      axios
-        .get(`http://localhost:3008/api/v1/appointments/patient/${patientId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          const data = res.data.citas || res.data.data || res.data.appointments || [];
-          const confirmadas = (Array.isArray(data) ? data : []).filter(
-            (cita) => cita.status === "CONFIRMED"
-          );
-          setCitas(confirmadas);
-        })
-        .catch(() => setError("Error al cargar las citas"));
-    }
-  }, [patientId, token]);
+  // 🔹 Mapa para mostrar nombres más amigables
+  const estadoMap = {
+    WAITING: "Esperando",
+    CALLED: "Llamado",
+    IN_PROGRESS: "En Atención",
+    COMPLETED: "Completado",
+    CONFIRMED: "Confirmado",
+    NO_SHOW: "No se presentó",
+    CANCELLED: "Cancelado",
 
-  // Unirse a la cola
-  async function unirseACola(doctorId, appointmentId) {
-    try {
-      const res = await axios.post(
-        "http://localhost:3008/api/v1/queue/join",
-        { doctorId, appointmentId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const data = res.data?.data;
-
-      setTicketInfo((prev) => ({
-        ...prev,
-        [appointmentId]: data
-      }));
-
-      Swal.fire({
-        icon: "success",
-        title: "¡Te has unido a la cola!",
-        html: `
-          🎟️ Ticket: ${data.ticketNumber} <br/>
-          📍 Posición: ${data.position} <br/>
-          ⏳ Espera estimada: ${data.estimatedWaitTime} min
-        `,
-        confirmButtonText: "Ok"
-      });
-    } catch (error) {
-      console.error("Error al unirse a la cola:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo unir a la cola. Intenta de nuevo."
-      });
-    }
-  }
-
-  // Formatear fecha
-  const formatearFecha = (fechaStr) => {
-    if (!fechaStr) return "-";
-    const fechaIso = fechaStr.replace(" ", "T");
-    const fecha = new Date(fechaIso);
-    if (isNaN(fecha)) return fechaStr;
-
-    return new Intl.DateTimeFormat('es-CO', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(fecha);
   };
 
+  // ========================
+  // 🔹 Función cargar turno
+  // ========================
+ const cargarTurno = async () => {
+  try {
+    if (!ticketId) {
+      setTurno(null);
+      setLoading(false);
+      return;
+    }
+
+    const res = await axios.get(
+      `http://localhost:3008/api/v1/queue/ticket/${ticketId}/position`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    let data = res.data?.data || null;
+
+    // 🔹 Revisar estado de la cita asociada
+    if (data?.appointmentId) {
+      const apptRes = await axios.get(
+        `http://localhost:3008/api/v1/appointments/${data.appointmentId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const cita = apptRes.data.data;
+
+      if (cita?.status === "CANCELLED") {
+        data = { ...data, status: "CANCELLED" }; // Forzamos cancelado
+      }
+    }
+
+    setTurno(data);
+    setLoading(false);
+  } catch (error) {
+    setTurno(null);
+    setLoading(false);
+    console.error("Error cargando turno:", error);
+  }
+};
+
+    // ========================
+  // 🔹 Salir de la cola
+  // ========================
+  const handleSalirCola = async () => {
+  try {
+    await axios.post(
+      `http://localhost:3008/api/v1/queue/ticket/${ticketId}/exit`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // 🔹 Eliminar ticket del front
+    localStorage.removeItem("ticketId");
+    setTurno(null);
+
+  } catch (error) {
+    console.error("Error al salir de la cola", error);
+  }
+};
+
+
+  // ============================
+  // 🔹 POLLING CADA 5 SEGUNDOS
+  // ============================
+  useEffect(() => {
+    cargarTurno(); 
+
+    const interval = setInterval(() => {
+      cargarTurno();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // ========================
+  // 🔹 Obtener estado final
+  // ========================
+  // Si appointmentStatus viene (CONFIRMED, IN_PROGRESS, COMPLETED)
+  // se usa ese. Si no, se usa el estado del ticket.
+ const estadoActual = (() => {
+  const s = turno?.status;
+  const a = turno?.appointmentStatus;
+
+  // Usar CANCELLED si el doctor canceló
+  if (s === "CANCELLED") return "CANCELLED";
+
+  // Si status está definido y es uno de los estados "activos", usarlo
+  if (s && ['CALLED', 'IN_PROGRESS', 'COMPLETED'].includes(s)) return s;
+
+  // Si no, usar appointmentStatus si existe, si no usar status
+  return a || s;
+})();
+
+
   return (
-    <div className="sala-espera">
-      <h2>🩺 Mis citas confirmadas</h2>
-      {error && <p className="alerta">{error}</p>}
-      {citas.length === 0 ? (
-        <p>No tienes citas confirmadas.</p>
-      ) : (
-        <ul className="lista-citas">
-          {citas.map((cita) => {
-            const info = ticketInfo[cita.id];
-            return (
-              <li key={cita.id} className="card-cita">
-                <div>
-                  <h3>Doctor ID: {cita.doctorId}</h3>
-                  <p>Especialidad: {cita.specialty?.nombre || "-"}</p>
-                  <p>Fecha: {formatearFecha(cita.date)}</p>
-                  {info && <p>Estado del turno: {info.status}</p>}
-                </div>
-                {!info ? (
-                  <button
-                    className="btn-join"
-                    onClick={() => unirseACola(cita.doctorId, cita.id)}
-                  >
-                    Unirme a la cola
-                  </button>
-                ) : (
-                  <div className="ticket-info">
-                    <p>🎟️ Ticket #{info.ticketNumber}</p>
-                    <p>📍 Posición: {info.position}</p>
-                    <p>⏳ Espera estimada: {info.estimatedWaitTime} min</p>
-                    {info.duplicate && <p className="alerta">Ya estás en la cola</p>}
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+    <div className="sala-container">
+      <h2>Sala de Espera</h2>
+
+      {loading && <p>Cargando tu turno...</p>}
+
+      {!loading && !turno && (
+        <p className="sin-turno">
+          No tienes turno asignado. Confirma tu cita para entrar a la fila.
+        </p>
       )}
+
+    {turno && (
+  <div className="turno-card">
+    <h3>🎟️ Ticket #{turno.ticketNumber}</h3>
+
+    <p>
+      <strong>📍 Posición:</strong> {turno.position}
+    </p>
+
+    <p>
+      <strong>📌 Estado actual:</strong>{" "}
+      <span className={`estado-${estadoActual?.toLowerCase()}`}>
+        {estadoMap[estadoActual]}
+      </span>
+    </p>
+
+    <p>
+      <strong>⏳ Tiempo estimado:</strong> {turno.estimatedWaitTime} minutos
+    </p>
+
+    <p className="mensaje">Por favor espera… te llamaremos pronto.</p>
+
+    {/* 🔥 Mostrar botón si ya terminó */}
+   {estadoActual === "COMPLETED" && (
+  <button
+    className="btn-salir-cola"
+    onClick={handleSalirCola}
+  >
+    Salir de la Cola
+  </button>
+)}
+{estadoActual === "CANCELLED" && (
+  <p className="mensaje cancelado">
+    ❌ Tu cita ha sido cancelada por el doctor.
+  </p>
+)}
+
+  </div>
+)}
+
     </div>
   );
 }

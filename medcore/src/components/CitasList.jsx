@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./CitasList.css";
+import Swal from "sweetalert2";
 
 function MisCitas() {
   const [citas, setCitas] = useState([]);
@@ -13,7 +14,7 @@ function MisCitas() {
     reason: "",
     duration: "",
     status: "SCHEDULED",
-  });
+  }); 
 
   const user = JSON.parse(localStorage.getItem("user"));
   const patientId = user?.id;
@@ -48,6 +49,7 @@ function MisCitas() {
     });
     setShowModal(true);
   };
+  
 
   // 🔹 Guardar cambios
   const handleSaveChanges = async () => {
@@ -94,20 +96,70 @@ function MisCitas() {
     }
   };
 
-  // 🔹 Confirmar cita
-  const handleConfirm = async (appointmentId) => {
+
+const handleConfirm = async (appointment) => {
+  console.log("APPOINTMENT ENVIADO:", appointment);
+
   try {
-    await axios.patch(
-      `http://localhost:3008/api/v1/appointments/status/${appointmentId}`,
-      { status: "CONFIRMADA" }, // ✅ clave correcta
-       { headers: { Authorization: `Bearer ${token}` } }
+    const token = localStorage.getItem("token");
+
+    if (!appointment.doctorId) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Esta cita no tiene doctor asignado. No se puede entrar a la cola.",
+      });
+      return;
+    }
+
+    const res = await axios.post(
+      "http://localhost:3008/api/v1/queue/join",
+      {
+        appointmentId: appointment.id,
+        patientId: appointment.patientId,
+        doctorId: appointment.doctorId,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
-    alert("Cita confirmada correctamente");
-  } catch (error) {
-    console.error("Error al confirmar cita:", error.response?.data || error);
-    alert("No se pudo confirmar la cita");
+
+    const data = res.data?.data || res.data;
+
+    console.log("📌 DATA RECIBIDA DEL JOINQUEUE:", data);
+
+    // 🟢 Guardar ticketId
+    if (data.ticketId) {
+      localStorage.setItem("ticketId", data.ticketId);
+      console.log("🔐 Ticket guardado:", data.ticketId);
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "¡Cita confirmada!",
+      html: `
+        <div style="text-align: left; font-size: 16px;">
+          <p><b>Ticket:</b> ${data.ticketNumber ?? "N/A"}</p>
+          <p><b>Posición actual:</b> ${data.position ?? "N/A"}</p>
+          <p><b>Tiempo estimado:</b> ${data.estimatedWaitTime ?? 0} minutos</p>
+        </div>
+      `,
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#3085d6",
+    });
+
+  } catch (err) {
+    console.log("❌ Error al confirmar / entrar a la cola", err);
+    console.log("ERROR API:", err.response?.data);
+
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.response?.data?.error?.message || "No se pudo procesar la solicitud.",
+    });
   }
 };
+
+
+
 
   const statusLabels = {
    PROGRAMADA: 'SCHEDULED',
@@ -118,7 +170,7 @@ function MisCitas() {
 
   return (
     <div className="appointments-container">
-      <h2 className="title">📅 Mis Citas</h2>
+      <h2 className="title">Mis Citas</h2>
 
       {error ? (
         <p className="error">{error}</p>
@@ -160,7 +212,7 @@ function MisCitas() {
                     <button className="btn-icon btn-edit" onClick={() => handleEditClick(cita)} title="Editar">
                       ✏️
                     </button>
-                    <button className="btn-icon btn-confirm" onClick={() => handleConfirm(cita.id)} title="Confirmar">
+                    <button className="btn-icon btn-confirm" onClick={() => handleConfirm(cita)} title="Confirmar">
                       ✅
                     </button>
                     <button className="btn-icon btn-cancel" onClick={() => handleCancel(cita.id)} title="Cancelar">

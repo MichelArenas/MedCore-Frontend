@@ -5,7 +5,7 @@
 
 // Base del API (lee REACT_APP_API_BASE_URL o por defecto localhost:3001)
 const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
-const API_QUEUE = process.env.APPOINTMENT_SERVICE_URL || 'http://localhost:3007'; //TEMPORAL
+const API_QUEUE = process.env.APPOINTMENT_SERVICE_URL || 'http://localhost:3008'; //TEMPORAL
 
 // Exporta la base por si otros módulos la necesitan
 export const API_GATEWAY_URL = API_BASE;
@@ -88,4 +88,10 @@ export const QUEUE_ENDPOINTS = {
   POST_CALL_NEXT:(doctorid) => `${API_QUEUE}/api/v1/queue/doctor/${doctorid}/call-next`,
   PUT_COMPLETE_CURRENT:(ticketid) => `${API_QUEUE}/api/v1/queue/ticket/${ticketid}/complete`,
   GET_POSITION_IN_QUEUE:(ticketid) => `${API_QUEUE}/api/v1/queue/ticket/${ticketid}/position`,
+
+   // Agrega esto:
+  PUT_MARK_NO_SHOW: (ticketId) => `/queue/${ticketId}/no-show`,
+  
+  GET_POSITION_IN_QUEUE: (ticketId) => `/queue/${ticketId}/position`,
+
 };

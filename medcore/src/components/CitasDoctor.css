@@ -1,0 +1,31 @@
+.dashboard-page {
+  padding: 20px;
+}
+
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.appointments-table th,
+.appointments-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.status-scheduled { color: #007bff; }
+.status-inprogress { color: #ffc107; }
+.status-completed { color: #28a745; }
+.status-cancelled { color: #ffffffff; }
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+  padding: 3px 5px;
+  border: none;
+  cursor: pointer;
+}
+.btn-cancel:hover {
+  opacity: 0.8;
+}

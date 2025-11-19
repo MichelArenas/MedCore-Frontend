@@ -31,10 +31,16 @@ function Login() {
         verificationCode 
       });
 
+      // ✅ VALIDACIÓN: Verificar que result existe
+      if (!result) {
+        throw new Error("No se recibió respuesta del servidor");
+      }
+
       // Obtener datos de la respuesta
       const { ok, data } = result;
 
-      if (ok) {
+      // ✅ VALIDACIÓN: Verificar que data existe antes de acceder a sus propiedades
+      if (ok && data) {
         if (data.requiresVerification) {
           // ✅ Primera fase: requiere verificación
           setRequiresVerification(true);
@@ -43,46 +49,53 @@ function Login() {
           Swal.fire({
             icon: "info",
             title: "Verificación requerida",
-            text: data.message,
+            text: data.message || "Se requiere verificación de código",
             confirmButtonColor: "#007bff",
           });
           
         } else {
           // ✅ Segunda fase: login exitoso
-          localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("profileImage", data.user.profileImage) //
-          localStorage.setItem("role", data.user.role);
-          localStorage.setItem("fullname", data.user.fullname);
-          localStorage.setItem("userId", data.user.id);
+          // ✅ VALIDACIÓN: Verificar que user y token existen
+          if (data.user && data.token) {
+            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("profileImage", data.user.profileImage || "");
+            localStorage.setItem("role", data.user.role || "");
+            localStorage.setItem("fullname", data.user.fullname || "");
+            localStorage.setItem("userId", data.user.id || "");
 
-          Swal.fire({
-            icon: "success",
-            title: "Bienvenido!",
-            text: "Login exitoso ✅",
-            confirmButtonColor: "#007bff",
-          });
+            Swal.fire({
+              icon: "success",
+              title: "Bienvenido!",
+              text: "Login exitoso ✅",
+              confirmButtonColor: "#007bff",
+            });
 
-          const role = data.user.role;
-          if (role === "ADMINISTRADOR") navigate("/DashboardAdmin");
-          if (role === "MEDICO") navigate("/DashboardMedico");
-          if (role === "PACIENTE") navigate("/DashboardPaciente");
-          if (role === "ENFERMERO") navigate("/DashboardEnfermero");
+            const role = data.user.role;
+            if (role === "ADMINISTRADOR") navigate("/DashboardAdmin");
+            else if (role === "MEDICO") navigate("/DashboardMedico");
+            else if (role === "PACIENTE") navigate("/DashboardPaciente");
+            else if (role === "ENFERMERO") navigate("/DashboardEnfermero");
+            else navigate("/dashboard"); // Ruta por defecto
+          } else {
+            throw new Error("Datos de usuario o token no recibidos");
+          }
         }
       } else {
         // Error en login
-        if (data.requiresVerification) {
+        // ✅ VALIDACIÓN SEGURA: Usar optional chaining
+        if (data?.requiresVerification) {
           setRequiresVerification(true);
-          setVerificationType(data.verificationType);
+          setVerificationType(data.verificationType || "email");
         }
-        setError(data.message || "Credenciales inválidas");
+        setError(data?.message || "Credenciales inválidas");
       }
     } catch (err) {
-      console.error(err);
-      setError("Error al conectar con el servidor");
+      console.error("Error completo en login:", err);
+      setError(err.message || "Error al conectar con el servidor");
     }
   };
-
+  
   return (
     <div className="login-container">
       <div className="login-panel">

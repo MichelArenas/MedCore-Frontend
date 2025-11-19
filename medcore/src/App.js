@@ -25,6 +25,7 @@ import DoctorQueue from "./components/queue/DoctorQueueList";
 import { canReadHistory, canWriteHistory } from "./utils/rbac";
 import SolicitarCita from "./components/SolicitarCita";
 import SalaDeEspera from "./components/SalaEspera";
+import DoctorAppointments from "./components/CitasDoctor"
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/turno-virtual" element={<SalaDeEspera />} />
         <Route path="/solicitar-cita" element={<PrivateRoute><SolicitarCita /></PrivateRoute>} />
         <Route path="/bulk-import" element={<BulkImportCsv />} />
+        <Route path="/citas-doctor" element={<DoctorAppointments />} />
         <Route path="/dashboard/profile" element={<PrivateRoute><PerfilPaciente/></PrivateRoute>} />
         <Route path="/dashboard/medical-history/:patientId" element={ <PrivateRoute allow={(user, params) => canReadHistory(user, params.patientId)}><MedicalHistoryView /></PrivateRoute>}/>
         <Route path="/dashboard/medical-history/new"element={<PrivateRoute allow={(user) => canWriteHistory(user)}><MedicalHistoryNew /></PrivateRoute>}/>

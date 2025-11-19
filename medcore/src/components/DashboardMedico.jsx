@@ -10,7 +10,7 @@ function DashboardMedico() {
   const doctorId = userId;
   return (
     <div className="dashboard-Medico-container">
-      {/* 🔹 CABECERA */}
+      {/* 🔹 CABECERA */} 
       <header className="dashboard-header-Medico">
         <div className="header-Medico-left">
           <img src={logo} alt="MedCore Logo" className="header-Medico-logo" />
@@ -69,7 +69,7 @@ function DashboardMedico() {
             </div>
             <div
               className="servicio-card"
-              onClick={() => navigate("/ver-citas")} // 
+              onClick={() => navigate("/citas-doctor")} // 
             >
               <i className="fa-solid fa-calendar icono-servicio"></i>
               <h4>Citas programadas</h4>

@@ -1,52 +1,175 @@
-.sala-espera {
+/* ==============================
+   🔹 Contenedor General
+   ============================== */
+.sala-container {
+  max-width: 500px;
+  margin: 40px auto;
   padding: 20px;
-  max-width: 800px;
-  margin: auto;
-  font-family: Arial, sans-serif;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  color: #2d3e4f;
 }
 
-.lista-citas {
-  list-style: none;
-  padding: 0;
+.sala-container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #1e88e5;
+  font-weight: 600;
 }
 
-.card-cita {
-  background: #f9f9f9;
-  border-radius: 12px;
-  padding: 15px;
+/* ==============================
+   🔹 Mensaje sin turno
+   ============================== */
+.sin-turno {
+  background: #fff7e6;
+  padding: 15px 20px;
+  border-left: 4px solid #ffa726;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #bf7100;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* ==============================
+   🔹 Tarjeta Turno
+   ============================== */
+.turno-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  text-align: left;
+  animation: fadeInUp 0.5s ease forwards;
+  border-top: 5px solid #1e88e5;
+}
+
+.turno-card h3 {
+  text-align: center;
+  font-size: 22px;
   margin-bottom: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.1s;
+  color: #1e88e5;
 }
 
-.card-cita:hover {
-  transform: translateY(-2px);
+.turno-card p {
+  font-size: 16px;
+  margin: 8px 0;
 }
 
-.btn-join {
-  background: #007bff;
+/* ==============================
+   🔹 Mensaje inferior
+   ============================== */
+.mensaje {
+  margin-top: 20px;
+  background: #e3f2fd;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #0d47a1;
+  text-align: center;
+}
+
+/* ==============================
+   🔹 Animaciones
+   ============================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(15px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* ==============================
+   🔹 Colores según estado
+   ============================== */
+
+.estado-CONFIRMED {
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.estado-IN_PROGRESS {
+  color: #ef6c00;
+  font-weight: bold;
+}
+
+.estado-COMPLETED {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.estado-CANCELLED {
+  color: #c62828;
+  font-weight: bold;
+}
+
+.estado-RESCHEDULED {
+  color: #6a1b9a;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .sala-container {
+    margin: 20px 10px;
+  }
+
+  .turno-card {
+    padding: 18px;
+  }
+
+  .turno-card h3 {
+    font-size: 20px;
+  }
+}
+
+.estado-waiting {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.estado-called {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.estado-in_progress {
+  color: #673ab7;
+  font-weight: bold;
+}
+
+.estado-completed {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.estado-confirmed {
+  color: #009688;
+  font-weight: bold;
+}
+
+.btn-salir-cola {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #d9534f;
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 16px;
   cursor: pointer;
-  font-weight: bold;
+  width: 100%;
 }
 
-.btn-join:hover {
-  background: #0056b3;
+.btn-salir-cola:hover {
+  background: #c9302c;
 }
 
-.ticket-info {
-  text-align: right;
-  color: #333;
-}
 
-.alerta {
-  color: #d9534f;
-  font-weight: bold;
-  margin-top: 5px;
-}
