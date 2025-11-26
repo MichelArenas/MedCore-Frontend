@@ -1,7 +1,6 @@
 import "./Login.css";
 import Swal from "sweetalert2";
 import logo from "../assets/logo.png";
-import doctor from "../assets/doctor.png";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "../App.css";

@@ -92,7 +92,6 @@ function DoctorAppointments() {
           <thead>
             <tr>
               <th>Paciente</th>
-              <th>Especialidad</th>
               <th>Fecha</th>
               <th>Hora</th>
               <th>Duración</th>
@@ -107,8 +106,11 @@ function DoctorAppointments() {
               const fecha = new Date(cita.appointmentDate);
               return (
                 <tr key={cita.id}>
-                  <td>{cita.patientName || cita.patientId}</td>
-                  <td>{cita.specialtyId || "N/A"}</td>
+                  <td>
+                    {cita.patientName
+                      || cita.patientContact?.fullName
+                      || `Paciente #${(cita.patientId || "").slice(0, 6)}…`}
+                  </td>
                   <td>{fecha.toLocaleDateString()}</td>
                   <td>{fecha.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</td>
                   <td>{cita.duration || "-"}</td>

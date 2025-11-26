@@ -92,6 +92,6 @@ export const QUEUE_ENDPOINTS = {
    // Agrega esto:
   PUT_MARK_NO_SHOW: (ticketId) => `/queue/${ticketId}/no-show`,
   
-  GET_POSITION_IN_QUEUE: (ticketId) => `/queue/${ticketId}/position`,
+  
 
 };
