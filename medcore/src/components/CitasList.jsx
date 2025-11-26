@@ -15,13 +15,44 @@ function MisCitas() {
     duration: "",
     status: "SCHEDULED",
   }); 
-
+  const [patientId, setPatientId] = useState(null);
+  const [loadingPatient, setLoadingPatient] = useState(true);
+  const [patientError, setPatientError] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
-  const patientId = user?.id;
+  const userId = user?.id;
   const token = localStorage.getItem("token");
+
+  //Obtener patientId
+  useEffect(() => {
+    const fetchPatient = async () => {
+      if (!userId || !token) {
+        setPatientError("No se pudo obtener el usuario autenticado");
+        setLoadingPatient(false);
+        return;
+      }
+
+      try {
+        const res = await axios.get(
+          `http://localhost:3003/api/v1/users/patients/by-user/${userId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log("🧍 Paciente cargado:", res.data);
+        setPatientId(res.data.id);              // 👈 AQUÍ va el patient.id
+        setLoadingPatient(false);
+      } catch (err) {
+        console.error("Error al obtener paciente:", err.response?.data || err);
+        setPatientError("No se encontró un paciente asociado a este usuario");
+        setLoadingPatient(false);
+      }
+    };
+
+    fetchPatient();
+  }, [userId, token]);
 
   // 🔹 Cargar citas
   useEffect(() => {
+    if(loadingPatient) return;
     if (patientId) {
       axios
         .get(`http://localhost:3008/api/v1/appointments/patient/${patientId}`, {
@@ -34,7 +65,7 @@ function MisCitas() {
         })
         .catch(() => setError("Error al cargar las citas"));
     }
-  }, [patientId]);
+  }, [token, patientId]);
 
   // 🔹 Abrir modal de edición
   const handleEditClick = (cita) => {
@@ -196,8 +227,9 @@ const handleConfirm = async (appointment) => {
               const fecha = new Date(cita.appointmentDate);
               return (
                 <tr key={cita.id}>
-                  <td>{cita.doctorId}</td>
-                  <td>{cita.specialtyId || "N/A"}</td>
+                  <td>{cita.doctorname 
+                  || cita.doctorContact?.fullName}</td>
+                  <td>{cita.specialty?.name ?? cita.specialtyId}</td>
                   <td>{fecha.toLocaleDateString()}</td>
                   <td>{fecha.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</td>
                   <td>{cita.duration || "-"}</td>

@@ -93,7 +93,7 @@ function SalaDeEspera() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [cargarTurno]);
 
   // ========================
   // 🔹 Obtener estado final
