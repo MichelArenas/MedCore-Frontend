@@ -45,10 +45,11 @@ export const SPECIALITY_ENDPOINTS = {
 };
 
 // Endpoints para gestión de pacientes
+// Endpoints para pacientes (según rutas actuales del gateway bajo /api/v1/users/patients)
 export const PATIENT_ENDPOINTS = {
-  BASE: `${API_GATEWAY_URL}/api/v1/patients`,
-  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/patients/${id}`,
-  GET_MEDICAL_HISTORY: (id) => `${API_GATEWAY_URL}/api/v1/patients/${id}/medical-history`,
+  BASE: `${API_GATEWAY_URL}/api/v1/users/patients`,
+  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/users/patients/${id}`,
+  GET_MEDICAL_HISTORY: (id) => `${API_GATEWAY_URL}/api/v1/users/patients/${id}/medical-history`,
 };
 
 // Endpoints para auditoría

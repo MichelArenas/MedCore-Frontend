@@ -17,7 +17,28 @@ export default function MedicalHistoryEdit() {
         console.log('[MedicalHistoryEdit] Loading record with ID:', id);
         const r = await medicalRecordsService.getById(id);
         console.log('[MedicalHistoryEdit] API Response:', r);
-        setRec(r.ok ? r.data?.data || r.data : null);
+        if (r.ok) {
+          setRec(r.data?.data || r.data);
+        } else {
+          console.warn('[MedicalHistoryEdit] getById failed status=', r.status);
+          // Fallback: quizá el usuario puso el patientId en la URL en vez del recordId
+          // Intentar listar historias por paciente y elegir una.
+          const fallback = await medicalRecordsService.list(id); // id como patientId
+          if (fallback.ok) {
+            const items = fallback.data?.items || fallback.data?.data || [];
+            if (Array.isArray(items) && items.length === 1) {
+              console.log('[MedicalHistoryEdit] Using single record from patient fallback');
+              setRec(items[0]);
+            } else if (Array.isArray(items) && items.length > 1) {
+              console.log('[MedicalHistoryEdit] Multiple records found; cannot infer which to edit');
+              setRec(null);
+            } else {
+              setRec(null);
+            }
+          } else {
+            setRec(null);
+          }
+        }
       } catch (error) {
         console.error("Error loading medical record:", error);
         Swal.fire({
@@ -83,7 +104,19 @@ export default function MedicalHistoryEdit() {
   };
 
   if (loading) return <div className="skeleton-page" />;
-  if (!rec) return <div className="error-page">Consulta no encontrada</div>;
+  if (!rec) return (
+    <div className="error-page" style={{ padding: '30px', textAlign: 'center' }}>
+      <h3>Consulta no encontrada</h3>
+      <p style={{ color:'#64748b', fontSize:'14px', maxWidth:'520px', margin:'12px auto' }}>
+        Verifica que usas el <strong>ID de la historia clínica</strong> y no el ID del paciente. 
+        Si deseas editar una historia específica, entra primero a la vista de historias del paciente y haz clic en "Editar".
+      </p>
+      <div style={{ display:'flex', gap:'10px', justifyContent:'center', marginTop:'15px' }}>
+        <button className="btn" onClick={() => navigate(-1)}>← Volver</button>
+        <button className="btn" onClick={() => navigate(`/dashboard/medical-history/${id}`)}>Ver historias del paciente</button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="mh-container">

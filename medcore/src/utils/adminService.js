@@ -220,14 +220,8 @@ export const documentsService = {
     if (description) fd.append("description", description);
     if (tags) fd.append("tags", tags);
     if (category) fd.append("category", category);
-
-    const result = await apiRequest(DOCUMENTS_ENDPOINTS.UPLOAD, {
-      method: "POST",
-      headers: {},
-      body: fd,
-    });
-
-    return result;
+    // Uso correcto de post (apiRequest requiere objeto con url, antes se enviaba mal)
+    return post(DOCUMENTS_ENDPOINTS.UPLOAD, fd, { headers: {} });
   },
   downloadUrl: (id) => DOCUMENTS_ENDPOINTS.GET_BY_ID(id),
   // Nuevo método para obtener blob con autenticación
@@ -281,12 +275,8 @@ export const diagnosisService = {
     if (nextAppointment) fd.append("nextAppointment", nextAppointment);
     if (medicalRecordId) fd.append("medicalRecordId", medicalRecordId);
     files.forEach(f => fd.append("documents", f)); // **clave** para múltiples archivos
-
-    return apiRequest(DIAGNOSIS_ENDPOINTS.CREATE_FOR_PATIENT(patientId), {
-      method: "POST",
-      headers: {},
-      body: fd,
-    });
+    // Corrección: apiRequest antes se llamaba sin objeto de configuración adecuado
+    return post(DIAGNOSIS_ENDPOINTS.CREATE_FOR_PATIENT(patientId), fd, { headers: {} });
   },
 };
 

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { documentService } from "../../utils/documentService";
 import { userService } from "../../utils/userService";
+import { medicalRecordsService } from "../../utils/adminService";
 import "./PatientDocuments.css";
 
 // Modal component for document viewing
@@ -87,6 +88,10 @@ function PatientDocuments() {
   const navigate = useNavigate();
   
   const [documents, setDocuments] = useState([]);
+  const [medicalRecords, setMedicalRecords] = useState([]);
+  const [selectedMedicalRecordId, setSelectedMedicalRecordId] = useState("");
+  const [diagnostics, setDiagnostics] = useState([]);
+  const [selectedDiagnosticId, setSelectedDiagnosticId] = useState("");
   const [patientInfo, setPatientInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -97,7 +102,58 @@ function PatientDocuments() {
   useEffect(() => {
     loadDocuments();
     loadPatientInfo();
+    loadMedicalRecords();
   }, [patientId]);
+
+  useEffect(() => {
+    if (selectedMedicalRecordId) {
+      loadDiagnosticsForMedicalRecord(selectedMedicalRecordId);
+    } else {
+      setDiagnostics([]);
+      setSelectedDiagnosticId("");
+    }
+  }, [selectedMedicalRecordId]);
+  const loadMedicalRecords = async () => {
+    try {
+      const res = await medicalRecordsService.list(patientId);
+      if (res.ok) {
+        const items = res.data?.items || res.data?.data || res.data || [];
+        setMedicalRecords(Array.isArray(items) ? items : []);
+        // Auto-seleccionar el primero si existe
+        if (items.length > 0) {
+          setSelectedMedicalRecordId(items[0].id);
+        }
+      }
+    } catch (err) {
+      console.error("Error cargando historias clínicas para documentos:", err);
+    }
+  };
+
+  const loadDiagnosticsForMedicalRecord = async (medicalRecordId) => {
+    try {
+      // Endpoint backend: /api/v1/diagnosis/medical-record/:medicalRecordId
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/api/v1/diagnosis/medical-record/${medicalRecordId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      let data = [];
+      if (res.ok) {
+        const json = await res.json();
+        data = json.data || [];
+      }
+      setDiagnostics(Array.isArray(data) ? data : []);
+      // Auto-seleccionar el primero si existe
+      if (data.length > 0) {
+        setSelectedDiagnosticId(data[0].id);
+      } else {
+        setSelectedDiagnosticId("");
+      }
+    } catch (err) {
+      console.error("Error cargando diagnósticos:", err);
+      setDiagnostics([]);
+      setSelectedDiagnosticId("");
+    }
+  };
 
   const loadDocuments = async () => {
     try {
@@ -146,9 +202,18 @@ function PatientDocuments() {
         throw new Error('No se seleccionó ningún archivo');
       }
       
+      if (!selectedMedicalRecordId) {
+        throw new Error('Seleccione una historia clínica para asociar el documento');
+      }
+      if (!selectedDiagnosticId) {
+        throw new Error('La historia clínica seleccionada no tiene diagnósticos. Cree un diagnóstico antes de subir documentos.');
+      }
+
       const formData = new FormData();
       formData.append('patientId', patientId);
-      formData.append('document', file); // El backend espera 'document', no 'documents'
+      formData.append('medicalRecordId', selectedMedicalRecordId);
+      formData.append('diagnosticId', selectedDiagnosticId);
+      formData.append('document', file); // El backend espera 'document'
 
       const response = await documentService.uploadDocument(formData);
       
@@ -328,6 +393,37 @@ function PatientDocuments() {
               style={{ display: 'none' }}
             />
           </label>
+        </div>
+      </div>
+
+      {/* Selector de Historia Clínica y Diagnóstico */}
+      <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        <div style={{ minWidth: '240px' }}>
+          <label style={{ fontWeight: '600', display: 'block', marginBottom: '4px' }}>Historia Clínica</label>
+          <select
+            value={selectedMedicalRecordId}
+            onChange={(e) => setSelectedMedicalRecordId(e.target.value)}
+            style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
+          >
+            <option value="">-- Seleccione --</option>
+            {medicalRecords.map(r => (
+              <option key={r.id} value={r.id}>{new Date(r.date || r.createdAt).toLocaleDateString('es-ES')} - {r.diagnosis || 'Sin diagnóstico'}</option>
+            ))}
+          </select>
+        </div>
+        <div style={{ minWidth: '240px' }}>
+          <label style={{ fontWeight: '600', display: 'block', marginBottom: '4px' }}>Diagnóstico</label>
+          <select
+            value={selectedDiagnosticId}
+            onChange={(e) => setSelectedDiagnosticId(e.target.value)}
+            style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
+            disabled={!selectedMedicalRecordId || diagnostics.length === 0}
+          >
+            <option value="">{diagnostics.length === 0 ? 'No hay diagnósticos' : '-- Seleccione --'}</option>
+            {diagnostics.map(d => (
+              <option key={d.id} value={d.id}>{d.title || d.diagnosis || 'Diagnóstico'}</option>
+            ))}
+          </select>
         </div>
       </div>
 

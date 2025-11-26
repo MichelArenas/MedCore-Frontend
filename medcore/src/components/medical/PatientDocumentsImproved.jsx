@@ -223,7 +223,8 @@ function PatientDocumentsImproved() {
       const response = await medicalRecordsService.list(patientId);
       
       if (response.ok) {
-        const recordsData = response.data?.data || response.data || [];
+        // Backend listByPatient retorna { items, total, patientId }
+        const recordsData = response.data?.items || response.data?.data || response.data || [];
         setMedicalRecords(Array.isArray(recordsData) ? recordsData : []);
       }
     } catch (err) {
@@ -266,6 +267,40 @@ function PatientDocumentsImproved() {
       } catch (err) {
         console.error("Error loading diagnostics:", err);
       }
+    }
+  };
+
+  // Crear diagnóstico rápido cuando no hay ninguno
+  const createQuickDiagnostic = async () => {
+    if (!selectedMedicalRecord) return;
+    try {
+      const token = localStorage.getItem('token');
+      const apiBase = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+      const payload = {
+        title: 'Diagnóstico inicial',
+        description: 'Creado automáticamente para adjuntar documentos',
+        diagnosis: 'Evaluación inicial',
+        treatment: 'Pendiente',
+        medicalRecordId: selectedMedicalRecord
+      };
+      const res = await fetch(`${apiBase}/api/v1/diagnosis/${patientId}/diagnostics`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json().catch(()=>({}));
+      if (!res.ok) throw new Error(json.message || 'No se pudo crear el diagnóstico');
+      const newId = json.data?.id || json.id;
+      // Recargar diagnósticos
+      await handleMedicalRecordChange(selectedMedicalRecord);
+      setSelectedDiagnostic(newId);
+      await Swal.fire({ icon:'success', title:'Diagnóstico creado', timer:1600, showConfirmButton:false });
+    } catch (err) {
+      console.error('Error creando diagnóstico:', err);
+      Swal.fire({ icon:'error', title:'Error', text: err.message });
     }
   };
 
@@ -456,30 +491,78 @@ function PatientDocumentsImproved() {
         </div>
       )}
 
-      {/* Upload Section */}
-      <div className="upload-section">
+      {/* Top Panels Wrapper */}
+      <div className="documents-top-panels">
+        {/* Medical Records Panel */}
+        <div className="records-panel">
+        <h3>Historias Clínicas del Paciente</h3>
+        {medicalRecords.length === 0 ? (
+          <div className="records-empty">
+            <p>Este paciente no tiene historias clínicas registradas.</p>
+            <button
+              className="create-history-button"
+              onClick={() => navigate(`/dashboard/medical-history/new?patientId=${patientId}`)}
+            >
+              Crear Historia Clínica
+            </button>
+          </div>
+        ) : (
+          <table className="records-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Diagnóstico</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {medicalRecords.map(r => (
+                <tr key={r.id} className={selectedMedicalRecord === r.id ? 'selected-row' : ''}>
+                  <td>{formatDate(r.date || r.createdAt)}</td>
+                  <td>{r.diagnosis || '—'}</td>
+                  <td>{r.status || 'active'}</td>
+                  <td>
+                    <button
+                      className="select-record-button"
+                      onClick={() => handleMedicalRecordChange(r.id)}
+                    >
+                      {selectedMedicalRecord === r.id ? 'Seleccionado' : 'Seleccionar'}
+                    </button>
+                    <button
+                      className="open-history-button"
+                      onClick={() => navigate(`/dashboard/medical-history/${r.id}/edit`)}
+                    >
+                      Editar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        </div>
+
+        {/* Upload Section (depende de selección) */}
+        <div className="upload-section">
         <div className="upload-card">
           <h3>Subir Documentos</h3>
           
           {medicalRecords.length === 0 ? (
             <div className="no-records-message">
-              <p>⚠️ Este paciente no tiene historias clínicas registradas.</p>
-              <button 
-                className="create-history-button"
-                onClick={() => navigate(`/dashboard/medical-history/new?patientId=${patientId}`)}
-              >
-                Crear Primera Historia Clínica
-              </button>
+              <p>⚠️ Crea una historia clínica para poder adjuntar documentos.</p>
+            </div>
+          ) : !selectedMedicalRecord ? (
+            <div className="no-selection-message">
+              <p>Selecciona una historia clínica para habilitar la subida de documentos.</p>
             </div>
           ) : (
             <>
               {!showUploadForm ? (
-                <button 
+                <button
                   className="show-upload-button"
                   onClick={() => setShowUploadForm(true)}
-                >
-                  Subir Nuevo Documento
-                </button>
+                >Subir Documento a Historia Seleccionada</button>
               ) : (
                 <div className="upload-form">
                   <div className="form-group">
@@ -513,6 +596,18 @@ function PatientDocumentsImproved() {
                           </option>
                         ))}
                       </select>
+                      {availableDiagnostics.length === 0 && (
+                        <div className="no-diagnostics">
+                          <p style={{margin:'8px 0'}}>No hay diagnósticos para esta historia.</p>
+                          <button
+                            type="button"
+                            className="create-diagnostic-button"
+                            onClick={createQuickDiagnostic}
+                          >
+                            Crear Diagnóstico Rápido
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -552,6 +647,7 @@ function PatientDocumentsImproved() {
               )}
             </>
           )}
+        </div>
         </div>
       </div>
 

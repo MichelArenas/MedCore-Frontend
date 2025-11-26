@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import medicalRecordService from '../../services/medicalRecordService';
-import userService from '../../services/userService';
+// Ajuste: userService está en utils y es un named export
+import { userService } from '../../utils/userService';
 import './PatientMedicalRecords.css';
 
 function PatientMedicalRecords() {
@@ -37,8 +38,10 @@ function PatientMedicalRecords() {
         throw new Error(response.data?.message || "Error al cargar historias clínicas");
       }
 
-      const records = response.data || [];
-      setMedicalRecords(Array.isArray(records) ? records : []);
+      // El servicio devuelve un objeto { items: [...], total, patientId }
+      const payload = response.data || {};
+      const items = Array.isArray(payload) ? payload : (payload.items || []);
+      setMedicalRecords(Array.isArray(items) ? items : []);
     } catch (err) {
       console.error("Error loading medical records:", err);
       setError(err.message);
