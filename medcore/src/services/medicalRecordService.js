@@ -2,15 +2,12 @@
 import { get, post, put } from '../utils/apiService';
 import { MEDICAL_RECORDS_ENDPOINTS } from '../utils/apiConfig';
 
-// helper para unwrap
-const unwrap = (res) => (res && typeof res === 'object' && 'data' in res ? res.data : res);
-
-// Siempre usar los endpoints centralizados de apiConfig
+// Siempre usar los endpoints centralizados de apiConfig.
+// Se devuelve el objeto completo { ok, status, data } para coherencia.
 const medicalRecordService = {
   // Listar historias clínicas de un paciente
   getPatientMedicalRecords: async (patientId) => {
-    const res = await get(MEDICAL_RECORDS_ENDPOINTS.BY_PATIENT(patientId));
-    return unwrap(res);
+    return await get(MEDICAL_RECORDS_ENDPOINTS.BY_PATIENT(patientId));
   },
 
   // Crear nueva historia clínica

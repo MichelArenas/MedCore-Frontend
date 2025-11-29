@@ -276,12 +276,14 @@ function DashboardPatientsList() {
   // Acciones por fila según modo
   const renderActions = (p) => {
     if (mode === "consult") {
-      const pid = p.patientId || p.id;
+      // Usar siempre el ID de usuario (p.id) para historia clínica y documentos.
+      // p.patientId corresponde al registro interno de paciente y NO es el que se guarda en medicalRecord.patientId.
+      const userId = p.id;
       return (
         <div className="actions">
           <button 
             className="btn-icon btn-primary" 
-            onClick={() => p.patientId && navigate(`/dashboard/medical-history/${pid}`)}
+            onClick={() => userId && navigate(`/dashboard/medical-history/${userId}`)}
             title="Ver Historia Clínica"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -294,7 +296,7 @@ function DashboardPatientsList() {
           </button>
           <button 
             className="btn-icon btn-secondary" 
-            onClick={() => p.patientId && navigate(`/dashboard/medical-history/new?patientId=${pid}`)}
+            onClick={() => userId && navigate(`/dashboard/medical-history/new?patientId=${userId}`)}
             title="Nueva Historia Clínica"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -304,7 +306,7 @@ function DashboardPatientsList() {
           </button>
           <button 
             className="btn-icon btn-info" 
-            onClick={() => p.patientId && navigate(`/dashboard/documents/${p.id}`)}
+            onClick={() => userId && navigate(`/dashboard/documents/${userId}`)}
             title="Ver Documentos"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

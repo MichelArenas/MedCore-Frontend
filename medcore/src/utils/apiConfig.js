@@ -45,10 +45,11 @@ export const SPECIALITY_ENDPOINTS = {
 };
 
 // Endpoints para gestión de pacientes
+// Endpoints para pacientes (según rutas actuales del gateway bajo /api/v1/users/patients)
 export const PATIENT_ENDPOINTS = {
-  BASE: `${API_GATEWAY_URL}/api/v1/patients`,
-  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/patients/${id}`,
-  GET_MEDICAL_HISTORY: (id) => `${API_GATEWAY_URL}/api/v1/patients/${id}/medical-history`,
+  BASE: `${API_GATEWAY_URL}/api/v1/users/patients`,
+  GET_BY_ID: (id) => `${API_GATEWAY_URL}/api/v1/users/patients/${id}`,
+  GET_MEDICAL_HISTORY: (id) => `${API_GATEWAY_URL}/api/v1/users/patients/${id}/medical-history`,
 };
 
 // Endpoints para auditoría
@@ -84,14 +85,11 @@ export const DIAGNOSIS_ENDPOINTS = {
 //Unirse a la cola de espera
 export const QUEUE_ENDPOINTS = {
   JOIN_QUEUE: `${API_QUEUE}/api/v1/queue/join`,
-  GET_QUEUE_MEDICO: (doctorid) => `${API_QUEUE}/api/v1/queue/doctor/${doctorid}/current`,
+  GET_QUEUE_MEDICO: (doctorid) => `${API_QUEUE}/api/v1/queue/doctor/${doctorid}/current-queue`,
   POST_CALL_NEXT:(doctorid) => `${API_QUEUE}/api/v1/queue/doctor/${doctorid}/call-next`,
   PUT_COMPLETE_CURRENT:(ticketid) => `${API_QUEUE}/api/v1/queue/ticket/${ticketid}/complete`,
   GET_POSITION_IN_QUEUE:(ticketid) => `${API_QUEUE}/api/v1/queue/ticket/${ticketid}/position`,
 
    // Agrega esto:
   PUT_MARK_NO_SHOW: (ticketId) => `/queue/${ticketId}/no-show`,
-  
-  GET_POSITION_IN_QUEUE: (ticketId) => `/queue/${ticketId}/position`,
-
 };

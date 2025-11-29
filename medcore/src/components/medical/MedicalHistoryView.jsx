@@ -30,10 +30,12 @@ export default function MedicalHistoryView() {
       try {
         setLoading(true);
         console.log('[MHV] fetching records for', patientId);
-        const json = await medicalRecordService.getPatientMedicalRecords(patientId);
-        console.log('[MHV] backend payload =', json);
-        // listByPatient devuelve { items: [...] }
-        const list = json.items || normalizeRecords(json);
+        const res = await medicalRecordService.getPatientMedicalRecords(patientId);
+        console.log('[MHV] raw response =', res);
+        if (!res.ok) throw new Error(res.data?.message || 'Error cargando historias');
+        const payload = res.data || {};
+        console.log('[MHV] backend data payload =', payload);
+        const list = payload.items || normalizeRecords(payload);
         console.log('[MHV] normalized records =', list);
         setRecords(list);
       } catch (e) {

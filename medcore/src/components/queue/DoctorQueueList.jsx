@@ -200,8 +200,10 @@ function DoctorQueueList() {
               <ul className="queue-list">
                 {queueData.queue.map((ticket, index) => {
                   const isFirst = index === 0;
-                  //const state = STATUS_CONFIG[ticket.status];
-
+                  const state = STATUS_CONFIG[ticket.status];
+                  const displayName =
+                  ticket.patientContact?.fullName ||
+                  `Paciente #${(ticket.patientId || "").slice(0, 6)}…`;
                   return (
                     <li
                       key={ticket.id}
@@ -220,20 +222,19 @@ function DoctorQueueList() {
                             (isFirst ? "queue-number-primary" : "")
                           }
                         >
-                          {String(ticket.ticketNumber).padStart(2, "0")}
+                          {String(ticket.position).padStart(2, "0")}
                         </div>
 
                         {/* Paciente */}
                         <div className="queue-patient">
-                          <p
-                            className={
-                              "queue-patient-name " +
-                              (isFirst ? "queue-patient-name-active" : "")
-                            }
-                          >
-                            Paciente #{ticket.patientId.slice(0, 6)}…
-                          </p>
-
+                        <p
+                          className={
+                            "queue-patient-name " +
+                            (isFirst ? "queue-patient-name-active" : "")
+                          }
+                        >
+                          {displayName}
+                        </p>
                           {typeof ticket.estimatedWaitTime === "number" && (
                             <p className="queue-waiting-time">
                               Lleva{" "}
