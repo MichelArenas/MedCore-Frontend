@@ -1,4 +1,8 @@
 import React from "react";
+
+import './App.css';
+import { HealthCheck } from './presentation/components/MedicalHealt'
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
@@ -29,9 +33,12 @@ import DoctorAppointments from "./components/CitasDoctor"
 
 function App() {
   return (
-   
+    
     <Router>
       <Routes>
+        {/*Ruta de prueba para arquitectura limpia + ms-medical-records */}
+        <Route path="/health-test" element={<HealthCheck />} />
+
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/landing" element={<LandingPage />} />

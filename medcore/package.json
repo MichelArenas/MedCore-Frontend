@@ -23,7 +23,8 @@
     "recharts": "^3.3.0",
     "sweetalert2": "^11.23.0",
     "swiper": "^12.0.3",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.8"
   },
   "scripts": {
     "start": "set NODE_OPTIONS=--max-old-space-size=4096 && react-scripts start",
