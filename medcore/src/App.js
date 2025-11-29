@@ -1,7 +1,8 @@
 import React from "react";
 
+//Rutas y componentes
 import './App.css';
-import { HealthCheck } from './presentation/components/MedicalHealt'
+import { HealthCheck } from './presentation/components/MedicalHealt' //Ruta de prueba para arquitectura limpia + ms-medical-records
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
