@@ -71,8 +71,8 @@ function Sidebar() {
  <li
             className="virtualAppoiments" onClick={()=> {close(); navigate ("/virtualappoiments");}}
           >
-            <FaUserInjured className="icon" />
-            <span>Pacientes</span>
+            <FaVideo className="icon" />
+            <span>Citas virtuales</span>
           </li>
 
           <li className="sidebar-item logout" onClick={handleLogout}>

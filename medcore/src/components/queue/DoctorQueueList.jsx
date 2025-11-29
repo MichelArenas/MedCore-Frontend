@@ -7,7 +7,7 @@ import { queueService } from "../../utils/adminService";
 //
 // CONFIGURACIÓN DE ESTADOS VISUALES
 //
-const STATUS_CONFIG = {
+/*const STATUS_CONFIG = {
   WAITING: {
     label: "En espera",
     chipClass: "queue-chip queue-chip-waiting",
@@ -34,7 +34,7 @@ const STATUS_CONFIG = {
     dotClass: "queue-chip-dot queue-chip-dot-cancel",
   },
 };
-
+*/
 function DoctorQueueList() {
   const params = useParams();
 
@@ -51,6 +51,8 @@ function DoctorQueueList() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [pause, setPause] = useState(false);
+  
 
   //
   // CARGAR COLA DEL DOCTOR
@@ -86,6 +88,8 @@ function DoctorQueueList() {
       setLoading(false);
     }
   }, [doctorId, date]);
+
+  
 
   useEffect(() => {
     loadQueue();
@@ -127,6 +131,12 @@ function DoctorQueueList() {
     }
   };
 
+  const handlepause = async () => {
+    setPause( prev => !prev); //??????
+  };
+
+
+
   //
   // RENDER
   //
@@ -138,6 +148,9 @@ function DoctorQueueList() {
           <div className="queue-header">
             <div>
               <h2 className="queue-title">Lista de Espera</h2>
+              {pause && (
+                <span className="queue-paused-toggle">Atención en pausa </span>
+              )}
 
               {/* Fecha */}
               <div className="queue-date-row">
@@ -159,7 +172,8 @@ function DoctorQueueList() {
               )}
             </div>
 
-            <button className="queue-call-btn" onClick={handleCallNext}>
+
+            <button className="queue-call-btn" onClick={handleCallNext} disabled={pause}>
               <span className="text">Llamar siguiente</span>
               <svg
                 className="arrow"
@@ -186,7 +200,7 @@ function DoctorQueueList() {
               <ul className="queue-list">
                 {queueData.queue.map((ticket, index) => {
                   const isFirst = index === 0;
-                  const state = STATUS_CONFIG[ticket.status];
+                  //const state = STATUS_CONFIG[ticket.status];
 
                   return (
                     <li
@@ -229,13 +243,13 @@ function DoctorQueueList() {
                           )}
                         </div>
 
-                        {/* Estado */}
+                        {/* Estado 
                         <div className="queue-status">
                           <span className={state.chipClass}>
                             <span className={state.dotClass} />
                             {state.label}
                           </span>
-                        </div>
+                        </div>*/}
 
                         {/* Botones */}
                         <div className="queue-actions">

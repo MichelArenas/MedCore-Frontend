@@ -398,7 +398,9 @@ function DashboardPatientsList() {
   return (
     <div className="patients-list-container">
       <div className="header-container">
-        <h1 className="title">{mode === "consult" ? "Selecciona un paciente" : "Pacientes Medcore"}</h1>
+      <h1 className="title" style={{ color: "blue" }}>
+  {mode === "consult" ? "Selecciona un paciente" : "Pacientes Medcore"}
+</h1>
 
         <div className="search-container">
           <input

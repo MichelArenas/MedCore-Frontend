@@ -17,25 +17,26 @@ export const apiRequest = async (config = {}) => {
     const queryString = new URLSearchParams(params).toString();
     const finalUrl = queryString ? `${url}?${queryString}` : url;
 
-    // Headers por defecto
-    const requestHeaders = {
-      "Content-Type": "application/json",
-      ...headers,
-    };
+   // Headers por defecto
+const requestHeaders = {
+  "Content-Type": "application/json",
+  ...headers,
+};
 
-    // Token
-    const token = localStorage.getItem("token");
-    console.log("🔑 TOKEN ENVIADoo =", token);
+// Configuración fetch
+const fetchOptions = {
+  method,
+  headers: requestHeaders,
+};
 
-    if (token) {
-      requestHeaders["Authorization"] = `Bearer ${token}`;
-    }
+// Token (¡ahora sí existe fetchOptions!)
+const token = localStorage.getItem("token");
+console.log("🔑 TOKEN ENVIADoo =", token);
 
-    // Configuración fetch
-    const fetchOptions = {
-      method,
-      headers: requestHeaders,
-    };
+if (token) {
+  fetchOptions.headers["Authorization"] = `Bearer ${token}`;
+}
+
 
     // Si hay body
     if (data !== null && method !== "GET" && method !== "DELETE") {

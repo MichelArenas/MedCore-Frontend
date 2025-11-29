@@ -311,6 +311,10 @@ body { margin: 0; background: #f4f7fc; }
     justify-content: space-between;
   }
 
+.title {
+  color: #007bff; /* azul */
+}
+
   .title { font-size: 2rem; }
 
   .search-container { margin-left: auto; }
@@ -319,7 +323,7 @@ body { margin: 0; background: #f4f7fc; }
   /* Asegura que NO queden columnas ocultas por reglas mobile */
   .patients-table thead th,
   .patients-table tbody td {
-    display: table-cell !important;
+    display: table-cell ;
     white-space: nowrap;
     padding: 12px 12px;
     font-size: 0.95rem;
@@ -378,7 +382,7 @@ body { margin: 0; background: #f4f7fc; }
   .patients-table tbody td:nth-child(3),
   .patients-table tbody td:nth-child(4),
   .patients-table tbody td:nth-child(5) {
-    display: none !important;
+    display: none ;
   }
 
   .actions { 

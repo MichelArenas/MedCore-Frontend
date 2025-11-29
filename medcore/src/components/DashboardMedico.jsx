@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./DashboardMedico.css";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SidesbarMedico";
 import logo from "../assets/logo.png";
 import DoctorQueueList from "./queue/DoctorQueueList";
 

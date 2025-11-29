@@ -259,7 +259,7 @@ useEffect(() => {
   return (
     <div className="doctors-list-container">
       <div className="header-container">
-        <h1 className="title"> Médicos Medcore</h1>
+        <h1 className="title" > Médicos Medcore</h1>
 
         {/* 🔍 Input de búsqueda */}
         <div className="search-container">
@@ -331,26 +331,24 @@ useEffect(() => {
                   </button>
 
                   <button
-                    className={`btn-icon btn-toggle ${
-                      doc.status === "ACTIVE" ? "btn-disable" : "btn-enable"
-                    }`}
-                    onClick={() => handleToggleStatus(doc.id, doc.status)}
-                    disabled={doc.status === "PENDING"}
-                    title={doc.status === "ACTIVE" ? "Desactivar Doctor" : "Activar Doctor"}
-                  >
-                    {doc.status === "ACTIVE" ?(
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          className={`btn-icon btn-toggle ${doc.status === "ACTIVE" ? "btn-danger" : "btn-success"}`}
+          onClick={() => handleToggleStatus(doc.id, doc.status)}
+          disabled={doc.status === "PENDING"}
+          title={doc.status === "ACTIVE" ? "Desactivar Doctor" : "Activar Doctor"}
+        >
+          {doc.status === "ACTIVE" ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10"/>
               <line x1="15" y1="9" x2="9" y2="15"/>
               <line x1="9" y1="9" x2="15" y2="15"/>
             </svg>
-                    ):(
-                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10"/>
               <polyline points="9,12 12,15 22,4"/>
             </svg>
-                    )}
-                  </button>
+          )}
+        </button>
 
                   <button
                     className="btn-icon delete-btn"

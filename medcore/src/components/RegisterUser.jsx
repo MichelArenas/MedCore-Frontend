@@ -193,9 +193,9 @@ export default function RegisterUser() {
 console.log("🗂️ Departamentos disponibles:", departments);
 
   return (
-    <div className="register-container">
+    <div className="register-container-r">
       <form onSubmit={handleSubmit} className="register-form">
-        <h2>Registrar Usuario</h2>
+        <h2 className="titleregister" style={{color: "#007bff"}}>Registrar Usuario</h2>
 
         {/* Navegación de secciones */}
         <div className="form-navigation">
@@ -229,7 +229,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
         {/* Sección 1: Información básica */}
         {activeSection === "basic" && (
           <div className="form-section">
-            <label>Nombre completo *</label>
+            <label className="datos" style={{fontWeight: 600}}>Nombre completo *</label>
             <input
               type="text"
               value={fullname}
@@ -237,7 +237,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               required
             />
 
-            <label>Correo *</label>
+            <label className="datos" style={{fontWeight: 600}}>Correo *</label>
             <input
               type="email"
               value={email}
@@ -245,7 +245,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               required
             />
 
-            <label>Contraseña *</label>
+            <label className="datos" style={{fontWeight: 600}}>Contraseña *</label>
             <input
               type="password"
               value={password}
@@ -253,7 +253,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               required
             />
 
-            <label>Rol *</label>
+            <label className="datos" style={{fontWeight: 600}}>Rol *</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
@@ -271,7 +271,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
             {/* 🔹 Bloque dinámico para médicos */}
             {role === "MEDICO" && (
               <>
-                <label>Departamento *</label>
+                <label className="datos" style={{fontWeight: 600}}>Departamento *</label>
                 <select
                   value={departmentId}
                   onChange={(e) => {
@@ -290,7 +290,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
 
                 {departmentId && (
                   <>
-                    <label>Especialidad *</label>
+                    <label className="datos" style={{fontWeight: 600}}>Especialidad *</label>
                     <select
                       value={specialtyId}
                       onChange={(e) => setSpecialtyId(e.target.value)}
@@ -323,7 +323,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
         {/* Sección 2: Datos personales */}
         {activeSection === "personal" && (
           <div className="form-section">
-            <label>Tipo de identificación *</label>
+            <label className="datos" style={{fontWeight: 600}}>Tipo de identificación *</label>
             <select
               value={idType}
               onChange={(e) => setIdType(e.target.value)}
@@ -337,7 +337,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               <option value="NIT">NIT</option>
             </select>
 
-            <label>Número de identificación *</label>
+            <label className="datos" style={{fontWeight: 600}}>Número de identificación *</label>
             <input
               type="text"
               value={idNumber}
@@ -345,7 +345,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               required
             />
 
-            <label>Fecha de nacimiento *</label>
+            <label className="datos" style={{fontWeight: 600}}>Fecha de nacimiento *</label>
             <input
               type="date"
               value={dateOfBirth}
@@ -353,7 +353,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               required
             />
 
-            <label>Género</label>
+            <label className="datos" style={{fontWeight: 600}}>Género</label>
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value)}
@@ -365,7 +365,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               <option value="NO_RESPONDE">Prefiero no responder</option>
             </select>
 
-            <label>Tipo de sangre</label>
+            <label className="datos" style={{fontWeight: 600}}>Tipo de sangre</label>
             <select
               value={bloodType}
               onChange={(e) => setBloodType(e.target.value)}
@@ -403,21 +403,21 @@ console.log("🗂️ Departamentos disponibles:", departments);
         {/* Sección 3: Contacto */}
         {activeSection === "contact" && (
           <div className="form-section">
-            <label>Teléfono</label>
+            <label className="datos" style={{fontWeight: 600}}>Teléfono</label>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
 
-            <label>Dirección</label>
+            <label className="datos" style={{fontWeight: 600}}>Dirección</label>
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
 
-            <label>Ciudad</label>
+            <label className="datos" style={{fontWeight: 600}}>Ciudad</label>
             <input
               type="text"
               value={city}
@@ -425,7 +425,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
             />
 
             <h3>Contacto de emergencia</h3>
-            <label>Nombre</label>
+            <label className="datos" style={{fontWeight: 600}}>Nombre</label>
             <input
               type="text"
               value={emergencyContact.name}
@@ -433,7 +433,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
                 handleEmergencyContactChange("name", e.target.value)
               }
             />
-            <label>Teléfono</label>
+            <label className="datos" style={{fontWeight: 600}}>Teléfono</label>
             <input
               type="tel"
               value={emergencyContact.phone}
@@ -441,7 +441,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
                 handleEmergencyContactChange("phone", e.target.value)
               }
             />
-            <label>Relación/Parentesco</label>
+            <label className="datos" style={{fontWeight: 600}}>Relación/Parentesco</label>
             <input
               type="text"
               value={emergencyContact.relationship}
@@ -458,7 +458,7 @@ console.log("🗂️ Departamentos disponibles:", departments);
               >
                 Anterior
               </button>
-              <button type="submit" className="register-btn">
+              <button type="submit" className="register-btn-r">
                 Registrar Usuario
               </button>
             </div>

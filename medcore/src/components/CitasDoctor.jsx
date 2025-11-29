@@ -9,6 +9,7 @@ function DoctorAppointments() {
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
   const doctorId = localStorage.getItem("userId"); // O usa useParams si viene por URL
+ 
 
   // 🔹 Cargar citas del doctor
   const loadCitas = useCallback(async () => {
@@ -25,6 +26,8 @@ function DoctorAppointments() {
       setError("Error al cargar las citas");
     }
   }, [doctorId, token]);
+
+
 
   useEffect(() => {
     loadCitas();

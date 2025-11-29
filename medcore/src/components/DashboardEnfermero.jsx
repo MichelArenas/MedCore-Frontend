@@ -1,49 +1,80 @@
 import { useNavigate } from "react-router-dom";
-import "./DashboardEnfermero.css";
-import Sidebar from "./Sidebar";
-import { logout } from "../utils/authUtils";
+import "./DashboardMedico.css";
+import Sidebar from "./SidesbarMedico";
+import logo from "../assets/logo.png";
+import DoctorQueueList from "./queue/DoctorQueueList";
 
- function Dashboard() {
+function DashboardMedico() {
   const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      
-      // Llamar al endpoint de logout
-      await fetch("http://localhost:3002/api/v1/auth/logout", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      });
-      
-      // Proceder con el logout en frontend
-      logout(); // Usar función centralizada
-      navigate("/landing", { replace: true }); // redirigir al landing
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-      // En caso de error, eliminar token de todas formas
-      logout(); // Usar función centralizada
-      navigate("/landing", { replace: true });
-    }
-  };
-
+  const userId = localStorage.getItem("userId");
+  const doctorId = userId;
   return (
-    
-    <div className="dashboard-container">
-        <header className="dashboard-header">
-        <div className="header-left">
-          <Sidebar /> {/* Botón menú hamburguesa */}
+    <div className="dashboard-Medico-container">
+      {/* 🔹 CABECERA */} 
+      <header className="dashboard-header-Medico">
+        <div className="header-Medico-left">
+          <img src={logo} alt="MedCore Logo" className="header-Medico-logo" />
+        </div>
+        <div className="header-Medico-right">
+          <Sidebar />
         </div>
       </header>
-      <h1>Bienvenido Enfermero</h1>
-       <button onClick={handleLogout} className="logOut-button">
-        Cerrar sesión
-      </button>
-    </div>
-  );
+
+      {/* 🔹 CONTENIDO PRINCIPAL */}
+      <div className="dashboard-Medico-content">
+        <h1 className="title-Medico">Bienvenido Enfermero</h1>
+        </div>
+
+        {/* 🔹 SECCIÓN: SERVICIOS MÁS UTILIZADOS */}
+
+        <div className="servicios-section">
+          <h3 className="servicios-title">Acciones rapidas</h3>
+          <div className="servicios-grid">
+            <div
+              className="servicio-card"
+              onClick={() => navigate("/dashboard/pacientes?mode=consult")}
+              style={{ cursor: "pointer" }} // indica que es clickeable
+            >
+              <div className="icon-wrapper">
+                <i className="fa-solid fa-user icono-servicio"></i>
+              </div>
+              <div className="card-content">
+                <h4>Pacientes programados</h4>
+                <p>Ver pacientes.</p>
+              </div>
+            </div>
+
+            <div
+              className="servicio-card"
+              onClick={() => navigate("/cita-virtual")} // 👈 redirige
+            >
+              <i className="fas fa-tasks icono-servicio"></i>
+              <h4>Tareas</h4>
+              <p>Mira tus tareas de hoy.</p>
+            </div>
+            <div
+              className="servicio-card"
+              onClick={() => navigate("/citas-doctor")} // 
+            >
+              <i className="fas fa-notes-medical icono-servicio"></i>
+              <h4>Ver historia clinica</h4>
+              <p>Mira la historia clinica de los pacientes.</p>
+            </div>
+           {/*CARD DE TURNOS DEL DOCTOR */}
+            <div
+              className="servicio-card"
+              onClick={() => navigate(`/doctor/${doctorId}/current`)}
+            >
+              <i className="fa-solid fa-calendar fa-users-line icono-servicio"></i>
+              <h4>Ver mis turnos</h4>
+              <p>Mira tus turnos programados</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+  )
 }
 
-export default Dashboard;
+
+export default DashboardMedico

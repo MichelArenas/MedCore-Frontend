@@ -1,5 +1,5 @@
 /* ====== Contenedor principal ====== */
-.register-container {
+.register-container-r {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,18 +15,21 @@
   padding: 30px 40px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 500px; /* Aumentado para acomodar más campos */
+  width: 700px; /* Aumentado para acomodar más campos */
   display: flex;
   flex-direction: column;
 }
 
 /* ====== Título ====== */
-.register-container h2 {
+.register-container-r h2 {
   margin-bottom: 20px;
   color: #007bff;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
+
+
+
 
 /* ====== Etiquetas ====== */
 .register-form label {
@@ -53,7 +56,7 @@
 }
 
 /* ====== Botón ====== */
-.register-btn {
+.register-btn-r {
 margin-top: 22px;
   padding: 14px;
   background: #007bff;
@@ -67,7 +70,7 @@ margin-top: 22px;
   box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
 }
 
-.register-btn:hover {
+.register-btn-r:hover {
   background: #0056b3;
   box-shadow: 0px 6px 14px rgba(0, 86, 179, 0.5);
   transform: translateY(-1px);
@@ -151,10 +154,11 @@ margin-top: 22px;
   animation: fadeIn 0.3s ease-in-out;
 }
 
+
 .bulk-import{
   margin-top: 28px;
   padding: 14px;
-  background: linear-gradient(135deg, #007bff, #0056b3);
+  background: #007bff;
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -187,20 +191,26 @@ margin-top: 22px;
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+  gap: 15px;
+  
 }
 
 .prev-btn, .next-btn {
-  background-color: #f0f0f0;
+ margin-top: 22px;
+  padding: 14px;
+  background: #007bff;
+  color: #fff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
 }
 
 .prev-btn:hover, .next-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #07509eff;
 }
 
 select {

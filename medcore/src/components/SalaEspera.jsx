@@ -21,9 +21,7 @@ function SalaDeEspera() {
 
   };
 
-  // ========================
-  // 🔹 Función cargar turno
-  // ========================
+ 
  const cargarTurno = async () => {
   try {
     if (!ticketId) {
@@ -39,7 +37,7 @@ function SalaDeEspera() {
 
     let data = res.data?.data || null;
 
-    // 🔹 Revisar estado de la cita asociada
+    //  Revisar estado de la cita asociada
     if (data?.appointmentId) {
       const apptRes = await axios.get(
         `http://localhost:3008/api/v1/appointments/${data.appointmentId}`,
@@ -61,9 +59,9 @@ function SalaDeEspera() {
   }
 };
 
-    // ========================
-  // 🔹 Salir de la cola
-  // ========================
+
+  //  Salir de la cola
+  
   const handleSalirCola = async () => {
   try {
     await axios.post(
@@ -81,10 +79,30 @@ function SalaDeEspera() {
   }
 };
 
+// SUSTENTACIÓN CANCELAR TURNO !!!!!!!!//
 
-  // ============================
-  // 🔹 POLLING CADA 5 SEGUNDOS
-  // ============================
+const cancelarTurno = async () => {
+  const cancelar = window.confirm("Estas cancelando tu turno, ¿Estas seguro de realizar esta acción?")
+
+  if (!cancelar) 
+    return;  //aqui miro si la respuesta es diferente de cancelar, se devuelve
+
+  try {
+    await axios.delete(`http://localhost:3008/api/v1/queue/ticket/${ticketId}/cancel`, //aqui consume el endpoint cancel del backend
+        {  headers: { Authorization:  `Bearer ${token}`,} //token del paciente
+         });
+    localStorage.removeItem("ticketId"); //con el local storage removemos el item del tiket
+    setTurno(null);
+   } catch (error) {
+    console.error("error al cancelar el turno del paciente",error); //aqui capturo el error
+    alert("Lo sentimos, no se pudo cancelar el turno")
+  }}
+
+//----------------------------------------------------------------------------------------------
+
+  
+  //  POLLING CADA 5 SEGUNDOS
+  
   useEffect(() => {
     cargarTurno(); 
 
@@ -95,9 +113,9 @@ function SalaDeEspera() {
     return () => clearInterval(interval);
   }, []);
 
-  // ========================
-  // 🔹 Obtener estado final
-  // ========================
+  
+  //  Obtener estado final
+  
   // Si appointmentStatus viene (CONFIRMED, IN_PROGRESS, COMPLETED)
   // se usa ese. Si no, se usa el estado del ticket.
  const estadoActual = (() => {
@@ -146,9 +164,11 @@ function SalaDeEspera() {
       <strong>⏳ Tiempo estimado:</strong> {turno.estimatedWaitTime} minutos
     </p>
 
+
+
     <p className="mensaje">Por favor espera… te llamaremos pronto.</p>
 
-    {/* 🔥 Mostrar botón si ya terminó */}
+    {/*  Mostrar botón si ya terminó */}
    {estadoActual === "COMPLETED" && (
   <button
     className="btn-salir-cola"
@@ -156,10 +176,19 @@ function SalaDeEspera() {
   >
     Salir de la Cola
   </button>
-)}
+  )}
+
+   {/*  aqui muestro el boton  */}
+
+  {estadoActual !== "COMPLETED" && estadoActual !=="CANCELLED" && (
+  <button className="btn-cancelar-turno" onClick={cancelarTurno}> Cancelar mi turno </button>
+  )}
+
+  {/*  muestra cancelado */}
+   
 {estadoActual === "CANCELLED" && (
   <p className="mensaje cancelado">
-    ❌ Tu cita ha sido cancelada por el doctor.
+     CANCELADO.
   </p>
 )}
 

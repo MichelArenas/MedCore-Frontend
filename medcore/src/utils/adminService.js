@@ -339,6 +339,27 @@ export const queueService = {
     return { ok: true, ticketId };
   },
 
+  // Verificar si la cola está llena (5 personas o más)
+isQueueFull: async (doctorId) => {
+  try {
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
+    // Obtener cola actual del doctor
+    const res = await queueService.getQueueForDoctor(doctorId, {
+      date: today,
+      includeFinished: false, // Solo pendientes
+    });
+
+    const queue = res?.data?.queue || res?.queue || [];
+
+    // Cola llena si hay 5 o más personas esperando
+    return queue.length >= 5;
+  } catch (error) {
+    console.error("[queueService] Error verificando cola llena", error);
+    return false; // Por seguridad: si falla, asumimos NO está llena
+  }
+},
+
   
 
 };

@@ -90,6 +90,52 @@ function DashboardEnfermerosList() {
     }
   };
 
+  const handleDeleteNurses = async (userId, email) => {
+    const result = await Swal.fire({
+      title: `¿Eliminar enfermero?`,
+      text: `Se eliminará completamente el enfermero con correo: ${email}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+  
+    if (!result.isConfirmed) return;
+  
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3003/api/v1/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Error al eliminar paciente");
+  
+      // Eliminar del estado local
+      setEnfermeros(prev => prev.filter(enf => enf.id !== userId));
+  
+      Swal.fire({
+        icon: "success",
+        title: "Eliminado",
+        text: data.message,
+        timer: 1800,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message,
+      });
+    }
+  };
+  
+  
+
   // ✏️ Editar médico
     const handleEditNurses = async (nurse) => {
       const { value: formValues } = await Swal.fire({
@@ -182,18 +228,18 @@ function DashboardEnfermerosList() {
   return (
     <div className="nurses-list-container">
       <div className="header-container">
-      <h1 className="title"> Enfermeros Medcore</h1>
+        <h1 className="title" > Enfermeros Medcore</h1>
 
-      {/* 🔍 Input de búsqueda */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nombre o documento..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="search-input"
-        />
-      </div>
+        {/* 🔍 Input de búsqueda */}
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar por nombre o documento..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="search-input"
+          />
+        </div>
       </div>
 
       <table className="nurses-table">
@@ -204,6 +250,7 @@ function DashboardEnfermerosList() {
             <th>Tipo de Documento</th>
             <th>Número de Documento</th>
             <th>Edad</th>
+           
             <th>Estado</th>
             <th>Acción</th>
           </tr>
@@ -212,11 +259,12 @@ function DashboardEnfermerosList() {
           {enfermerosFiltrados.length > 0 ? (
             enfermerosFiltrados.map((enf) => (
               <tr key={enf.id}>
-                <td>{enf.fullname}</td> 
+                <td>{enf.fullname}</td>
                 <td>{enf.email}</td>
                 <td>{enf.id_type}</td>
                 <td>{enf.id_number}</td>
                 <td>{enf.age}</td>
+               
                 <td>
                   <span
                     className={`status-badge ${
@@ -231,35 +279,78 @@ function DashboardEnfermerosList() {
                   </span>
                 </td>
                 <td className="actions">
-                     <button
-                    className="edit-btn"
-                    onClick={() => handleEditNurses(enf)}
-                  >
-                    Editar
-                  </button>
                   <button
-                    className={`toggle-btn ${
-                      enf.status === "ACTIVE"
-                        ? "btn-disable"
-                        : "btn-enable"
-                    }`}
-                    onClick={() => handleToggleStatus(enf.id, enf.status)}
-                    disabled={enf.status === "PENDING"}
+                    className="btn-icon btn-editar"
+                    onClick={() => handleEditNurses(enf)}
+                    title="Editar enfermero"
                   >
-                    {enf.status === "ACTIVE" ? "Desactivar" : "Activar"}
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </button>
+
+                  <button
+          className={`btn-icon btn-toggle ${enf.status === "ACTIVE" ? "btn-danger" : "btn-success"}`}
+          onClick={() => handleToggleStatus(enf.id, enf.status)}
+          disabled={enf.status === "PENDING"}
+          title={enf.status === "ACTIVE" ? "Desactivar Enfermero" : "Activar Enfermero"}
+        >
+          {enf.status === "ACTIVE" ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="9,12 12,15 22,4"/>
+            </svg>
+          )}
+        </button>
+
+                  <button
+                    className="btn-icon delete-btn"
+                    onClick={() => handleDeleteNurses(enf.id, enf.email)}
+                    title="Eliminar Enfermero"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6 18.333 19.333c-.083.833-.75 1.667-1.667 1.667H8.334c-.917 0-1.583-.833-1.667-1.667L5 6" />
+                      <line x1="10" y1="11" x2="10" y2="17" />
+                      <line x1="14" y1="11" x2="14" y2="17" />
+                      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                    </svg>
                   </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="7">No se encontraron enfermeros con ese nombre o documento.</td>
+              <td colSpan="9">
+                No se encontraron doctores con ese nombre o documento.
+              </td>
             </tr>
           )}
         </tbody>
       </table>
     </div>
-  );
+  )
 }
 
-export default DashboardEnfermerosList;
+export default DashboardEnfermerosList
