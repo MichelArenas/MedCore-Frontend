@@ -3,3 +3,10 @@ export class HealtRepository {
     throw new Error('Not implemented');
   }
 }
+
+
+export class MedicalRecordRepository {
+  async getByAppointmentId(appointmentId) {
+    throw new Error("Not implemented");
+  }
+}
