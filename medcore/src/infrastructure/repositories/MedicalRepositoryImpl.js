@@ -9,3 +9,14 @@ export class MedicalRepositoryImpl extends HealtRepository {
     return new Healt(data);
   }
 }
+
+export class MedicalRecordRepositoryImpl extends MedicalRecordRepository {
+  async getByAppointmentId(appointmentId) {
+    const raw = await MedicalApi.appointmentMedicalRecord(appointmentId);
+
+    // Por si tu backend a veces envía { data: {...} } y otras directamente {...}
+    const recordData = raw.data ?? raw;
+
+    return new MedicalRecord(recordData);
+  }
+}
