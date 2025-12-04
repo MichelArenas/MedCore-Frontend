@@ -3,12 +3,20 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "./prescription.css";
+import PrescriptionPreview from "../components/PrescriptionPreview";
+import MedicationItem from "../components/MedicationItem";
+
 
 export default function PrescriptionForm() {
   //const { medicalRecordId } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const { patientId, medicalRecordId } = useParams();
+  const [previewMode, setPreviewMode] = useState(false);
+const [savedPrescription, setSavedPrescription] = useState(null);
+const [items, setItems] = useState([]);
+
+
 
 
   const [form, setForm] = useState({
@@ -32,46 +40,103 @@ export default function PrescriptionForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const addItem = () => {
+  setItems([
+    ...items,
+    {
+      medication: "",
+      dosage: "",
+      frequency: "",
+      duration: "",
+      instructions: ""
+    }
+  ]);
+};
+
+const updateItem = (index, updated) => {
+  const newItems = [...items];
+  newItems[index] = { ...newItems[index], ...updated };
+  setItems(newItems);
+};
+
+const removeItem = (index) => {
+  setItems(items.filter((_, i) => i !== index));
+};
+
+
   const handleSubmit = async (e, generatePDF = false) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!form.medication || !form.dosage || !form.frequency || !form.duration) {
-      return Swal.fire("Error", "Todos los campos obligatorios deben llenarse", "error");
-    }
+  if (!form.medication || !form.dosage || !form.frequency || !form.duration) {
+    return Swal.fire("Error", "Todos los campos obligatorios deben llenarse", "error");
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const url = `http://localhost:3005/api/v1/prescriptions${generatePDF ? "?pdf=true" : ""}`;
+  try {
+    const url = `http://localhost:3005/api/v1/prescriptions${generatePDF ? "?pdf=true" : ""}`;
 
-      const body = { ...form, medicalRecordId, patientId }; // ⬅ CORREGIDO
+   const body = {
+  ...form,
+  medicalRecordId,
+  patientId,
+  items
+};
 
-      console.log("Enviando:", body);
 
-      const res = await axios.post(url, body, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: generatePDF ? "arraybuffer" : "json",
-      });
+    const res = await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${token}` },
+      responseType: generatePDF ? "arraybuffer" : "json",
+    });
 
-      if (generatePDF) {
-        const blob = new Blob([res.data], { type: "application/pdf" });
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "prescripcion.pdf";
-        link.click();
-      }
+    const saved = res.data.data ?? res.data;
 
-      Swal.fire("Éxito", "Prescripción creada correctamente", "success");
+setSavedPrescription({
+  ...saved,
+  patientName: saved.patient?.name ?? "Nombre no disponible",
+  doctorName: saved.doctor?.name ?? "Médico no disponible",
+  doctorId: saved.physicianId,
+});
 
-      navigate(`/dashboard/medical-history/${patientId}`);
 
-    } catch (error) {
-      console.error(error);
-      Swal.fire("Error", error.response?.data?.message || "No se pudo crear la prescripción", "error");
-    } finally {
+    //  Si solo se guardó, activar vista previa
+    if (!generatePDF) {
+      console.log("RESPUESTA DEL BACKEND:", res.data);
+      setSavedPrescription(res.data.data ?? res.data);
+      setPreviewMode(true);
       setLoading(false);
+      return;
     }
-  };
+
+    // Si viene en modo generar PDF
+    const blob = new Blob([res.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "prescripcion.pdf";
+    link.click();
+
+    Swal.fire("Éxito", "PDF generado correctamente", "success");
+
+    navigate(`/dashboard/medical-history/${patientId}`);
+
+  } catch (error) {
+    console.error(error);
+    Swal.fire("Error", error.response?.data?.message || "No se pudo crear la prescripción", "error");
+  } finally {
+    setLoading(false);
+  }
+};
+
+if (previewMode && savedPrescription) {
+  return (
+    <PrescriptionPreview
+  prescription={savedPrescription}
+  onEdit={() => setPreviewMode(false)}
+  onConfirm={() => handleSubmit(new Event("submit"), true)}
+/>
+
+  );
+}
 
   
   return (
@@ -138,6 +203,29 @@ export default function PrescriptionForm() {
             placeholder="Indicaciones para el paciente"
           />
         </div>
+
+        <h3>Medicamentos adicionales</h3>
+
+<div className="items-container">
+  {items.map((item, index) => (
+    <MedicationItem
+      key={index}
+      index={index}
+      item={item}
+      onUpdate={updateItem}
+      onDelete={removeItem}
+      medicationOptions={medicationOptions}
+      dosageOptions={dosageOptions}
+      frequencyOptions={frequencyOptions}
+      durationOptions={durationOptions}
+    />
+  ))}
+</div>
+
+<button type="button" className="btn secondary" onClick={addItem}>
+  + Agregar Medicamento
+</button>
+
 
         <div className="form-actions">
           <button type="submit" className="btn primary" disabled={loading}>

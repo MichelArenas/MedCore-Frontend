@@ -1,0 +1,58 @@
+.prescription-preview-container {
+  max-width: 650px;
+  margin: auto;
+  padding: 20px;
+}
+
+.preview-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+  color: #333;
+}
+
+.preview-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.preview-card h3 {
+  margin-top: 20px;
+  color: #444;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.preview-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-edit {
+  background-color: #999;
+  padding: 10px 18px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background-color: #777;
+}
+
+.btn-confirm {
+  background-color: #2f8bfd;
+  padding: 10px 18px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-confirm:hover {
+  background-color: #1a6ed1;
+}

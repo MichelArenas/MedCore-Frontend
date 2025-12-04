@@ -10,15 +10,13 @@ function DashboardPatientsList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [sp] = useSearchParams();                 // ⬅️ lee ?mode=consult
-  const mode = sp.get("mode") || "admin";         // "admin" | "consult"
-  const navigate = useNavigate();                 // ⬅️ navegación
-  const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null); //ver card con la informacion del paciente seleccionado.
+  const [sp] = useSearchParams();
+  const mode = sp.get("mode") || "admin";
+  const navigate = useNavigate();
+  const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
-const [patientInfo, setPatientInfo] = useState(null);
+  const [patientInfo, setPatientInfo] = useState(null);
   const userId = localStorage.getItem("userId");
-
-
 
   const fetchPacientes = async () => {
     try {
@@ -32,16 +30,12 @@ const [patientInfo, setPatientInfo] = useState(null);
       if (!response.ok) throw new Error("Error al obtener pacientes");
 
       const data = await response.json();
-      console.log("Respuesta de pacientes:", data); // Para depuración
+      console.log("Respuesta de pacientes:", data);
       
-      // Obtener array de usuarios, intentando diferentes propiedades en la respuesta
-      console.log("Respuesta de pacientes:", data); // Para depuración
       const raw = Array.isArray(data) ? data : data.patients || data.users || [];
       console.log("Pacientes encontrados:", raw.length);
       
-      // Normaliza ids/campos con mejor manejo de la estructura
       const list = raw.map((p) => {
-        // Si es un paciente completo con datos de usuario anidados
         if (p.user) {
           return {
             id: p.userId || p.id || p._id,
@@ -56,7 +50,6 @@ const [patientInfo, setPatientInfo] = useState(null);
             address: p.address || p.user.address || "",
             city: p.city || p.user.city || "",
             status: p.status || p.user.status || "",
-            
             _original: p,
           };
         }
@@ -64,8 +57,6 @@ const [patientInfo, setPatientInfo] = useState(null);
           patientId: p.patientId, userId: p.userId, fullname: p.fullname
         })));
 
-        
-        // Si es directamente un usuario con rol PACIENTE
         return {
           id: p.id || p._id,
           patientId: p.id,
@@ -79,7 +70,6 @@ const [patientInfo, setPatientInfo] = useState(null);
           address: p.address || "",
           city: p.city || "",
           status: p.status || "",
-         
           _original: p,
         };
       });
@@ -98,9 +88,6 @@ const [patientInfo, setPatientInfo] = useState(null);
     fetchPacientes();
   }, []);
 
-  
-
-  // --- Acciones ADMIN (si quieres mantenerlas para mode=admin) ---
   const handleToggleStatus = async (userId, currentStatus) => {
     const newStatus = currentStatus === "ACTIVE" ? "DISABLE" : "ACTIVE";
     try {
@@ -148,49 +135,47 @@ const [patientInfo, setPatientInfo] = useState(null);
   };
 
   const handleDeletePatient = async (userId, email) => {
-  const result = await Swal.fire({
-    title: `¿Eliminar paciente?`,
-    text: `Se eliminará completamente el paciente con correo: ${email}`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "Cancelar",
-  });
-
-  if (!result.isConfirmed) return;
-
-  try {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`http://localhost:3003/api/v1/users/${userId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+    const result = await Swal.fire({
+      title: `¿Eliminar paciente?`,
+      text: `Se eliminará completamente el paciente con correo: ${email}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
     });
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Error al eliminar paciente");
+    if (!result.isConfirmed) return;
 
-    // Eliminar del estado local
-    setPacientes(prev => prev.filter(p => p.id !== userId));
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3003/api/v1/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-    Swal.fire({
-      icon: "success",
-      title: "Eliminado",
-      text: data.message,
-      timer: 1800,
-      showConfirmButton: false,
-    });
-  } catch (err) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err.message,
-    });
-  }
-};
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Error al eliminar paciente");
 
+      setPacientes(prev => prev.filter(p => p.id !== userId));
+
+      Swal.fire({
+        icon: "success",
+        title: "Eliminado",
+        text: data.message,
+        timer: 1800,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message,
+      });
+    }
+  };
 
   const handleEditPatient = async (patient) => {
     console.log("Paciente a editar:", patient);
@@ -229,7 +214,6 @@ const [patientInfo, setPatientInfo] = useState(null);
       const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3003/api/v1/users/patients/${patient.id}`,
-      // `http://localhost:3003/api/v1/users/:id`,
         {
           method: "PUT",
           headers: {
@@ -271,21 +255,20 @@ const [patientInfo, setPatientInfo] = useState(null);
   };
 
   const handleShowPatientInfo = async (id) => {
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch(`http://localhost:3003/api/v1/users/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const res = await fetch(`http://localhost:3003/api/v1/users/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    const data = await res.json();
-    setPatientInfo(data);
-    setShowInfo(true);
-  } catch (err) {
-    console.error("Error cargando info paciente", err);
-  }
-};
-
+      const data = await res.json();
+      setPatientInfo(data);
+      setShowInfo(true);
+    } catch (err) {
+      console.error("Error cargando info paciente", err);
+    }
+  };
 
   if (loading) return <p className="loading">Cargando pacientes...</p>;
   if (error) return <p className="error">{error}</p>;
@@ -297,56 +280,52 @@ const [patientInfo, setPatientInfo] = useState(null);
   );
 
   const fetchPatientInfo = async (userId) => {
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:3003/api/v1/users/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    setPatientInfo(data);
-    setShowInfo(true); // abrir modal
-  } catch (error) {
-    console.error("Error al obtener información del paciente:", error);
-  }
-};
-
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://localhost:3003/api/v1/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setPatientInfo(data);
+      setShowInfo(true);
+    } catch (error) {
+      console.error("Error al obtener información del paciente:", error);
+    }
+  };
 
   // Acciones por fila según modo
   const renderActions = (p) => {
     if (mode === "consult") {
-      // Usar siempre el ID de usuario (p.id) para historia clínica y documentos.
-      // p.patientId corresponde al registro interno de paciente y NO es el que se guarda en medicalRecord.patientId.
       const userId = p.id;
       const infoModal = showInfo && patientInfo ? (
-  <div className="modal-overlay">
-    <div className="modal-card">
-      <button className="close-btn" onClick={() => setShowInfo(false)}>X</button>
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <button className="close-btn" onClick={() => setShowInfo(false)}>X</button>
 
-      <h3>Información del Paciente</h3>
-      <div className="info-grid">
-        <div>
-          <p><strong>Nombre:</strong> {patientInfo.fullname}</p>
-          <p><strong>Edad:</strong> {patientInfo.age}</p>
-          <p><strong>Sexo:</strong> {patientInfo.gender}</p>
-        </div>
+            <h3>Información del Paciente</h3>
+            <div className="info-grid">
+              <div>
+                <p><strong>Nombre:</strong> {patientInfo.fullname}</p>
+                <p><strong>Edad:</strong> {patientInfo.age}</p>
+                <p><strong>Sexo:</strong> {patientInfo.gender}</p>
+              </div>
 
-        <div>
-          <p><strong>Correo:</strong> {patientInfo.email}</p>
-          <p><strong>Celular:</strong> {patientInfo.phone}</p>
-          <p><strong>Ciudad:</strong> {patientInfo.city}</p>
-        </div>
+              <div>
+                <p><strong>Correo:</strong> {patientInfo.email}</p>
+                <p><strong>Celular:</strong> {patientInfo.phone}</p>
+                <p><strong>Ciudad:</strong> {patientInfo.city}</p>
+              </div>
 
-         <div>
-          <p><strong>Direccion:</strong> {patientInfo.address}</p>
-          <p><strong>Estado:</strong> {patientInfo.status}</p>
+              <div>
+                <p><strong>Direccion:</strong> {patientInfo.address}</p>
+                <p><strong>Estado:</strong> {patientInfo.status}</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-) : null;
+      ) : null;
 
       return (
-        
         <div className="actions">
           <button 
             className="btn-icon btn-primary" 
@@ -361,6 +340,7 @@ const [patientInfo, setPatientInfo] = useState(null);
               <polyline points="10,9 9,9 8,9"/>
             </svg>
           </button>
+          
           <button 
             className="btn-icon btn-secondary" 
             onClick={() => userId && navigate(`/dashboard/medical-history/new?patientId=${userId}`)}
@@ -371,6 +351,7 @@ const [patientInfo, setPatientInfo] = useState(null);
               <line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
           </button>
+          
           <button 
             className="btn-icon btn-info" 
             onClick={() => userId && navigate(`/dashboard/documents/${userId}`)}
@@ -382,27 +363,39 @@ const [patientInfo, setPatientInfo] = useState(null);
             </svg>
           </button>
 
-           {/* NUEVO BOTÓN: Ver Información del Paciente */}
-       <button
-  className="btn-icon btn-info"
-  onClick={() => handleShowPatientInfo(p.id)}
-  title="Ver Información del Paciente"
->
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="12" y1="16" x2="12" y2="12" />
-    <line x1="12" y1="8" x2="12" y2="8" />
-  </svg>
-</button>
+          {/* NUEVO BOTÓN: Ver Prescripciones */}
+          <button 
+            className="btn-icon btn-success" 
+            onClick={() => {
+              console.log('ID enviado a prescripciones:', userId);
+              userId && navigate(`/dashboard/prescriptions/${userId}`);
+            }}
+            title="Ver Prescripciones"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1z"/>
+              <path d="M14 8H8m6 4H8"/>
+            </svg>
+          </button>
 
-{infoModal}
+          <button
+            className="btn-icon btn-info"
+            onClick={() => handleShowPatientInfo(p.id)}
+            title="Ver Información del Paciente"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12" y2="8" />
+            </svg>
+          </button>
 
-          
+          {infoModal}
         </div>
       );
     }
 
-    // modo admin (lo que ya tenías)
+    // modo admin
     return (
       <div className="actions">
         <button 
@@ -416,22 +409,19 @@ const [patientInfo, setPatientInfo] = useState(null);
           </svg>
         </button>
 
-       <button
-  className="btn-icon delete-btn"
-  onClick={() => handleDeletePatient(p.id, p.email)}
-  title="Eliminar Paciente"
->
-  
-
-
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="3 6 5 6 21 6"/>
-    <path d="M19 6 18.333 19.333c-.083.833-.75 1.667-1.667 1.667H8.334c-.917 0-1.583-.833-1.667-1.667L5 6"/>
-    <line x1="10" y1="11" x2="10" y2="17"/>
-    <line x1="14" y1="11" x2="14" y2="17"/>
-    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-  </svg>
-</button>
+        <button
+          className="btn-icon delete-btn"
+          onClick={() => handleDeletePatient(p.id, p.email)}
+          title="Eliminar Paciente"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6 18.333 19.333c-.083.833-.75 1.667-1.667 1.667H8.334c-.917 0-1.583-.833-1.667-1.667L5 6"/>
+            <line x1="10" y1="11" x2="10" y2="17"/>
+            <line x1="14" y1="11" x2="14" y2="17"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </button>
 
         <button 
           className="btn-icon btn-primary" 
@@ -446,6 +436,7 @@ const [patientInfo, setPatientInfo] = useState(null);
             <polyline points="10,9 9,9 8,9"/>
           </svg>
         </button>
+        
         <button 
           className="btn-icon btn-info" 
           onClick={() => navigate(`/dashboard/documents/${p.id}`)}
@@ -456,6 +447,22 @@ const [patientInfo, setPatientInfo] = useState(null);
             <polyline points="13,2 13,9 20,9"/>
           </svg>
         </button>
+
+        {/* NUEVO BOTÓN: Ver Prescripciones */}
+        <button 
+          className="btn-icon btn-success" 
+          onClick={() => {
+            console.log('ID enviado a prescripciones (admin):', p.id);
+            navigate(`/dashboard/prescriptions/${p.id}`);
+          }}
+          title="Ver Prescripciones"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1z"/>
+            <path d="M14 8H8m6 4H8"/>
+          </svg>
+        </button>
+        
         <button
           className={`btn-icon btn-toggle ${p.status === "ACTIVE" ? "btn-danger" : "btn-success"}`}
           onClick={() => handleToggleStatus(p.id, p.status)}
@@ -476,74 +483,26 @@ const [patientInfo, setPatientInfo] = useState(null);
           )}
         </button>
 
-      <button
-  className="btn-icon btn-warning"
-  onClick={() => userId && fetchPatientInfo(userId)}
-  title="Ver Información del Paciente"
->
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="7" r="4"/>
-    <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
-  </svg>
-</button>
-
+        <button
+          className="btn-icon btn-warning"
+          onClick={() => userId && fetchPatientInfo(userId)}
+          title="Ver Información del Paciente"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="7" r="4"/>
+            <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
+          </svg>
+        </button>
       </div>
     );
   };
 
-
-{showInfo && (
-  <div className="modal-overlay" onClick={() => setShowInfo(false)}>
-    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-      <h3>Información del Paciente</h3>
-
-      {patientInfo ? (
-        <div className="info-grid">
-          <div>
-            <p><strong>Nombre:</strong> {patientInfo.fullname}</p>
-            <p><strong>Edad:</strong> {patientInfo.age}</p>
-            <p><strong>Sexo:</strong> {patientInfo.gender}</p>
-          </div>
-          <div>
-            <p><strong>Celular:</strong> {patientInfo.phone}</p>
-            <p><strong>Correo:</strong> {patientInfo.email}</p>
-            <p><strong>Ciudad:</strong> {patientInfo.city}</p>
-
-            <div>
-            <p><strong>Dirección:</strong> {patientInfo.address}</p>
-
-             <p><strong>Estado:</strong> 
-            <span
-              className={`status-badge ${
-                patientInfo.status === "ACTIVE"
-                  ? "status-active"
-                  : patientInfo.status === "DISABLED" || patientInfo.status === "DISABLE"
-                  ? "status-disabled"
-                  : "status-pending"
-              }`}
-            >
-              {patientInfo.status}
-            </span>
-          </p>
-          </div>
-          </div>
-        </div>
-      ) : (
-        <p>Cargando información...</p>
-      )}
-
-      <button className="close-btn" onClick={() => setShowInfo(false)}>Cerrar</button>
-    </div>
-  </div>
-)}
-
-
   return (
     <div className="patients-list-container">
       <div className="header-container">
-      <h1 className="title" style={{ color: "blue" }}>
-  {mode === "consult" ? "Selecciona un paciente" : "Pacientes Medcore"}
-</h1>
+        <h1 className="title" style={{ color: "blue" }}>
+          {mode === "consult" ? "Selecciona un paciente" : "Pacientes Medcore"}
+        </h1>
 
         <div className="search-container">
           <input
@@ -595,7 +554,6 @@ const [patientInfo, setPatientInfo] = useState(null);
                 <td>{renderActions(p)}</td>
               </tr>
             ))
-            
           ) : (
             <tr>
               <td colSpan={mode !== "consult" ? 7 : 6}>
@@ -606,6 +564,49 @@ const [patientInfo, setPatientInfo] = useState(null);
         </tbody>
       </table>
 
+      {showInfo && (
+        <div className="modal-overlay" onClick={() => setShowInfo(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h3>Información del Paciente</h3>
+
+            {patientInfo ? (
+              <div className="info-grid">
+                <div>
+                  <p><strong>Nombre:</strong> {patientInfo.fullname}</p>
+                  <p><strong>Edad:</strong> {patientInfo.age}</p>
+                  <p><strong>Sexo:</strong> {patientInfo.gender}</p>
+                </div>
+                <div>
+                  <p><strong>Celular:</strong> {patientInfo.phone}</p>
+                  <p><strong>Correo:</strong> {patientInfo.email}</p>
+                  <p><strong>Ciudad:</strong> {patientInfo.city}</p>
+
+                  <div>
+                    <p><strong>Dirección:</strong> {patientInfo.address}</p>
+                    <p><strong>Estado:</strong> 
+                      <span
+                        className={`status-badge ${
+                          patientInfo.status === "ACTIVE"
+                            ? "status-active"
+                            : patientInfo.status === "DISABLED" || patientInfo.status === "DISABLE"
+                            ? "status-disabled"
+                            : "status-pending"
+                        }`}
+                      >
+                        {patientInfo.status}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p>Cargando información...</p>
+            )}
+
+            <button className="close-btn" onClick={() => setShowInfo(false)}>Cerrar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

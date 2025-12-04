@@ -1,0 +1,16 @@
+.medication-item {
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.medication-item h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.medication-item .form-group {
+  margin-bottom: 10px;
+}

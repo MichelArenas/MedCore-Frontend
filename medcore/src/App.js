@@ -32,6 +32,7 @@ import SolicitarCita from "./components/SolicitarCita";
 import SalaDeEspera from "./components/SalaEspera";
 import DoctorAppointments from "./components/CitasDoctor"
 import PrescriptionForm from "./presentation/pages/prescription.jsx"
+import PatientPrescriptions from "./components/PatientPrescriptions";
 import DoctorConsultationView from "./presentation/pages/infoconsulta.jsx"
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
         <Route path="/bulk-import" element={<BulkImportCsv />} />
         <Route path="/citas-doctor" element={<DoctorAppointments />} />
         <Route path="/dashboard/prescription/:patientId/:medicalRecordId/new" element={<PrescriptionForm />}/>
+        <Route path="/dashboard/prescriptions/:patientId" element={<PatientPrescriptions />} />
         <Route path="/dashboard/profile" element={<PrivateRoute><PerfilPaciente/></PrivateRoute>} />
         <Route path="/dashboard/medical-history/:patientId" element={ <PrivateRoute allow={(user, params) => canReadHistory(user, params.patientId)}><MedicalHistoryView /></PrivateRoute>}/>
         <Route path="/dashboard/medical-history/new"element={<PrivateRoute allow={(user) => canWriteHistory(user)}><MedicalHistoryNew /></PrivateRoute>}/>
