@@ -13,6 +13,12 @@ function DashboardPatientsList() {
   const [sp] = useSearchParams();                 // ⬅️ lee ?mode=consult
   const mode = sp.get("mode") || "admin";         // "admin" | "consult"
   const navigate = useNavigate();                 // ⬅️ navegación
+  const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null); //ver card con la informacion del paciente seleccionado.
+  const [showInfo, setShowInfo] = useState(false);
+const [patientInfo, setPatientInfo] = useState(null);
+  const userId = localStorage.getItem("userId");
+
+
 
   const fetchPacientes = async () => {
     try {
@@ -264,6 +270,23 @@ function DashboardPatientsList() {
     }
   };
 
+  const handleShowPatientInfo = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`http://localhost:3003/api/v1/users/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json();
+    setPatientInfo(data);
+    setShowInfo(true);
+  } catch (err) {
+    console.error("Error cargando info paciente", err);
+  }
+};
+
+
   if (loading) return <p className="loading">Cargando pacientes...</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -273,13 +296,57 @@ function DashboardPatientsList() {
       (p.id_number || "").toString().includes(busqueda)
   );
 
+  const fetchPatientInfo = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`http://localhost:3003/api/v1/users/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    setPatientInfo(data);
+    setShowInfo(true); // abrir modal
+  } catch (error) {
+    console.error("Error al obtener información del paciente:", error);
+  }
+};
+
+
   // Acciones por fila según modo
   const renderActions = (p) => {
     if (mode === "consult") {
       // Usar siempre el ID de usuario (p.id) para historia clínica y documentos.
       // p.patientId corresponde al registro interno de paciente y NO es el que se guarda en medicalRecord.patientId.
       const userId = p.id;
+      const infoModal = showInfo && patientInfo ? (
+  <div className="modal-overlay">
+    <div className="modal-card">
+      <button className="close-btn" onClick={() => setShowInfo(false)}>X</button>
+
+      <h3>Información del Paciente</h3>
+      <div className="info-grid">
+        <div>
+          <p><strong>Nombre:</strong> {patientInfo.fullname}</p>
+          <p><strong>Edad:</strong> {patientInfo.age}</p>
+          <p><strong>Sexo:</strong> {patientInfo.gender}</p>
+        </div>
+
+        <div>
+          <p><strong>Correo:</strong> {patientInfo.email}</p>
+          <p><strong>Celular:</strong> {patientInfo.phone}</p>
+          <p><strong>Ciudad:</strong> {patientInfo.city}</p>
+        </div>
+
+         <div>
+          <p><strong>Direccion:</strong> {patientInfo.address}</p>
+          <p><strong>Estado:</strong> {patientInfo.status}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+) : null;
+
       return (
+        
         <div className="actions">
           <button 
             className="btn-icon btn-primary" 
@@ -314,6 +381,21 @@ function DashboardPatientsList() {
               <polyline points="13,2 13,9 20,9"/>
             </svg>
           </button>
+
+           {/* NUEVO BOTÓN: Ver Información del Paciente */}
+       <button
+  className="btn-icon btn-info"
+  onClick={() => handleShowPatientInfo(p.id)}
+  title="Ver Información del Paciente"
+>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="16" x2="12" y2="12" />
+    <line x1="12" y1="8" x2="12" y2="8" />
+  </svg>
+</button>
+
+{infoModal}
 
           
         </div>
@@ -393,9 +475,68 @@ function DashboardPatientsList() {
             </svg>
           )}
         </button>
+
+      <button
+  className="btn-icon btn-warning"
+  onClick={() => userId && fetchPatientInfo(userId)}
+  title="Ver Información del Paciente"
+>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="7" r="4"/>
+    <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
+  </svg>
+</button>
+
       </div>
     );
   };
+
+
+{showInfo && (
+  <div className="modal-overlay" onClick={() => setShowInfo(false)}>
+    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+      <h3>Información del Paciente</h3>
+
+      {patientInfo ? (
+        <div className="info-grid">
+          <div>
+            <p><strong>Nombre:</strong> {patientInfo.fullname}</p>
+            <p><strong>Edad:</strong> {patientInfo.age}</p>
+            <p><strong>Sexo:</strong> {patientInfo.gender}</p>
+          </div>
+          <div>
+            <p><strong>Celular:</strong> {patientInfo.phone}</p>
+            <p><strong>Correo:</strong> {patientInfo.email}</p>
+            <p><strong>Ciudad:</strong> {patientInfo.city}</p>
+
+            <div>
+            <p><strong>Dirección:</strong> {patientInfo.address}</p>
+
+             <p><strong>Estado:</strong> 
+            <span
+              className={`status-badge ${
+                patientInfo.status === "ACTIVE"
+                  ? "status-active"
+                  : patientInfo.status === "DISABLED" || patientInfo.status === "DISABLE"
+                  ? "status-disabled"
+                  : "status-pending"
+              }`}
+            >
+              {patientInfo.status}
+            </span>
+          </p>
+          </div>
+          </div>
+        </div>
+      ) : (
+        <p>Cargando información...</p>
+      )}
+
+      <button className="close-btn" onClick={() => setShowInfo(false)}>Cerrar</button>
+    </div>
+  </div>
+)}
+
 
   return (
     <div className="patients-list-container">
@@ -454,6 +595,7 @@ function DashboardPatientsList() {
                 <td>{renderActions(p)}</td>
               </tr>
             ))
+            
           ) : (
             <tr>
               <td colSpan={mode !== "consult" ? 7 : 6}>
@@ -463,6 +605,7 @@ function DashboardPatientsList() {
           )}
         </tbody>
       </table>
+
     </div>
   );
 }

@@ -62,7 +62,7 @@
 }
 
 .history-button, .new-history-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #007bff;
   color: white;
   border: none;
   padding: 10px 16px;

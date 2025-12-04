@@ -1,0 +1,14 @@
+.notes-editor-wrapper {
+  width: 100%;
+  max-width: 1000px; /* puedes aumentar más */
+  margin-top: 10px;
+}
+
+.notes-editor-wrapper .ql-container {
+  height: 280px;
+  width: 100%;
+}
+
+.notes-editor-wrapper .ql-editor {
+  min-height: 240px;
+}

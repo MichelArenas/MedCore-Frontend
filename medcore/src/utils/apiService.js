@@ -50,6 +50,7 @@ if (token) {
 
     console.log("🔍 Fetch request:", { finalUrl, fetchOptions });
 
+    console.log("[apiService] finalUrl:", finalUrl, "options:", fetchOptions);
     const response = await fetch(finalUrl, fetchOptions);
 
     const contentType = response.headers.get("content-type");

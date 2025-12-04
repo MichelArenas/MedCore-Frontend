@@ -292,3 +292,17 @@
   transform: translateY(0);
 }
 
+.queue-documents-btn {
+  background-color: #3a7afe;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.queue-documents-btn:hover {
+  background-color: #1f5fe0;
+}

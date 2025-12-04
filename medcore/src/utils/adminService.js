@@ -264,13 +264,14 @@ export const diagnosisService = {
 
   // Si envías CON archivos: multipart (como en Postman)
   createForPatientFormData: async (patientId, {
-    title, description, diagnosis, treatment, observations, nextAppointment, medicalRecordId, files = []
+    title, description, diagnosis, treatment, observations, nextAppointment, medicalRecordId, files,diseaseCode = []
   }) => {
     const fd = new FormData();
     if (title) fd.append("title", title);
     if (description) fd.append("description", description);
     if (diagnosis) fd.append("diagnosis", diagnosis);
     if (treatment) fd.append("treatment", treatment);
+    if(diseaseCode) fd.append("diseaseCode", diseaseCode);
     if (observations) fd.append("observations", observations);
     if (nextAppointment) fd.append("nextAppointment", nextAppointment);
     if (medicalRecordId) fd.append("medicalRecordId", medicalRecordId);
@@ -308,8 +309,10 @@ export const queueService = {
   
 
   // Llamar al siguiente paciente
-  callNextPatient: (doctorId) =>
-    post(QUEUE_ENDPOINTS.POST_CALL_NEXT(doctorId)),
+  callNextPatient: (doctorId) => {
+  console.log("🤖 Enviando POST a:", QUEUE_ENDPOINTS.POST_CALL_NEXT(doctorId));
+  return post(QUEUE_ENDPOINTS.POST_CALL_NEXT(doctorId));
+},
 
   // Completar la atención del paciente actual
   completeCurrentTicket: (ticketId) =>

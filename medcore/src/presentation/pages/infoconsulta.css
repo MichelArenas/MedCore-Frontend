@@ -1,0 +1,51 @@
+.consultation-container {
+  max-width: 920px;
+  margin: auto;
+  padding: 20px;
+}
+
+.consult-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.consult-details p {
+  margin: 6px 0;
+  font-size: 16px;
+}
+
+.consult-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 14px;
+  background: #0a66ff;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.btn.secondary {
+  background: #555;
+}
+
+.btn.primary {
+  background: #28a745;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+
+.btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

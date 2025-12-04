@@ -72,8 +72,8 @@ function DashboardMedico() {
               onClick={() => navigate("/citas-doctor")} // 
             >
               <i className="fa-solid fa-calendar icono-servicio"></i>
-              <h4>Citas programadas</h4>
-              <p>Mira o cancela las citas que tienes programadas.</p>
+              <h4>Consultas programadas</h4>
+              <p>Mira o cancela las consultas que tienes programadas.</p>
             </div>
            {/*CARD DE TURNOS DEL DOCTOR */}
             <div

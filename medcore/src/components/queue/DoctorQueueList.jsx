@@ -1,13 +1,18 @@
 // src/components/queue/DoctorQueueList.jsx
-import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import "./DoctorQueueList.css";
-import { queueService } from "../../utils/adminService";
+import { useEffect, useState, useCallback } from "react"
+import { useParams } from "react-router-dom"
+import "./DoctorQueueList.css"
+import { queueService } from "../../utils/adminService"
+import { useNavigate } from "react-router-dom";
+
+
+
+
 
 //
 // CONFIGURACIÓN DE ESTADOS VISUALES
 //
-/*const STATUS_CONFIG = {
+const STATUS_CONFIG = {
   WAITING: {
     label: "En espera",
     chipClass: "queue-chip queue-chip-waiting",
@@ -33,109 +38,105 @@ import { queueService } from "../../utils/adminService";
     chipClass: "queue-chip queue-chip-cancel",
     dotClass: "queue-chip-dot queue-chip-dot-cancel",
   },
-};
-*/
+}
+
 function DoctorQueueList() {
-  const params = useParams();
+  const params = useParams()
 
   // doctorId puede venir por URL o localStorage
   const doctorId =
-    params.doctorId || params.id || localStorage.getItem("userId") || null;
+    params.doctorId || params.id || localStorage.getItem("userId") || null
 
-  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [queueData, setQueueData] = useState({
     doctorId: null,
     averageServiceMinutes: 0,
     size: 0,
     queue: [],
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [pause, setPause] = useState(false);
-  
-
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [pause, setPause] = useState(false)
+  const navigate = useNavigate();
   //
   // CARGAR COLA DEL DOCTOR
   //
   const loadQueue = useCallback(async () => {
     if (!doctorId) {
-      console.warn("[DoctorQueueList] Sin doctorId, no se consulta la cola");
-      return;
+      console.warn("[DoctorQueueList] Sin doctorId, no se consulta la cola")
+      return
     }
     try {
-      setLoading(true);
-      setError("");
+      setLoading(true)
+      setError("")
 
       const raw = await queueService.getQueueForDoctor(doctorId, {
         date,
         includeFinished: true,
-      });
+      })
 
-      const payload = raw?.data?.data || raw?.data || raw;
+      const payload = raw?.data?.data || raw?.data || raw
 
       const nextState = {
         doctorId: payload.doctorId,
         averageServiceMinutes: payload.averageServiceMinutes || 0,
         size: payload.size || (payload.queue ? payload.queue.length : 0),
         queue: payload.queue || [],
-      };
+      }
 
-      setQueueData(nextState);
+      setQueueData(nextState)
     } catch (err) {
-      console.error("[DoctorQueueList] Error cargando cola:", err);
-      setError("Error al cargar la cola de espera del médico.");
+      console.error("[DoctorQueueList] Error cargando cola:", err)
+      setError("Error al cargar la cola de espera del médico.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [doctorId, date]);
-
-  
+  }, [doctorId, date])
 
   useEffect(() => {
-    loadQueue();
-  }, [loadQueue]);
+    loadQueue()
+  }, [loadQueue])
 
   //
   // ACCIONES: Llamar, Completar, No-show
   //
   const handleCallNext = async () => {
+     console.log("🚀 handleCallNext ejecutado, doctorId:", doctorId);
     try {
-      const resp = await queueService.callNextPatient(doctorId);
-      console.log("[DoctorQueueList] callNext:", resp);
-      await loadQueue();
+      const resp = await queueService.callNextPatient(doctorId)
+      console.log("[DoctorQueueList] callNext:", resp)
+      await loadQueue()
     } catch (err) {
-      console.error("[DoctorQueueList] Error al llamar siguiente:", err);
-      setError("No se pudo llamar al siguiente paciente.");
+      console.error("[DoctorQueueList] Error al llamar siguiente:", err)
+      setError("No se pudo llamar al siguiente paciente.")
     }
-  };
+  }
 
   const handleCompleteTicket = async (ticketId) => {
     try {
-      const resp = await queueService.completeCurrentTicket(ticketId);
-      console.log("[DoctorQueueList] completeTicket:", resp);
-      await loadQueue();
+      const resp = await queueService.completeCurrentTicket(ticketId)
+      console.log("[DoctorQueueList] completeTicket:", resp)
+      await loadQueue()
     } catch (err) {
-      console.error("[DoctorQueueList] Error completando ticket:", err);
-      setError("No se pudo completar el ticket.");
+      console.error("[DoctorQueueList] Error completando ticket:", err)
+      setError("No se pudo completar el ticket.")
     }
-  };
+  }
 
   const handleNoShow = async (ticketId) => {
     try {
-      const resp = await queueService.markNoShow(ticketId);
-      console.log("[DoctorQueueList] noShow:", resp);
-      await loadQueue();
+      const resp = await queueService.markNoShow(ticketId)
+      console.log("[DoctorQueueList] noShow:", resp)
+      await loadQueue()
     } catch (err) {
-      console.error("[DoctorQueueList] Error no-show:", err);
-      setError("No se pudo marcar como no presentado.");
+      console.error("[DoctorQueueList] Error no-show:", err)
+      setError("No se pudo marcar como no presentado.")
     }
-  };
+  }
 
   const handlepause = async () => {
-    setPause( prev => !prev); //??????
-  };
-
-
+    setPause((prev) => !prev) //??????
+  }
 
   //
   // RENDER
@@ -172,8 +173,11 @@ function DoctorQueueList() {
               )}
             </div>
 
-
-            <button className="queue-call-btn" onClick={handleCallNext} disabled={pause}>
+            <button
+              className="queue-call-btn"
+              onClick={handleCallNext}
+              disabled={pause}
+            >
               <span className="text">Llamar siguiente</span>
               <svg
                 className="arrow"
@@ -199,11 +203,12 @@ function DoctorQueueList() {
             ) : (
               <ul className="queue-list">
                 {queueData.queue.map((ticket, index) => {
-                  const isFirst = index === 0;
-                  const state = STATUS_CONFIG[ticket.status];
+                  console.log("🔥 Ticket recibido en el map():", ticket);
+                  const isFirst = index === 0
+                  const state = STATUS_CONFIG[ticket.status]
                   const displayName =
-                  ticket.patientContact?.fullName ||
-                  `Paciente #${(ticket.patientId || "").slice(0, 6)}…`;
+                    ticket.patientContact?.fullName ||
+                    `Paciente #${(ticket.patientId || "").slice(0, 6)}…`
                   return (
                     <li
                       key={ticket.id}
@@ -214,7 +219,6 @@ function DoctorQueueList() {
                       }
                     >
                       <div className="queue-item-inner">
-
                         {/* Número */}
                         <div
                           className={
@@ -227,14 +231,14 @@ function DoctorQueueList() {
 
                         {/* Paciente */}
                         <div className="queue-patient">
-                        <p
-                          className={
-                            "queue-patient-name " +
-                            (isFirst ? "queue-patient-name-active" : "")
-                          }
-                        >
-                          {displayName}
-                        </p>
+                          <p
+                            className={
+                              "queue-patient-name " +
+                              (isFirst ? "queue-patient-name-active" : "")
+                            }
+                          >
+                            {displayName}
+                          </p>
                           {typeof ticket.estimatedWaitTime === "number" && (
                             <p className="queue-waiting-time">
                               Lleva{" "}
@@ -244,17 +248,16 @@ function DoctorQueueList() {
                           )}
                         </div>
 
-                        {/* Estado 
+                        {/* Estado */}
                         <div className="queue-status">
                           <span className={state.chipClass}>
                             <span className={state.dotClass} />
                             {state.label}
                           </span>
-                        </div>*/}
+                        </div>
 
                         {/* Botones */}
                         <div className="queue-actions">
-
                           {/* Marcar atendido */}
                           {(ticket.status === "CALLED" ||
                             ticket.status === "IN_PROGRESS" ||
@@ -266,6 +269,24 @@ function DoctorQueueList() {
                               Atendido
                             </button>
                           )}
+
+                          {/* Botón ir a documentos médicos */}
+                    
+
+{ticket.status === "CALLED" && ticket.patientId && (
+  
+  <button
+    className="queue-documents-btn"
+    
+   onClick={() => {
+  console.log("👉 appointmentId:", ticket.appointmentId);
+  navigate(`/dashboard/infoconsulta/${ticket.appointmentId}`);
+}}
+
+  >
+    Ver documentos
+  </button>
+)}
 
                           {/* No se presentó 
                           {(ticket.status === "WAITING" ||
@@ -280,7 +301,7 @@ function DoctorQueueList() {
                         </div>
                       </div>
                     </li>
-                  );
+                  )
                 })}
               </ul>
             )}
@@ -288,7 +309,7 @@ function DoctorQueueList() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default DoctorQueueList;
+export default DoctorQueueList

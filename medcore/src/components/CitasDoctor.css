@@ -1,31 +1,234 @@
 .dashboard-page {
   padding: 20px;
+  background: #f4f7fc;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
 }
 
-.appointments-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Encabezado */
+.header-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
-.appointments-table th,
-.appointments-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
+.title {
+  color: #020202ff;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 50px;
   text-align: left;
 }
 
-.status-scheduled { color: #007bff; }
-.status-inprogress { color: #ffc107; }
-.status-completed { color: #28a745; }
-.status-cancelled { color: #ffffffff; }
+/* TABLA */
+.appointments-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid #e1e9f4;
+  border-radius: 0px;
+  overflow: hidden;
+ 
+}
 
-.btn-cancel {
-  background-color: #dc3545;
-  color: white;
-  padding: 3px 5px;
+.appointments-table thead th {
+  background: #007bff;
+  color: #ffffffff;
+  text-align: left;
+  padding: 20px 14px;
+  font-weight: 700;
+  border-bottom: 1px solid #d9e6fb;
+   border-radius: 0;
+}
+
+.appointments-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eef3fb;
+  color: #1f2937;
+}
+
+.appointments-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* BADGES DE ESTADO */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-scheduled {
+  background: #fff7e6;
+  color: #b76e00;
+  border: 1px solid #ffe2a8;
+}
+
+.status-inprogress {
+  background: #e6f9ef;
+  color: #138a36;
+  border: 1px solid #b9f0cf;
+}
+
+.status-completed {
+  background: #e6f9ef;
+  color: #138a36;
+  border: 1px solid #b9f0cf;
+}
+
+.status-cancelled {
+  background: #fdecec;
+  color: #b42318;
+  border: 1px solid #f8c9c6;
+}
+
+/* ACCIONES CON ICONOS */
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Botones iconográficos */
+.btn-icon {
+  padding: 10px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
-.btn-cancel:hover {
-  opacity: 0.8;
+
+.btn-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.btn-cancel{
+   width: 24px;
+  height: 24px;
+  background: red;
+  border-radius: 30%; /* círculo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #f15757ff;
+}
+
+
+
+.btn-icon:hover svg {
+  transform: scale(1.1);
+}
+
+/* COLORES */
+.btn-icon.delete-btn {
+  background: #ff0404ff;
+  color: white;
+}
+
+.btn-icon.delete-btn:hover {
+  background: #e61616ff;
+  box-shadow: 0 4px 12px rgba(221, 63, 63, 0.4);
+}
+
+.btn-icon.btn-info {
+  background: #0ea5e9;
+  color: white;
+}
+
+.btn-icon.btn-info:hover {
+  background: #0284c7;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+//filtros
+
+/* Label del filtro */
+.filter-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.filter-contenedor {
+  display: flex;            /* fila: label + select + button */
+  flex-direction: row;      /* o column si quieres vertical */
+  align-items: center;
+  column-gap: 24px;         /* espacio horizontal entre label, select y botón */
+  row-gap: 12px;            /* espacio vertical si se envuelve */
+  /* opcionales para control visual */
+  margin-left: 8px; 
+  
+}
+
+.filtros {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  gap: 40px;
+}
+/* Select */
+.filter-select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 200px; /* Ajusta si quieres más ancho */
+}
+
+/* Botón */
+.btn-apply-filter {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-apply-filter:hover {
+  background: #005fcc;
+}
+
+//botones paginacion
+.pagination {
+  display: flex;
+  justify-content: center;   /* ← Centra horizontalmente */
+  align-items: center;
+  gap: 20px;                 /* ← Espacio entre botones */
+  margin-top: 30px;          /* ← Separa de la tabla */
+  padding-top: 10px;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  border: none;
+  background-color: #4a90e2;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }

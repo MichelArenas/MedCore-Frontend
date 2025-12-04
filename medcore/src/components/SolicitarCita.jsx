@@ -118,6 +118,8 @@ function SolicitarCita() {
           ? dataDisponibilidad
           : [];
 
+
+          
         // 2️⃣ Citas del doctor en esa fecha (status CONFIRMED)
         const resCitas = await fetch(
           `http://localhost:3008/api/v1/appointments/range?doctorId=${doctorSeleccionado}&dateFrom=${fechaSeleccionada}&dateTo=${fechaSeleccionada}&status=CONFIRMED`,
@@ -162,12 +164,11 @@ function SolicitarCita() {
         }
 
         // 👇 Ajusta el puerto/base si tu medcore-user está en otro
-        const res = await fetch(
-          "http://localhost:3003/api/v1/users/patients/by-user/" + userId,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+       const res = await fetch(
+  `http://localhost:3003/api/v1/users/patients/by-user/${userId}`,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+
 
         if (!res.ok) {
           const errData = await res.json();
@@ -177,11 +178,20 @@ function SolicitarCita() {
           return;
         }
 
-        const data = await res.json();
-        console.log("🧍 Paciente cargado:", data);
+      const data = await res.json();
+console.log("🧍 Paciente cargado:", data);
 
-        // 👈 AQUÍ usamos el `id` del paciente (no el userId)
-        setPatientId(data.id);
+// 1️⃣ Verifica dónde viene el paciente
+const paciente = data.data || data.patient || data;
+
+if (!paciente.id) {
+  console.error("❌ No se encontró ID de paciente en la respuesta:", data);
+  setPatientError("No se encontró el ID del paciente en la respuesta del servidor");
+  return;
+}
+
+setPatientId(paciente.id);
+
         setLoadingPatient(false);
       } catch (err) {
         console.error("Error al obtener paciente:", err);

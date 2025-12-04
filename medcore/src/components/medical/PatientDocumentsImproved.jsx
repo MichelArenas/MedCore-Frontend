@@ -454,7 +454,7 @@ function PatientDocumentsImproved() {
         <div className="header-content">
           <button 
             className="back-button" 
-            onClick={() => navigate('/DashboardPatientsList')}
+            onClick={() => navigate('/dashboard/pacientes?mode=consult')}
           >
             ← Volver a Pacientes
           </button>
